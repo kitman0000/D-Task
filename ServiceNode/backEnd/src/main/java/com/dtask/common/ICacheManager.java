@@ -6,8 +6,16 @@ package com.dtask.common;
 public interface ICacheManager {
     void write(String key,String value);
 
+    void write(String key, String value, long ttl);
+
     void write(String key,int value);
 
-    String read(String key);
+    void write(String key, int value, long ttl);
+
+    void increase(String key);
+
+    void increase(String key, long ttl);
+
+    Object read(String key);
 
 }
