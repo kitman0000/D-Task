@@ -1,4 +1,4 @@
-package com.dtask.DTask.config;
+package com.dtask.common.config;
 
 import com.dtask.common.AuthFilter;
 import org.apache.shiro.mgt.SecurityManager;

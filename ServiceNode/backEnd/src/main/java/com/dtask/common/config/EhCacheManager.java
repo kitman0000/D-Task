@@ -1,4 +1,4 @@
-package com.dtask.DTask.config;
+package com.dtask.common.config;
 
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;

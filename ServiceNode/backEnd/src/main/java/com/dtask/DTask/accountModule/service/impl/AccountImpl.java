@@ -4,6 +4,7 @@ import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.service.IAccount;
 import com.dtask.DTask.userModule.bo.UserBo;
 import com.dtask.common.UserCommon;
+import com.dtask.common.config.WebsiteConfig;
 import com.dtask.common.util.CacheUtil;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -31,6 +32,13 @@ public class AccountImpl implements IAccount{
         // 添加用户认证信息
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
 
+        CacheUtil cacheUtil = new CacheUtil();
+
+        int loginFailedTime = (int)cacheUtil.read("loginFailedTime");
+        if(loginFailedTime >= WebsiteConfig.getMaxLoginTime()){
+            return ""; // 返回已经被封锁
+        }
+
         // 进行验证，这里可以捕获异常，然后返回对应信息
         try {
             SecurityUtils.getSubject().login(usernamePasswordToken);
@@ -43,7 +51,6 @@ public class AccountImpl implements IAccount{
             String token = UserCommon.createToken(userBo);
 
             // 将token放入缓存
-            CacheUtil cacheUtil = new CacheUtil();
             cacheUtil.write("token:"+username,token);
             cacheUtil.write("pwd:"+username,password);
 
@@ -57,6 +64,7 @@ public class AccountImpl implements IAccount{
         catch (Exception ex)
         {
             // 记录尝试次数
+            cacheUtil.increase("loginFailedTime:"+username,300);
             return null;
             //return AccountResult.USER_LOGIN_FAILED.toString();
         }

@@ -1,4 +1,4 @@
-package com.dtask.DTask.config;
+package com.dtask.common.config;
 
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.userModule.bo.PermissionBo;

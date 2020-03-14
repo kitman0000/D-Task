@@ -1,4 +1,4 @@
-package com.dtask.DTask.config;
+package com.dtask.common.config;
 
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
