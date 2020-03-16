@@ -2,13 +2,11 @@ package com.dtask.DTask.accountModule.service.impl;
 
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.service.IAccount;
+import com.dtask.DTask.accountModule.type.LoginType;
 import com.dtask.DTask.userModule.bo.UserBo;
 import com.dtask.common.UserCommon;
 import com.dtask.common.config.WebsiteConfig;
 import com.dtask.common.util.CacheUtil;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -36,7 +34,7 @@ public class AccountImpl implements IAccount{
 
         int loginFailedTime = (int)cacheUtil.read("loginFailedTime");
         if(loginFailedTime >= WebsiteConfig.getMaxLoginTime()){
-            return ""; // 返回已经被封锁
+            return LoginType.ACCOUNT_LOCK.toString(); // 返回已经被封锁
         }
 
         // 进行验证，这里可以捕获异常，然后返回对应信息
@@ -58,15 +56,13 @@ public class AccountImpl implements IAccount{
         }
         catch (DisabledAccountException ex)
         {
-            return null;
-            //return AccountResult.USER_LOGIN_BAN.toString();
+            return LoginType.ACCOUNT_BAN.toString();
         }
         catch (Exception ex)
         {
             // 记录尝试次数
             cacheUtil.increase("loginFailedTime:"+username,300);
-            return null;
-            //return AccountResult.USER_LOGIN_FAILED.toString();
+            return LoginType.LOGIN_FAILED.toString();
         }
     }
 
