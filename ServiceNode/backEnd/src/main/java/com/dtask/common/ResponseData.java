@@ -9,10 +9,11 @@ import lombok.Data;
 public class ResponseData {
     private int ret;
     private String message;
-    private Object[] data;
+    private Object data;
 
-    public ResponseData(int ret, String message) {
+    public ResponseData(int ret, String message, Object data) {
         this.ret = ret;
         this.message = message;
+        this.data = data;
     }
 }

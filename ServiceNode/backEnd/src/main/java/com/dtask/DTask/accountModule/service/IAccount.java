@@ -1,10 +1,12 @@
 package com.dtask.DTask.accountModule.service;
 
+import com.dtask.common.ResponseData;
+
 /**
  * Created by zhong on 2020-3-12.
  */
 public interface IAccount {
-    String login(String username, String password);
+    ResponseData login(String username, String password);
 
     void sendChangePwdCaptcha(String userID);
 

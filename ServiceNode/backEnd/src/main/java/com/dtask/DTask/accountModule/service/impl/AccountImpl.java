@@ -4,6 +4,7 @@ import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.service.IAccount;
 import com.dtask.DTask.accountModule.type.LoginType;
 import com.dtask.DTask.userModule.bo.UserBo;
+import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.config.WebsiteConfig;
 import com.dtask.common.util.CacheUtil;
@@ -23,7 +24,9 @@ public class AccountImpl implements IAccount{
     AccountDao accountDao;
 
     @Override
-    public String login(String username, String password) {
+    public ResponseData login(String username, String password) {
+        ResponseData responseData;
+
         // 对密码二次加密
         password = UserCommon.encodePwd(password);
 
@@ -34,7 +37,7 @@ public class AccountImpl implements IAccount{
 
         int loginFailedTime = (int)cacheUtil.read("loginFailedTime");
         if(loginFailedTime >= WebsiteConfig.getMaxLoginTime()){
-            return LoginType.ACCOUNT_LOCK.toString(); // 返回已经被封锁
+            return new ResponseData(3,LoginType.LOGIN_LOCK.toString(),null);
         }
 
         // 进行验证，这里可以捕获异常，然后返回对应信息
@@ -52,17 +55,17 @@ public class AccountImpl implements IAccount{
             cacheUtil.write("token:"+username,token);
             cacheUtil.write("pwd:"+username,password);
 
-            return token;
+            return new ResponseData(1, LoginType.LOGIN_SUCCESS.toString(),token);
         }
         catch (DisabledAccountException ex)
         {
-            return LoginType.ACCOUNT_BAN.toString();
+            return  new ResponseData(4,LoginType.LOGIN_BAN.toString(),null);
         }
         catch (Exception ex)
         {
             // 记录尝试次数
             cacheUtil.increase("loginFailedTime:"+username,300);
-            return LoginType.LOGIN_FAILED.toString();
+            return new ResponseData(2,LoginType.LOGIN_FAILED.toString(),null);
         }
     }
 
