@@ -12,6 +12,8 @@ public class DTaskApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DTaskApplication.class, args);
 
+		CacheUtil.setCacheMode(1);
+
 		System.out.println("===                        =======        ==             ====       =     =");
 		System.out.println("=     ==                      =          =  =          ==           =  =");
 		System.out.println("=     ==     ===              =         ======            ==        ==");

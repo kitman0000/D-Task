@@ -10,15 +10,24 @@ import javax.annotation.Resource;
  */
 @Component
 public class CacheUtil implements ICacheManager{
+
+    private static int cacheMode;
+
     private ICacheManager cacheManager;
 
     @Resource
     RedisUtil redisUtil;
-    /**
-     * 启动时调用
-     */
+
+    public static void setCacheMode(int cacheMode) {
+        CacheUtil.cacheMode = cacheMode;
+    }
+
     public void setCacheManager(){
-        cacheManager = redisUtil;
+        if(cacheMode == 1){ // 缓存模式是1则使用Redis
+            cacheManager = redisUtil;
+        }else { // 缓存模式是2则使用ECache
+            cacheManager = new EcacheUtil();
+        }
     }
 
     @Override
