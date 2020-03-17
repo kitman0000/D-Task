@@ -3,7 +3,7 @@ package com.dtask.DTask.accountModule.service.impl;
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.service.IAccount;
 import com.dtask.DTask.accountModule.type.LoginType;
-import com.dtask.DTask.userModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.UserBo;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.config.WebsiteConfig;
@@ -23,8 +23,14 @@ public class AccountImpl implements IAccount{
     @Autowired
     AccountDao accountDao;
 
+    @Autowired
+    CacheUtil cacheUtil;
+
     @Override
     public ResponseData login(String username, String password) {
+
+        cacheUtil.setCacheManager();
+
         ResponseData responseData;
 
         // 对密码二次加密
@@ -33,9 +39,15 @@ public class AccountImpl implements IAccount{
         // 添加用户认证信息
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
 
-        CacheUtil cacheUtil = new CacheUtil();
+        Object loginFailedTimeObj = cacheUtil.read("loginFailedTime:"+username);
 
-        int loginFailedTime = (int)cacheUtil.read("loginFailedTime");
+        int loginFailedTime;
+        if(loginFailedTimeObj == null){
+            loginFailedTime = 0;
+        }else {
+            loginFailedTime = Integer.parseInt(loginFailedTimeObj.toString());
+        }
+
         if(loginFailedTime >= WebsiteConfig.getMaxLoginTime()){
             return new ResponseData(3,LoginType.LOGIN_LOCK.toString(),null);
         }

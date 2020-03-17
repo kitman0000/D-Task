@@ -3,7 +3,7 @@ package com.dtask.common.config;
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.userModule.bo.PermissionBo;
 import com.dtask.DTask.userModule.bo.RoleBo;
-import com.dtask.DTask.userModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.UserBo;
 import com.dtask.DTask.userModule.dao.PermissionDao;
 import com.dtask.DTask.userModule.dao.RoleDao;
 import com.dtask.DTask.userModule.dao.UserDao;

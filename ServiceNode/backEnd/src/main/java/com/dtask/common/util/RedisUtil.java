@@ -1,14 +1,18 @@
 package com.dtask.common.util;
 
-import com.dtask.common.ICacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import com.dtask.common.ICacheManager;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zhong on 2020-3-11.
  */
+@Component
 public class RedisUtil implements ICacheManager {
     @Autowired
     StringRedisTemplate redisTemplate;

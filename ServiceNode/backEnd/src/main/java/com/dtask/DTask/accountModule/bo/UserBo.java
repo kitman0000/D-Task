@@ -1,4 +1,4 @@
-package com.dtask.DTask.userModule.bo;
+package com.dtask.DTask.accountModule.bo;
 
 import lombok.Data;
 
@@ -10,7 +10,6 @@ public class UserBo {
     private int userID;
     private String username;
     private String pwd;
-    private String nickName;
     private int status;
     private int role;
 }

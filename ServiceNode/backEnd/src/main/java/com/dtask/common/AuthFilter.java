@@ -27,7 +27,7 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 
         // 如果是登录页面，不拦截
-        if(httpServletRequest.getRequestURI().equals( "/api/account/login")){
+        if(httpServletRequest.getRequestURI().equals( "/api/account/localLogin")){
             return true;
         }
 

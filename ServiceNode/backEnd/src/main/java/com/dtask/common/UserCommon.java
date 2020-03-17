@@ -1,7 +1,7 @@
 package com.dtask.common;
 
 import com.dtask.DTask.accountModule.bo.TokenBo;
-import com.dtask.DTask.userModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.UserBo;
 import com.dtask.common.util.EncodeUtil;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.web.context.request.RequestContextHolder;

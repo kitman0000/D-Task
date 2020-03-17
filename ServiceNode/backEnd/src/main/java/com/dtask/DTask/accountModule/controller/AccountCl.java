@@ -15,7 +15,7 @@ public class AccountCl {
     @Autowired
     IAccount account;
 
-    @RequestMapping(value = "api/account/localLogin",method = RequestMethod.POST)
+    @RequestMapping(value = "/api/account/localLogin",method = RequestMethod.POST)
     public ResponseData localLogin(String username,String pwd)
     {
         return account.login(username,pwd);

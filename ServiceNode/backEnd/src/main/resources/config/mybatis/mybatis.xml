@@ -14,7 +14,7 @@
     </typeAliases>
 
     <mappers>
-
+        <mapper resource="com/dtask/DTask/accountModule/mapping/accountMapping.xml"/>
     </mappers>
 
 </configuration>

@@ -1,6 +1,6 @@
 package com.dtask.DTask.accountModule.dao;
 
-import com.dtask.DTask.userModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.UserBo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package com.dtask.DTask.userModule.dao;
 
-import com.dtask.DTask.userModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.UserBo;
 import com.dtask.DTask.userModule.bo.UserDetailBo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
