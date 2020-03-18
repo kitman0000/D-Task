@@ -21,15 +21,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountImpl implements IAccount{
     @Autowired
-    AccountDao accountDao;
+    private AccountDao accountDao;
 
     @Autowired
-    CacheUtil cacheUtil;
+    private CacheUtil cacheUtil;
 
     @Override
     public ResponseData login(String username, String password) {
-
-        cacheUtil.setCacheManager();
 
         ResponseData responseData;
 

@@ -1,6 +1,7 @@
 package com.dtask.common;
 
 import com.dtask.DTask.accountModule.bo.TokenBo;
+import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.EncodeUtil;
 import com.dtask.common.util.JsonUtil;
 import net.sf.ehcache.Cache;
@@ -9,6 +10,7 @@ import net.sf.ehcache.Element;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -22,6 +24,10 @@ import java.io.PrintWriter;
  * Created by zhong on 2019-12-17.
  */
 public class AuthFilter extends BasicHttpAuthenticationFilter {
+
+    @Autowired
+    private CacheUtil cacheUtil;
+
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
@@ -42,10 +48,10 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         TokenBo tokenBo = (TokenBo) JsonUtil.jsonToObject(json,TokenBo.class);
 
         // 判断缓存中是否存在token
-        CacheManager cacheManager = CacheManager.create();
-        Cache cache = cacheManager.getCache("ehcache");
-        Element element = cache.get("token:" + tokenBo.getUsername());
-        if(element == null||!element.getObjectValue().toString().equals(base64Token)){
+        //Element element = cache.get("token:" + tokenBo.getUsername());
+        Object tokenObj = cacheUtil.read("token:" + tokenBo.getUsername());
+
+        if(tokenObj == null||!tokenBo.toString().equals(base64Token)){
             // token过期或不存在
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             try {
@@ -59,7 +65,7 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         }
 
         // 从缓存中获取pwd
-        String pwd = cache.get("pwd:"+tokenBo.getUsername()).getObjectValue().toString();
+        String pwd = cacheUtil.read("pwd:"+tokenBo.getUsername()).toString();
 
         // 尝试登录，校验token信息正确
         UsernamePasswordToken token = new UsernamePasswordToken(tokenBo.getUsername(),pwd);

@@ -1,9 +1,8 @@
 package com.dtask.common.util;
 
 import com.dtask.common.ICacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * Created by zhong on 2020-3-11.
@@ -11,22 +10,17 @@ import javax.annotation.Resource;
 @Component
 public class CacheUtil implements ICacheManager{
 
-    private static int cacheMode;
-
     private ICacheManager cacheManager;
 
-    @Resource
-    RedisUtil redisUtil;
+    @Autowired
+    public CacheUtil(RedisUtil redisUtil) {
+        // 获取缓存方法
+        int cacheMode = 1;
 
-    public static void setCacheMode() {
-        CacheUtil.cacheMode = 1;
-    }
-
-    public void setCacheManager(){
         if(cacheMode == 1){ // 缓存模式是1则使用Redis
-            cacheManager = redisUtil;
+            this.cacheManager = redisUtil;
         }else { // 缓存模式是2则使用ECache
-            cacheManager = new EcacheUtil();
+            this.cacheManager = new EcacheUtil();
         }
     }
 
