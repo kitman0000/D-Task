@@ -18,8 +18,8 @@ public class CacheUtil implements ICacheManager{
     @Resource
     RedisUtil redisUtil;
 
-    public static void setCacheMode(int cacheMode) {
-        CacheUtil.cacheMode = cacheMode;
+    public static void setCacheMode() {
+        CacheUtil.cacheMode = 1;
     }
 
     public void setCacheManager(){

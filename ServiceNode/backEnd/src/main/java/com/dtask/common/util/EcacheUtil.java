@@ -35,21 +35,36 @@ public class EcacheUtil implements ICacheManager{
 
     @Override
     public void increase(String key) {
-        int temp = Integer.parseInt(read(key).toString());
-        temp++;
-        write(key,temp);
+        Object obj = read(key);
+        if(obj != null){
+            int temp = Integer.parseInt(obj.toString());
+            temp++;
+            write(key,temp);
+        }else {
+            write(key,1);
+        }
     }
 
     @Override
     public void increase(String key, long ttl) {
-        int temp = Integer.parseInt(read(key).toString());
-        temp++;
-        write(key,temp,ttl);
+        Object obj = read(key);
+        if(obj != null){
+            int temp = Integer.parseInt(obj.toString());
+            temp++;
+            write(key,temp,ttl);
+        }else {
+            write(key,1,ttl);
+        }
     }
 
     @Override
     public Object read(String key) {
-        return cache.get(key).getObjectValue();
+        Element obj = cache.get(key);
+        if(obj != null) {
+            return obj.getObjectValue();
+        }else {
+            return null;
+        }
     }
 
 }
