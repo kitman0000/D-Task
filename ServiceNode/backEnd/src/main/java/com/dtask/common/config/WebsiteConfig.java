@@ -6,6 +6,8 @@ package com.dtask.common.config;
 public class WebsiteConfig {
     private static int maxLoginTime = 5; // 5分钟内最大登录次数
 
+    private static boolean changePasswordCaptcha;
+
     public static int getMaxLoginTime() {
         return maxLoginTime;
     }

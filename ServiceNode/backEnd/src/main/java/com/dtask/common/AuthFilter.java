@@ -48,7 +48,6 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         TokenBo tokenBo = (TokenBo) JsonUtil.jsonToObject(json,TokenBo.class);
 
         // 判断缓存中是否存在token
-        //Element element = cache.get("token:" + tokenBo.getUsername());
         Object tokenObj = cacheUtil.read("token:" + tokenBo.getUsername());
 
         if(tokenObj == null||!tokenBo.toString().equals(base64Token)){

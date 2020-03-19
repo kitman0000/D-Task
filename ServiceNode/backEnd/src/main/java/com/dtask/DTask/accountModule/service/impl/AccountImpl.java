@@ -88,4 +88,9 @@ public class AccountImpl implements IAccount{
     public void changePwd(String username, String password, String captcha) {
 
     }
+
+    @Override
+    public ResponseData logout(String token) {
+        return null;
+    }
 }

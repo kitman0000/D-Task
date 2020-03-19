@@ -11,4 +11,6 @@ public interface IAccount {
     void sendChangePwdCaptcha(String userID);
 
     void changePwd(String username,String password,String captcha);
+
+    ResponseData logout(String token);
 }

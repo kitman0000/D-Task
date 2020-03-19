@@ -21,4 +21,10 @@ public class AccountCl {
         return account.login(username,pwd);
     }
 
+    @RequestMapping(value = "/api/account/localLogout",method = RequestMethod.POST)
+    public ResponseData localLogout(String token)
+    {
+        return account.logout(token);
+    }
+
 }
