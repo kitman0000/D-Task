@@ -90,7 +90,7 @@ public class AccountImpl implements IAccount{
     }
 
     @Override
-    public ResponseData logout(String token) {
+    public ResponseData logout() {
         return null;
     }
 }

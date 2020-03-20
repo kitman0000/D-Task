@@ -22,9 +22,9 @@ public class AccountCl {
     }
 
     @RequestMapping(value = "/api/account/localLogout",method = RequestMethod.POST)
-    public ResponseData localLogout(String token)
+    public ResponseData localLogout()
     {
-        return account.logout(token);
+        return account.logout();
     }
 
 }
