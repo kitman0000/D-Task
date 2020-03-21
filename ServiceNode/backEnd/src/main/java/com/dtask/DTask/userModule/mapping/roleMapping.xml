@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.DTask.userModule.dao.RoleDao">
+
+    <!-- 添加角色-->
+    <insert id="addRole">
+
+    </insert>
+
+    <!-- 添加权限 -->
+    <insert id="addRolePermission">
+
+    </insert>
+
+    <!-- 删除权限 -->
+    <delete id="deleteRole">
+
+    </delete>
+
+    <!-- 删除角色的权限 -->
+    <delete id="deleteRolePermission">
+
+    </delete>
+
+    <!-- 获取用户的角色 -->
+    <select id="getUserRole" resultType="com.dtask.DTask.userModule.bo.RoleBo">
+        SELECT
+            tb_user_info.roleID, tb_role.name
+        FROM
+            tb_user_info
+                INNER JOIN
+            tb_role ON tb_user_info.roleID = tb_role.id
+        <where>
+            tb_user_info.id = 1001
+                AND tb_role.id = 1
+        </where>
+    </select>
+
+    <!-- 检查某角色是否有某权限 -->
+    <select id="checkRolePermission" resultType="java.lang.Integer">
+
+    </select>
+
+    <!-- 获取所有角色 -->
+    <select id="getAllRole" resultType="com.dtask.DTask.userModule.bo.RoleBo">
+
+    </select>
+
+    <!-- 获取某角色拥有的权限-->
+    <select id="getRolePermission" resultType="com.dtask.DTask.userModule.bo.PermissionBo">
+        
+    </select>
+</mapper>

@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.dao;
 
+import com.dtask.DTask.userModule.bo.PermissionBo;
 import com.dtask.DTask.userModule.bo.RoleBo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,7 +18,7 @@ public interface RoleDao {
     RoleBo getUserRole(int userID);
 
     // 获取所有角色
-    List<RoleBo> getAllUser();
+    List<RoleBo> getAllRole();
 
     // 添加新角色
     void addRole(String roleName);
@@ -34,4 +35,9 @@ public interface RoleDao {
     // 为角色删除权限
     void deleteRolePermission(@Param("roleID") int roleID, @Param("permissionID") int permissionID);
 
+    //获取某角色拥有的权限-
+    List<PermissionBo> getRolePermission(int roleID);
+
+    // 获取所有权限
+    List<PermissionBo> getAllPermission();
 }

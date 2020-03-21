@@ -4,7 +4,6 @@ import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.userModule.bo.PermissionBo;
 import com.dtask.DTask.userModule.bo.RoleBo;
 import com.dtask.DTask.accountModule.bo.UserBo;
-import com.dtask.DTask.userModule.dao.PermissionDao;
 import com.dtask.DTask.userModule.dao.RoleDao;
 import com.dtask.DTask.userModule.dao.UserDao;
 import org.apache.shiro.authc.*;
@@ -25,9 +24,6 @@ public class MyShiroRealm extends AuthorizingRealm {
 
 	@Autowired
 	RoleDao roleDao;
-
-	@Autowired
-	PermissionDao permissionDao;
 
 	@Autowired
 	UserDao userDao;
@@ -83,7 +79,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 		// 添加角色
 		simpleAuthorizationInfo.addRole(roleBo.getRoleName());
 
-		for (PermissionBo permissionBo : permissionDao.getRolePermission(roleBo.getRoleID())) {
+		for (PermissionBo permissionBo : roleDao.getRolePermission(roleBo.getRoleID())) {
 			// 添加权限
 			simpleAuthorizationInfo.addStringPermission(permissionBo.getPermissionName());
 		}
