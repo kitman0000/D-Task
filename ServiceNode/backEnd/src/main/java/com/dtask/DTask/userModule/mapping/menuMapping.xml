@@ -17,11 +17,29 @@
     </select>
 
     <!-- 获取某父菜单的子菜单 -->
-    <select id="getChildMenuBo" resultType="com.dtask.DTask.userModule.bo.ChildMenuBo">
+    <select id="getChildMenu" resultType="com.dtask.DTask.userModule.bo.ChildMenuBo">
         SELECT * FROM tb_child_menu
         <where>
             parentID = #{parentMenuID}
         </where>
     </select>
+    <select id="getRoleChildMenu" resultType="com.dtask.DTask.userModule.bo.ChildMenuBo">
+        SELECT
+            *
+        FROM
+            tb_child_menu
+        <where>
+            pObject IN (SELECT
+                    pObject
+                FROM
+                    dtask_db.tb_role_permission
+                        INNER JOIN
+                    tb_permission ON tb_role_permission.permissionID = tb_permission.id
+                WHERE
+                    roleID = #{roleID})
+            AND parentID = #{parentMenuID}
+        </where>
+    </select>
+
 
 </mapper>

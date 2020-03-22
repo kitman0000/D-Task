@@ -43,10 +43,8 @@ public class MenuImpl implements IMenu{
 
         List<ParentMenuBo> parentMenuBoList = menuDao.getRoleMenu(roleBo.getRoleID());
         for(ParentMenuBo parentMenuBo : parentMenuBoList){
-            List<ChildMenuBo> childMenuBo = menuDao.getChildMenuBo(parentMenuBo.getId());
-            //todo : 筛选用户有权限的菜单
-
-            parentMenuBo.setChildMenuBoList();
+            List<ChildMenuBo> childMenuBo = menuDao.getRoleChildMenu(roleBo.getRoleID(),parentMenuBo.getId());
+            parentMenuBo.setChildMenuBoList(childMenuBo);
         }
 
         return new ResponseData(1,"请求成功",parentMenuBoList);
