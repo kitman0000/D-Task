@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.DTask.userModule.dao.MenuDao">
+    <!-- 获取某角色所有菜单 -->
+    <select id="getRoleMenu" resultType="com.dtask.DTask.userModule.bo.ParentMenuBo">
+        SELECT * FROM tb_parent_menu WHERE tb_parent_menu.pCategory in (
+        SELECT
+        distinct pCategory
+        FROM
+        dtask_db.tb_role_permission
+        INNER JOIN
+        tb_permission ON tb_role_permission.permissionID = tb_permission.id
+        <where>
+            roleID = #{roleID}
+        </where>
+        )
+    </select>
+
+    <!-- 获取某父菜单的子菜单 -->
+    <select id="getChildMenuBo" resultType="com.dtask.DTask.userModule.bo.ChildMenuBo">
+
+    </select>
+
+</mapper>

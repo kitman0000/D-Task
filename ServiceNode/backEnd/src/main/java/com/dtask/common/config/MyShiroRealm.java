@@ -81,7 +81,9 @@ public class MyShiroRealm extends AuthorizingRealm {
 
 		for (PermissionBo permissionBo : roleDao.getRolePermission(roleBo.getRoleID())) {
 			// 添加权限
-			simpleAuthorizationInfo.addStringPermission(permissionBo.getPermissionName());
+			simpleAuthorizationInfo.addStringPermission(permissionBo.getPCategory() + ":"
+					+ permissionBo.getPObject() + ":"
+					+ permissionBo.getPOperate());
 		}
 		return simpleAuthorizationInfo;
 	}

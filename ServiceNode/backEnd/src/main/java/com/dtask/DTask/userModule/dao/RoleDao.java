@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.dao;
 
+import com.dtask.DTask.userModule.bo.ParentMenuBo;
 import com.dtask.DTask.userModule.bo.PermissionBo;
 import com.dtask.DTask.userModule.bo.RoleBo;
 import org.apache.ibatis.annotations.Mapper;
@@ -40,4 +41,6 @@ public interface RoleDao {
 
     // 获取所有权限
     List<PermissionBo> getAllPermission();
+
+
 }

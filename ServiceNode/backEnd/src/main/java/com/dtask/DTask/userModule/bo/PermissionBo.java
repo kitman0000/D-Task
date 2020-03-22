@@ -7,7 +7,8 @@ import lombok.Data;
  */
 @Data
 public class PermissionBo {
-    private int permissionID;
-    private String permissionName;
-    private String info;
+    private int id;
+    private String pCategory;
+    private String pObject;
+    private String pOperate;
 }

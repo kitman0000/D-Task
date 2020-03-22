@@ -48,6 +48,17 @@
 
     <!-- 获取某角色拥有的权限-->
     <select id="getRolePermission" resultType="com.dtask.DTask.userModule.bo.PermissionBo">
-        
+        SELECT
+            tb_permission.id,pCategory,pObject,pOperate
+        FROM
+            dtask_db.tb_role_permission
+                INNER JOIN
+            tb_permission ON tb_role_permission.permissionID = tb_permission.id
+        <where>
+            roleID = #{roleID};
+        </where>
     </select>
+
+
+
 </mapper>
