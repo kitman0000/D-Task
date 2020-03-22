@@ -46,7 +46,7 @@ public class UserCommon {
         // 生成token对象
         TokenBo tokenBo = new TokenBo();
         tokenBo.setUsername(userBo.getUsername());
-        tokenBo.setUserID(userBo.getUserID());
+        tokenBo.setUserID(userBo.getId());
         tokenBo.setCreateTime(System.currentTimeMillis());
 
         // 序列化token对象并返回

@@ -67,7 +67,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 		// 获取登录用户名
 		String username = (String) principalCollection.getPrimaryPrincipal();
 		// 获取用户id
-		int userID = accountDao.findUserIDByName(username).getUserID();
+		int userID = accountDao.findUserIDByName(username).getId();
 
 		// 获取用户角色
 		RoleBo roleBo = roleDao.getUserRole(userID);

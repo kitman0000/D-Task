@@ -11,6 +11,8 @@ import com.dtask.common.util.CacheUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,12 +60,13 @@ public class AccountImpl implements IAccount{
             UserBo userBo = new UserBo();
             userBo.setUsername(username);
             userBo.setPwd(password);
-            userBo.setUserID(accountDao.findUserIDByName(username).getUserID());
+            userBo.setId(accountDao.findUserIDByName(username).getId());
             String token = UserCommon.createToken(userBo);
 
             // 将token放入缓存
             cacheUtil.write("token:"+username,token);
             cacheUtil.write("pwd:"+username,password);
+
 
             return new ResponseData(1, LoginType.LOGIN_SUCCESS.toString(),token);
         }

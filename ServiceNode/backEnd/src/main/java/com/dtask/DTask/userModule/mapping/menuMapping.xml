@@ -18,7 +18,10 @@
 
     <!-- 获取某父菜单的子菜单 -->
     <select id="getChildMenuBo" resultType="com.dtask.DTask.userModule.bo.ChildMenuBo">
-
+        SELECT * FROM tb_child_menu
+        <where>
+            parentID = #{parentMenuID}
+        </where>
     </select>
 
 </mapper>

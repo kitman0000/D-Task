@@ -1,18 +1,19 @@
 package com.dtask.DTask.userModule.service.impl;
 
 import com.dtask.DTask.accountModule.dao.AccountDao;
+import com.dtask.DTask.userModule.bo.ChildMenuBo;
 import com.dtask.DTask.userModule.bo.ParentMenuBo;
-import com.dtask.DTask.userModule.bo.PermissionBo;
 import com.dtask.DTask.userModule.bo.RoleBo;
 import com.dtask.DTask.userModule.dao.MenuDao;
 import com.dtask.DTask.userModule.dao.RoleDao;
 import com.dtask.DTask.userModule.service.IMenu;
 import com.dtask.common.ResponseData;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,18 +28,25 @@ public class MenuImpl implements IMenu{
     @Autowired
     private MenuDao menuDao;
 
+    Logger logger = LoggerFactory.getLogger(MenuImpl.class);
+
     @Override
     public ResponseData getUserMenu() {
+         logger.info(String.valueOf(SecurityUtils.getSubject().getPrincipal() == null));
+
         // 获取登录用户名
         String username = SecurityUtils.getSubject().getPrincipal().toString();
         // 获取用户id
-        int userID = accountDao.findUserIDByName(username).getUserID();
+        int userID = accountDao.findUserIDByName(username).getId();
         // 获取用户角色
         RoleBo roleBo = roleDao.getUserRole(userID);
 
         List<ParentMenuBo> parentMenuBoList = menuDao.getRoleMenu(roleBo.getRoleID());
         for(ParentMenuBo parentMenuBo : parentMenuBoList){
-            parentMenuBo.setChildMenuBoList(menuDao.getChildMenuBo(parentMenuBo.getId()));
+            List<ChildMenuBo> childMenuBo = menuDao.getChildMenuBo(parentMenuBo.getId());
+            //todo : 筛选用户有权限的菜单
+
+            parentMenuBo.setChildMenuBoList();
         }
 
         return new ResponseData(1,"请求成功",parentMenuBoList);

@@ -10,7 +10,10 @@ import net.sf.ehcache.Element;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -23,10 +26,13 @@ import java.io.PrintWriter;
  * 用户权限拦截类
  * Created by zhong on 2019-12-17.
  */
+@Component
 public class AuthFilter extends BasicHttpAuthenticationFilter {
 
     @Autowired
     private CacheUtil cacheUtil;
+
+    Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
@@ -50,7 +56,7 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         // 判断缓存中是否存在token
         Object tokenObj = cacheUtil.read("token:" + tokenBo.getUsername());
 
-        if(tokenObj == null||!tokenBo.toString().equals(base64Token)){
+        if(tokenObj == null||!tokenObj.toString().equals(base64Token)){
             // token过期或不存在
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             try {

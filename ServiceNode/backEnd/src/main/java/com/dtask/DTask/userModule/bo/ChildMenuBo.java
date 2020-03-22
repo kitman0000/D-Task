@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.bo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -8,5 +9,9 @@ import lombok.Data;
 @Data
 public class ChildMenuBo {
     private int id;
+
     private String name;
+
+    @JsonIgnore
+    private String pObject;
 }

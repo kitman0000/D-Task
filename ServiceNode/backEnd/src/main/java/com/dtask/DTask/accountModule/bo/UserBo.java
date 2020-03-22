@@ -7,7 +7,7 @@ import lombok.Data;
  */
 @Data
 public class UserBo {
-    private int userID;
+    private int id;
     private String username;
     private String pwd;
     private int status;
