@@ -5,6 +5,7 @@
 				<h1 style="color: white;margin-left: 80px;">D-task</h1>
 			</el-header>
 			<el-main>
+				<router-view>
 				<div style="left: 40%;position: absolute;">
 					<!-- <div style="margin-left: 12%;"><h3>登录</h3></div> -->
 					<img style="margin-left: 25%;" src="./assets/logo.png"/>
@@ -22,6 +23,7 @@
 					</el-form>
 					 <el-button round style="margin-left: 25%;background-color: purple;width: 70%;color: white;margin-top: 40px;" @click="login()">登录</el-button>
 						</div>
+				</router-view>
 			</el-main>
 		</el-container>
 
@@ -51,8 +53,8 @@
 			login(){
 				var userLogin = new URLSearchParams();
 				userLogin.append("username", this.userName);
-				userLogin.append("password", md5(this.pwd));
-				axios.post('api/account/localLogin', userLogin)
+				userLogin.append("password", this.$md5(this.pwd));
+				axios.post('/api/account/localLogin', userLogin)
 					.then(res=> {
 						alert("成功");
 					}).catch(err=>{
