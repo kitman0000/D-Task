@@ -12,6 +12,8 @@ public class CacheUtil implements ICacheManager{
 
     private ICacheManager cacheManager;
 
+    private final String APPLICATION_PREFIX = "DTask:";
+
     @Autowired
     public CacheUtil(RedisUtil redisUtil) {
         // 获取缓存方法
@@ -26,36 +28,36 @@ public class CacheUtil implements ICacheManager{
 
     @Override
     public void write(String key,String value){
-        cacheManager.write(key,value);
+        cacheManager.write(APPLICATION_PREFIX + key,value);
     }
 
     @Override
     public void write(String key,int value){
-        cacheManager.write(key,value);
+        cacheManager.write(APPLICATION_PREFIX + key,value);
     }
 
     @Override
     public Object read(String key){
-        return cacheManager.read(key);
+        return cacheManager.read(APPLICATION_PREFIX + key);
     }
 
     @Override
     public void write(String key, String value, long ttl) {
-        cacheManager.write(key,value,ttl);
+        cacheManager.write(APPLICATION_PREFIX + key,value,ttl);
     }
 
     @Override
     public void write(String key, int value, long ttl) {
-        cacheManager.write(key,value,ttl);
+        cacheManager.write(APPLICATION_PREFIX + key,value,ttl);
     }
 
     @Override
     public void increase(String key) {
-        cacheManager.increase(key);
+        cacheManager.increase(APPLICATION_PREFIX + key);
     }
 
     @Override
     public void increase(String key, long ttl) {
-        cacheManager.increase(key,ttl);
+        cacheManager.increase(APPLICATION_PREFIX + key,ttl);
     }
 }
