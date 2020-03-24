@@ -1,6 +1,6 @@
 package com.dtask.DTask.accountModule.dao;
 
-import com.dtask.DTask.accountModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.AccountBo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface AccountDao {
-    UserBo findUserIDByName(@Param("username") String username);
+    AccountBo findUserIDByName(@Param("username") String username);
 
     String getUserPwd(int userID);
 

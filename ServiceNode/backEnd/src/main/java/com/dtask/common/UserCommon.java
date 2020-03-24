@@ -1,7 +1,7 @@
 package com.dtask.common;
 
 import com.dtask.DTask.accountModule.bo.TokenBo;
-import com.dtask.DTask.accountModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.AccountBo;
 import com.dtask.common.util.EncodeUtil;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -39,14 +39,14 @@ public class UserCommon {
 
     /**
      * 生成用户token
-     * @param userBo 用户信息对象
+     * @param accountBo 用户信息对象
      * @return token字符串
      */
-    public static String createToken(UserBo userBo){
+    public static String createToken(AccountBo accountBo){
         // 生成token对象
         TokenBo tokenBo = new TokenBo();
-        tokenBo.setUsername(userBo.getUsername());
-        tokenBo.setUserID(userBo.getId());
+        tokenBo.setUsername(accountBo.getUsername());
+        tokenBo.setUserID(accountBo.getId());
         tokenBo.setCreateTime(System.currentTimeMillis());
 
         // 序列化token对象并返回

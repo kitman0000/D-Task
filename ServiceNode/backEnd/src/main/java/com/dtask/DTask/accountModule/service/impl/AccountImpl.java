@@ -3,7 +3,7 @@ package com.dtask.DTask.accountModule.service.impl;
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.service.IAccount;
 import com.dtask.DTask.accountModule.type.LoginType;
-import com.dtask.DTask.accountModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.AccountBo;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.config.WebsiteConfig;
@@ -11,8 +11,6 @@ import com.dtask.common.util.CacheUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,11 +55,11 @@ public class AccountImpl implements IAccount{
             SecurityUtils.getSubject().login(usernamePasswordToken);
 
             // 用户验证通过，生成token
-            UserBo userBo = new UserBo();
-            userBo.setUsername(username);
-            userBo.setPwd(password);
-            userBo.setId(accountDao.findUserIDByName(username).getId());
-            String token = UserCommon.createToken(userBo);
+            AccountBo accountBo = new AccountBo();
+            accountBo.setUsername(username);
+            accountBo.setPwd(password);
+            accountBo.setId(accountDao.findUserIDByName(username).getId());
+            String token = UserCommon.createToken(accountBo);
 
             // 将token放入缓存
             cacheUtil.write("token:"+username,token);

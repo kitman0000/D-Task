@@ -3,7 +3,7 @@ package com.dtask.common.config;
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.userModule.bo.PermissionBo;
 import com.dtask.DTask.userModule.bo.RoleBo;
-import com.dtask.DTask.accountModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.AccountBo;
 import com.dtask.DTask.userModule.dao.RoleDao;
 import com.dtask.DTask.userModule.dao.UserDao;
 import org.apache.shiro.authc.*;
@@ -40,20 +40,20 @@ public class MyShiroRealm extends AuthorizingRealm {
 		}
 		// 获取用户信息
 		String username = authenticationToken.getPrincipal().toString();
-		UserBo userBo = accountDao.findUserIDByName(username);
+		AccountBo accountBo = accountDao.findUserIDByName(username);
 
-		if(userBo == null){
+		if(accountBo == null){
 			return null;
 		}
 
-		if(userBo.getStatus() != 1)
+		if(accountBo.getStatus() != 1)
 		{
 			throw new DisabledAccountException();
 		}
 
 		// 这里验证authenticationToken和simpleAuthenticationInfo的信息
 		SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(username,
-				userBo.getPwd(), getName());
+				accountBo.getPwd(), getName());
 
 		return simpleAuthenticationInfo;
 

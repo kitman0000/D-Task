@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.DTask.userModule.dao.UserDao">
+
+    <!-- 获取用户数量 -->
+    <select id="getUserNumber" resultType="java.lang.Integer">
+        SELECT count(id) FROM  tb_user NATURAL JOIN tb_user_info
+        <where>
+            <if test="userSelectEntity.username != ''">
+                username LIKE '%${userSelectEntity.username}%'
+            </if>
+            <if test="userSelectEntity.nickname != ''">
+                AND nickname LIKE '%${userSelectEntity.nickname}%'
+            </if>
+            <if test="userSelectEntity.phone != ''">
+                AND phone LIKE '%${userSelectEntity.phone}%'
+            </if>
+            <if test="userSelectEntity.email != ''">
+                AND phone LIKE '%${userSelectEntity.email}%'
+            </if>
+            <if test="userSelectEntity.roleID != -1">
+                AND roleID = #{userSelectEntity.roleID}
+            </if>
+            <if test="userSelectEntity.departmentID != -1">
+                AND departmentID = #{userSelectEntity.departmentID}
+            </if>
+            <if test="userSelectEntity.onboardDateStart != ''">
+                AND onboardDate > #{userSelectEntity.onboardDateStart}
+            </if>
+            <if test="userSelectEntity.onboardDateEnd != ''">
+                AND onboardDate &lt; #{userSelectEntity.onboardDateEnd}<!-- 小于 -->
+            </if>
+            <if test="userSelectEntity.birthdayStart != ''">
+                AND onboardDate > #{userSelectEntity.birthdayStart}
+            </if>
+            <if test="userSelectEntity.birthdayEnd != ''">
+                AND onboardDate &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取用户列表 -->
+    <select id="getUserList" resultType="com.dtask.DTask.userModule.bo.UserListBo">
+
+    </select>
+</mapper>

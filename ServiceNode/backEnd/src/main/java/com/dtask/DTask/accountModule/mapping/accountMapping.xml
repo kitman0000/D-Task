@@ -3,7 +3,7 @@
 <mapper namespace="com.dtask.DTask.accountModule.dao.AccountDao">
 
     <!-- 通过UserID寻找用户 -->
-    <select id="findUserIDByName" resultType="com.dtask.DTask.accountModule.bo.UserBo">
+    <select id="findUserIDByName" resultType="com.dtask.DTask.accountModule.bo.AccountBo">
         SELECT * FROM tb_user WHERE username = #{username}
     </select>
 

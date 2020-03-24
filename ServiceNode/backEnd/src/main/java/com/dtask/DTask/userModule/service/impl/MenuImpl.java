@@ -47,7 +47,7 @@ public class MenuImpl implements IMenu{
             parentMenuBo.setChildMenuBoList(childMenuBo);
         }
 
-        return new ResponseData(1,"请求成功",parentMenuBoList);
+        return new ResponseData(1,"查询成功",parentMenuBoList);
 
     }
 

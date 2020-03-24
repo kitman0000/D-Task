@@ -1,7 +1,9 @@
 package com.dtask.DTask.userModule.dao;
 
-import com.dtask.DTask.accountModule.bo.UserBo;
+import com.dtask.DTask.accountModule.bo.AccountBo;
 import com.dtask.DTask.userModule.bo.UserDetailBo;
+import com.dtask.DTask.userModule.bo.UserListBo;
+import com.dtask.DTask.userModule.entity.UserSelectEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -16,11 +18,10 @@ import java.util.List;
 public interface UserDao {
 
     // 获取用户数量
-    int getUserNumber(@Param("username") String username, @Param("status") int status);
+    int getUserNumber(@Param("userSelectEntity") UserSelectEntity userSelectEntity);
 
     // 获取某页用户信息
-    List<UserBo> getUser(@Param("username") String username, @Param("status") int status,
-                         @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
+    List<UserListBo> getUserList(@Param("userSelectEntity") UserSelectEntity userSelectEntity);
 
     // 获取单个用户详细信息
     UserDetailBo getUserDetail(int userID);

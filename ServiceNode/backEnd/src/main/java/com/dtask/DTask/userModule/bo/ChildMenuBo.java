@@ -12,6 +12,7 @@ public class ChildMenuBo {
 
     private String name;
 
-    @JsonIgnore
+    private String url;
+
     private String pObject;
 }
