@@ -31,10 +31,10 @@
                 AND onboardDate &lt; #{userSelectEntity.onboardDateEnd}<!-- 小于 -->
             </if>
             <if test="userSelectEntity.birthdayStart != ''">
-                AND onboardDate > #{userSelectEntity.birthdayStart}
+                AND birthday > #{userSelectEntity.birthdayStart}
             </if>
             <if test="userSelectEntity.birthdayEnd != ''">
-                AND onboardDate &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
+                AND birthday &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
             </if>
         </where>
     </select>
