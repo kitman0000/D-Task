@@ -1,5 +1,7 @@
 package com.dtask.DTask.userModule.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,6 +27,7 @@ public class UserListBo implements Serializable{
 
     private String department;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDay;
 
     private Date onboardDate;
