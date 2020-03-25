@@ -9,5 +9,5 @@ import com.dtask.common.ResponseData;
 public interface IUser {
     ResponseData getUserNumber(UserSelectEntity userSelectEntity);
 
-    ResponseData getUserList(UserSelectEntity userSelectEntity);
+    ResponseData getUserList(UserSelectEntity userSelectEntity, int page);
 }

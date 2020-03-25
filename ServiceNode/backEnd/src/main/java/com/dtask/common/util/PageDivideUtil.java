@@ -14,20 +14,16 @@ public class PageDivideUtil {
     {
         int result;
 
-        if(intRows == 0)
-        {
+        if(intRows == 0) {
             result = 0;
         }
-        else if(intRows < countOfOnePage)
-        {
+        else if(intRows < countOfOnePage) {
             result = 1;
         }
-        else if(intRows % countOfOnePage != 0)
-        {
+        else if(intRows % countOfOnePage != 0) {
             result = intRows / countOfOnePage + 1;
         }
-        else
-        {
+        else {
             result = intRows / countOfOnePage;
         }
 

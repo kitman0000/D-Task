@@ -21,7 +21,7 @@ public interface UserDao {
     int getUserNumber(@Param("userSelectEntity") UserSelectEntity userSelectEntity);
 
     // 获取某页用户信息
-    List<UserListBo> getUserList(@Param("userSelectEntity") UserSelectEntity userSelectEntity);
+    List<UserListBo> getUserList(@Param("userSelectEntity") UserSelectEntity userSelectEntity,@Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
 
     // 获取单个用户详细信息
     UserDetailBo getUserDetail(int userID);

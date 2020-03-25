@@ -41,6 +41,77 @@
 
     <!-- 获取用户列表 -->
     <select id="getUserList" resultType="com.dtask.DTask.userModule.bo.UserListBo">
+        SELECT * FROM tb_user NATURAL JOIN tb_user_info
 
+        <where>
+            <!-- 查询条件 -->
+            <if test="userSelectEntity.username != ''">
+                username LIKE '%${userSelectEntity.username}%'
+            </if>
+            <if test="userSelectEntity.nickname != ''">
+                AND nickname LIKE '%${userSelectEntity.nickname}%'
+            </if>
+            <if test="userSelectEntity.phone != ''">
+                AND phone LIKE '%${userSelectEntity.phone}%'
+            </if>
+            <if test="userSelectEntity.email != ''">
+                AND phone LIKE '%${userSelectEntity.email}%'
+            </if>
+            <if test="userSelectEntity.roleID != -1">
+                AND roleID = #{userSelectEntity.roleID}
+            </if>
+            <if test="userSelectEntity.departmentID != -1">
+                AND departmentID = #{userSelectEntity.departmentID}
+            </if>
+            <if test="userSelectEntity.onboardDateStart != ''">
+                AND onboardDate > #{userSelectEntity.onboardDateStart}
+            </if>
+            <if test="userSelectEntity.onboardDateEnd != ''">
+                AND onboardDate &lt; #{userSelectEntity.onboardDateEnd}<!-- 小于 -->
+            </if>
+            <if test="userSelectEntity.birthdayStart != ''">
+                AND onboardDate > #{userSelectEntity.birthdayStart}
+            </if>
+            <if test="userSelectEntity.birthdayEnd != ''">
+                AND onboardDate &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
+            </if>
+            <!-- 查询条件结束 -->
+            AND id Not In (Select * from (Select id From tb_user NATURAL JOIN tb_user_info
+            <where>
+                <!-- 查询条件 -->
+                <if test="userSelectEntity.username != ''">
+                    username LIKE '%${userSelectEntity.username}%'
+                </if>
+                <if test="userSelectEntity.nickname != ''">
+                    AND nickname LIKE '%${userSelectEntity.nickname}%'
+                </if>
+                <if test="userSelectEntity.phone != ''">
+                    AND phone LIKE '%${userSelectEntity.phone}%'
+                </if>
+                <if test="userSelectEntity.email != ''">
+                    AND phone LIKE '%${userSelectEntity.email}%'
+                </if>
+                <if test="userSelectEntity.roleID != -1">
+                    AND roleID = #{userSelectEntity.roleID}
+                </if>
+                <if test="userSelectEntity.departmentID != -1">
+                    AND departmentID = #{userSelectEntity.departmentID}
+                </if>
+                <if test="userSelectEntity.onboardDateStart != ''">
+                    AND onboardDate > #{userSelectEntity.onboardDateStart}
+                </if>
+                <if test="userSelectEntity.onboardDateEnd != ''">
+                    AND onboardDate &lt; #{userSelectEntity.onboardDateEnd}<!-- 小于 -->
+                </if>
+                <if test="userSelectEntity.birthdayStart != ''">
+                    AND onboardDate > #{userSelectEntity.birthdayStart}
+                </if>
+                <if test="userSelectEntity.birthdayEnd != ''">
+                    AND onboardDate &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
+                </if>
+                <!-- 查询条件结束 -->
+            </where>
+            Limit #{startRow})as t) Limit #{rowsOnePage}
+        </where>
     </select>
 </mapper>

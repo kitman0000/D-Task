@@ -24,8 +24,8 @@ public class UserCl {
     }
 
     @RequestMapping(value = "/api/user/userList",method = RequestMethod.GET)
-    public ResponseData getUserList(UserSelectEntity userSelectEntity){
-        return user.getUserList(userSelectEntity);
+    public ResponseData getUserList(UserSelectEntity userSelectEntity,int page){
+        return user.getUserList(userSelectEntity, page);
     }
 
 }
