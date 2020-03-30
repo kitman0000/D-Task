@@ -13,4 +13,6 @@ public interface IAccount {
     void changePwd(String username,String password,String captcha);
 
     ResponseData logout();
+
+    void addAccount(String username, String pwd);
 }

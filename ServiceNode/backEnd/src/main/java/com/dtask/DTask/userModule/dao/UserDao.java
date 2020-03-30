@@ -3,6 +3,7 @@ package com.dtask.DTask.userModule.dao;
 import com.dtask.DTask.accountModule.bo.AccountBo;
 import com.dtask.DTask.userModule.bo.UserDetailBo;
 import com.dtask.DTask.userModule.bo.UserListBo;
+import com.dtask.DTask.userModule.entity.UserAddEntity;
 import com.dtask.DTask.userModule.entity.UserSelectEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -28,4 +29,7 @@ public interface UserDao {
 
     // 删除单个用户(注销账号)
     void deleteUser(int userID);
+
+    // 添加用户
+    void addUser(@Param("userAddEntity") UserAddEntity userAddEntity);
 }

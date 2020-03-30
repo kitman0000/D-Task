@@ -1,9 +1,12 @@
 package com.dtask.DTask.userModule.controller;
 
+import com.dtask.DTask.accountModule.service.IAccount;
+import com.dtask.DTask.userModule.entity.UserAddEntity;
 import com.dtask.DTask.userModule.entity.UserSelectEntity;
 import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +21,9 @@ public class UserCl {
     @Autowired
     IUser user;
 
+    @Autowired
+    IAccount account;
+
     @RequestMapping(value = "/api/user/userNumber",method = RequestMethod.GET)
     public ResponseData getUserNumber(UserSelectEntity userSelectEntity){
         return user.getUserNumber(userSelectEntity);
@@ -26,6 +32,13 @@ public class UserCl {
     @RequestMapping(value = "/api/user/userList",method = RequestMethod.GET)
     public ResponseData getUserList(UserSelectEntity userSelectEntity,int page){
         return user.getUserList(userSelectEntity, page);
+    }
+
+    @Transactional
+    @RequestMapping(value = "api/user/user",method = RequestMethod.POST)
+    public ResponseData addUser(UserAddEntity userAddEntity){
+        account.addAccount(userAddEntity.getUsername(),userAddEntity.getPwd());
+        return user.addUser(userAddEntity);
     }
 
 }

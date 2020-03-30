@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dtask.DTask.accountModule.dao.AccountDao">
+    <!-- 添加账号 -->
+    <insert id="addAccount">
+        INSERT INTO tb_user
+        <set>
+            username = #{username},
+            pwd = #{pwd}
+        </set>
+    </insert>
 
     <!-- 通过UserID寻找用户 -->
     <select id="findUserIDByName" resultType="com.dtask.DTask.accountModule.bo.AccountBo">

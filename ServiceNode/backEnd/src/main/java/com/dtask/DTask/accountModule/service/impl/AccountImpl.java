@@ -27,15 +27,15 @@ public class AccountImpl implements IAccount{
     private CacheUtil cacheUtil;
 
     @Override
-    public ResponseData login(String username, String password) {
+    public ResponseData login(String username, String pwd) {
 
         ResponseData responseData;
 
         // 对密码二次加密
-        password = UserCommon.encodePwd(password);
+        pwd = UserCommon.encodePwd(pwd);
 
         // 添加用户认证信息
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, pwd);
 
         Object loginFailedTimeObj = cacheUtil.read("loginFailedTime:"+username);
 
@@ -57,13 +57,13 @@ public class AccountImpl implements IAccount{
             // 用户验证通过，生成token
             AccountBo accountBo = new AccountBo();
             accountBo.setUsername(username);
-            accountBo.setPwd(password);
+            accountBo.setPwd(pwd);
             accountBo.setId(accountDao.findUserIDByName(username).getId());
             String token = UserCommon.createToken(accountBo);
 
             // 将token放入缓存
             cacheUtil.write("token:"+username,token);
-            cacheUtil.write("pwd:"+username,password);
+            cacheUtil.write("pwd:"+username,pwd);
 
 
             return new ResponseData(1, LoginType.LOGIN_SUCCESS.toString(),token);
@@ -93,5 +93,11 @@ public class AccountImpl implements IAccount{
     @Override
     public ResponseData logout() {
         return null;
+    }
+
+    @Override
+    public void addAccount(String username, String pwd) {
+        pwd = UserCommon.encodePwd(pwd);
+        accountDao.addAccount(username,pwd);
     }
 }

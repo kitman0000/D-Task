@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dtask.DTask.userModule.dao.UserDao">
 
+    <!-- 添加用户 -->
+    <insert id="addUser">
+        INSERT INTO tb_user_info
+        <set>
+            id = @@IDENTITY,
+            nickname = #{userAddEntity.nickname},
+            phone = #{userAddEntity.phone},
+            email = #{userAddEntity.email},
+            onboardDate = #{userAddEntity.onboardDate},
+            roleID = #{userAddEntity.roleID},
+            departmentID = #{userAddEntity.departmentID},
+            birthday = #{userAddEntity.birthday}
+        </set>
+    </insert>
+
     <!-- 获取用户数量 -->
     <select id="getUserNumber" resultType="java.lang.Integer">
         SELECT count(id) FROM  tb_user NATURAL JOIN tb_user_info

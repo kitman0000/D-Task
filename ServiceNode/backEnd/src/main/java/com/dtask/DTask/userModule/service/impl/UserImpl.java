@@ -2,9 +2,11 @@ package com.dtask.DTask.userModule.service.impl;
 
 import com.dtask.DTask.userModule.bo.UserListBo;
 import com.dtask.DTask.userModule.dao.UserDao;
+import com.dtask.DTask.userModule.entity.UserAddEntity;
 import com.dtask.DTask.userModule.entity.UserSelectEntity;
 import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.ResponseData;
+import com.dtask.common.UserCommon;
 import com.dtask.common.util.PageDivideUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +36,14 @@ public class UserImpl implements IUser {
         List<UserListBo> userListBoList = userDao.getUserList(userSelectEntity,startRow,ROWS_ONE_PAGE);
 
         return new ResponseData(1,"查询成功",userListBoList);
+    }
+
+    @Override
+    public ResponseData addUser(UserAddEntity userAddEntity) {
+        // 对密码二次加密
+        userAddEntity.setPwd(UserCommon.encodePwd(userAddEntity.getPwd()));
+
+        userDao.addUser(userAddEntity);
+        return new ResponseData(1,"添加成功",null);
     }
 }
