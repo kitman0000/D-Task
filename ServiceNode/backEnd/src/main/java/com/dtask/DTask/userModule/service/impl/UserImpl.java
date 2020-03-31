@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.service.impl;
 
+import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.userModule.bo.UserListBo;
 import com.dtask.DTask.userModule.dao.UserDao;
 import com.dtask.DTask.userModule.entity.UserAddEntity;
@@ -45,5 +46,11 @@ public class UserImpl implements IUser {
 
         userDao.addUser(userAddEntity);
         return new ResponseData(1,"添加成功",null);
+    }
+
+    @Override
+    public ResponseData editUser(UserAddEntity userAddEntity) {
+        userDao.updateUser(userAddEntity);
+        return new ResponseData(1,"修改成功",null);
     }
 }

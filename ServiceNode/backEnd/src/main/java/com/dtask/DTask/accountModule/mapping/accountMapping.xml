@@ -22,7 +22,13 @@
 
     <!-- 更新用户密码-->
     <update id="updateUserPwd">
-
+        UPDATE tb_user
+        <set>
+            pwd = #{pwd}
+        </set>
+        <where>
+            id = #{id}
+        </where>
     </update>
 
 </mapper>

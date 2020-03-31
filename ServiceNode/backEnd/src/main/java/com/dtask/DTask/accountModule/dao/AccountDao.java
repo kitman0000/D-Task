@@ -15,7 +15,7 @@ public interface AccountDao {
 
     String getUserPwd(int userID);
 
-    void updateUserPwd(@Param("id") int userID, @Param("pwd") String pwd);
+    void updateUserPwd(@Param("id") int id, @Param("pwd") String pwd);
 
     void addAccount(@Param("username") String username, @Param("pwd") String pwd);
 }

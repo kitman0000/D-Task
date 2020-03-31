@@ -100,4 +100,10 @@ public class AccountImpl implements IAccount{
         pwd = UserCommon.encodePwd(pwd);
         accountDao.addAccount(username,pwd);
     }
+
+    @Override
+    public void updatePwd(int id, String pwd) {
+        pwd =UserCommon.encodePwd(pwd);
+        accountDao.updateUserPwd(id,pwd);
+    }
 }

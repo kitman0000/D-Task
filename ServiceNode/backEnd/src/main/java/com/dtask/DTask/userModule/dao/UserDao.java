@@ -32,4 +32,7 @@ public interface UserDao {
 
     // 添加用户
     void addUser(@Param("userAddEntity") UserAddEntity userAddEntity);
+
+    // 修改用户(管理员)
+    void updateUser(@Param("userAddEntity") UserAddEntity userAddEntity);
 }

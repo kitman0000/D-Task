@@ -15,4 +15,6 @@ public interface IAccount {
     ResponseData logout();
 
     void addAccount(String username, String pwd);
+
+    void updatePwd(int id,String pwd);
 }

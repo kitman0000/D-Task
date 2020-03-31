@@ -17,6 +17,23 @@
         </set>
     </insert>
 
+    <!-- 修改用户(管理员) -->
+    <update id="updateUser">
+        UPDATE tb_user_info
+        <set>
+            nickname = #{userAddEntity.nickname},
+            phone = #{userAddEntity.phone},
+            email = #{userAddEntity.email},
+            onboardDate = #{userAddEntity.onboardDate},
+            roleID = #{userAddEntity.roleID},
+            departmentID = #{userAddEntity.departmentID},
+            birthday = #{userAddEntity.birthday}
+        </set>
+        <where>
+            id = #{userAddEntity.id}
+        </where>
+    </update>
+
     <!-- 获取用户数量 -->
     <select id="getUserNumber" resultType="java.lang.Integer">
         SELECT count(id) FROM  tb_user NATURAL JOIN tb_user_info

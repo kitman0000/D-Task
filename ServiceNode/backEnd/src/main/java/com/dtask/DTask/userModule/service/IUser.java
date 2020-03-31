@@ -13,4 +13,6 @@ public interface IUser {
     ResponseData getUserList(UserSelectEntity userSelectEntity, int page);
 
     ResponseData addUser(UserAddEntity userAddEntity);
+
+    ResponseData editUser(UserAddEntity userAddEntity);
 }

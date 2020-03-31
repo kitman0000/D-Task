@@ -41,4 +41,13 @@ public class UserCl {
         return user.addUser(userAddEntity);
     }
 
+    @Transactional
+    @RequestMapping(value = "api/user/user",method = RequestMethod.PUT)
+    public ResponseData editUser(UserAddEntity userAddEntity){
+        if(!userAddEntity.getPwd().equals("")){
+            account.updatePwd(userAddEntity.getId(),userAddEntity.getPwd());
+        }
+        return user.editUser(userAddEntity);
+    }
+
 }

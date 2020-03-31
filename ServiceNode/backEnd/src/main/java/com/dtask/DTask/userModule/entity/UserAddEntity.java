@@ -9,6 +9,8 @@ import java.util.Date;
  */
 @Data
 public class UserAddEntity {
+    private int id;
+
     private String username;
 
     private String pwd;
