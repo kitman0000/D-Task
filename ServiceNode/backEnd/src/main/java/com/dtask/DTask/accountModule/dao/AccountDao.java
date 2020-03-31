@@ -18,4 +18,6 @@ public interface AccountDao {
     void updateUserPwd(@Param("id") int id, @Param("pwd") String pwd);
 
     void addAccount(@Param("username") String username, @Param("pwd") String pwd);
+
+    int checkUsernameExist(String username);
 }

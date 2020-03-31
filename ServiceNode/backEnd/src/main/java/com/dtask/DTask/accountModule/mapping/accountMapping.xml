@@ -20,6 +20,14 @@
         SELECT pwd FROM tb_user WHERE id = #{userID}
     </select>
 
+    <!-- 判断用户名是否存在 -->
+    <select id="checkUsernameExist" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM tb_user
+        <where>
+            username = #{username}
+        </where>
+    </select>
+
     <!-- 更新用户密码-->
     <update id="updateUserPwd">
         UPDATE tb_user

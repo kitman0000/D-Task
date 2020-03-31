@@ -96,7 +96,11 @@ public class AccountImpl implements IAccount{
     }
 
     @Override
-    public void addAccount(String username, String pwd) {
+    public void addAccount(String username, String pwd) throws Exception {
+        if(accountDao.checkUsernameExist(username) != 0){
+            throw new Exception("account has exist");
+        }
+
         pwd = UserCommon.encodePwd(pwd);
         accountDao.addAccount(username,pwd);
     }

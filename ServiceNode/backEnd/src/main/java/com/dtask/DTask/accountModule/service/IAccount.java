@@ -14,7 +14,7 @@ public interface IAccount {
 
     ResponseData logout();
 
-    void addAccount(String username, String pwd);
+    void addAccount(String username, String pwd) throws Exception;
 
     void updatePwd(int id,String pwd);
 }

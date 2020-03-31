@@ -37,7 +37,11 @@ public class UserCl {
     @Transactional
     @RequestMapping(value = "api/user/user",method = RequestMethod.POST)
     public ResponseData addUser(UserAddEntity userAddEntity){
-        account.addAccount(userAddEntity.getUsername(),userAddEntity.getPwd());
+        try {
+            account.addAccount(userAddEntity.getUsername(),userAddEntity.getPwd());
+        }catch (Exception e){
+            return new ResponseData(2,"账号已经存在",null);
+        }
         return user.addUser(userAddEntity);
     }
 
