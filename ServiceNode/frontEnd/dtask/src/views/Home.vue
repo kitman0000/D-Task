@@ -48,10 +48,13 @@ import axios from 'axios';
 			login(){
 				var userLogin = new URLSearchParams();
 				userLogin.append("username", this.userName);
-				userLogin.append("password", this.$md5(this.pwd));
+				userLogin.append("pwd", this.$md5(this.pwd));
 				axios.post('/api/account/localLogin', userLogin)
 					.then(res=> {
-						alert("成功");
+						var response = res.data;
+						localStorage.setItem("token",response.data);
+						this.$router.push({path:"/Menu"});
+						
 					}).catch(err=>{
 						alert("请求异常");
 					})
@@ -59,3 +62,8 @@ import axios from 'axios';
 		},
 	}
 </script>
+<style>
+	.theChosenOne{
+		text-decoration: underline;
+	}
+</style>
