@@ -17,7 +17,7 @@ public class CacheUtil implements ICacheManager{
     @Autowired
     public CacheUtil(RedisUtil redisUtil) {
         // 获取缓存方法
-        int cacheMode = 1;
+        int cacheMode = 2;
 
         if(cacheMode == 1){ // 缓存模式是1则使用Redis
             this.cacheManager = redisUtil;

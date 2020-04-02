@@ -13,12 +13,16 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
+
 /**
  * 实现AuthorizingRealm接口用户用户认证
  * @author Louis
  * @date Jun 20, 2019
  */
 public class MyShiroRealm extends AuthorizingRealm {
+
+
 	@Autowired
 	AccountDao accountDao;
 

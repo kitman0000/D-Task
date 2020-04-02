@@ -4,6 +4,7 @@ import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.service.IAccount;
 import com.dtask.DTask.accountModule.type.LoginType;
 import com.dtask.DTask.accountModule.bo.AccountBo;
+import com.dtask.common.AuthFilter;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.config.WebsiteConfig;
@@ -63,8 +64,9 @@ public class AccountImpl implements IAccount{
 
             // 将token放入缓存
             cacheUtil.write("token:"+username,token);
-            cacheUtil.write("pwd:"+username,pwd);
 
+            // 将密码放入HashMap缓存
+            AuthFilter.userPwdMap.put(username,pwd);
 
             return new ResponseData(1, LoginType.LOGIN_SUCCESS.toString(),token);
         }

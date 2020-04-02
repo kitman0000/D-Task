@@ -5,6 +5,7 @@ import com.dtask.DTask.userModule.entity.UserAddEntity;
 import com.dtask.DTask.userModule.entity.UserSelectEntity;
 import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.ResponseData;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,16 +25,19 @@ public class UserCl {
     @Autowired
     IAccount account;
 
+    @RequiresPermissions("user:userList:get")
     @RequestMapping(value = "/api/user/userNumber",method = RequestMethod.GET)
     public ResponseData getUserNumber(UserSelectEntity userSelectEntity){
         return user.getUserNumber(userSelectEntity);
     }
 
+    @RequiresPermissions("user:userList:get")
     @RequestMapping(value = "/api/user/userList",method = RequestMethod.GET)
     public ResponseData getUserList(UserSelectEntity userSelectEntity,int page){
         return user.getUserList(userSelectEntity, page);
     }
 
+    @RequiresPermissions("user:userList:add")
     @Transactional
     @RequestMapping(value = "api/user/user",method = RequestMethod.POST)
     public ResponseData addUser(UserAddEntity userAddEntity){
@@ -45,6 +49,7 @@ public class UserCl {
         return user.addUser(userAddEntity);
     }
 
+    @RequiresPermissions("user:userList:edit")
     @Transactional
     @RequestMapping(value = "api/user/user",method = RequestMethod.PUT)
     public ResponseData editUser(UserAddEntity userAddEntity){

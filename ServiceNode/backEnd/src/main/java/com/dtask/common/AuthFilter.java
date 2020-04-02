@@ -4,9 +4,6 @@ import com.dtask.DTask.accountModule.bo.TokenBo;
 import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.EncodeUtil;
 import com.dtask.common.util.JsonUtil;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
@@ -14,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -21,16 +19,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 /**
  * 用户权限拦截类
  * Created by zhong on 2019-12-17.
  */
-@Component
 public class AuthFilter extends BasicHttpAuthenticationFilter {
 
-    @Autowired
-    private CacheUtil cacheUtil;
+    public static HashMap<String,String> userPwdMap = new HashMap<>();
 
     Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
@@ -53,10 +50,10 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         String json = EncodeUtil.decodeBase64(base64Token);
         TokenBo tokenBo = (TokenBo) JsonUtil.jsonToObject(json,TokenBo.class);
 
-        // 判断缓存中是否存在token
-        Object tokenObj = cacheUtil.read("token:" + tokenBo.getUsername());
+        // 从缓存中获取pwd
+        String pwd = userPwdMap.get(tokenBo.getUsername());
 
-        if(tokenObj == null||!tokenObj.toString().equals(base64Token)){
+        if(pwd == null){
             // token过期或不存在
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             try {
@@ -68,9 +65,6 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
             }
             return false;
         }
-
-        // 从缓存中获取pwd
-        String pwd = cacheUtil.read("pwd:"+tokenBo.getUsername()).toString();
 
         // 尝试登录，校验token信息正确
         UsernamePasswordToken token = new UsernamePasswordToken(tokenBo.getUsername(),pwd);
