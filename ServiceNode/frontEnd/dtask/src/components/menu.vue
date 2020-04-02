@@ -1,17 +1,19 @@
 <template>
 	<div>
 		<el-container>
-		
-		  <el-aside width="200px" style="min-height: 700px;background-color: #24375E;">
-			  <el-menu :default-openeds="[]"  text-color="#fff" active-color="#1D376B" >
+		<img src="../assets/TIM图片20200401203159.png"  @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
+		  <el-aside width="200px" style="min-height: 700px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
+			  <el-menu :default-openeds="['1']"  text-color="#fff" active-text-color="#FFF" >
 			  	<li v-for="menu in menus">
 			  		<el-submenu :index="menu.id.toString()" style="background-color: #10192B;">
 			  			<template slot="title"  >{{menu.name}}</template>
-			  				<div  v-for="subMenu in menu.childMenuBoList" style="background-color: #334E85;">
-			  						<el-menu-item :index="subMenu.id.toString()" >
-			  								{{subMenu.name}}
-			  						</el-menu-item>
-	
+			  				<div  v-for="subMenu in menu.childMenuBoList" style="border-bottom:1px solid #5C75A7;">
+								<el-row>
+								  <el-col :span="4" :class="{'theSelectedMenu':theSelectedSubMenu==subMenu.id.toString(),'otherSubMenu':theSelectedSubMenu!=subMenu.id.toString()}" :index="subMenu.id.toString()" style="height: 50px;"></el-col>
+								  <el-col :span="20" style="height: 50px;background-color: #334E85;"><el-menu-item :index="subMenu.id.toString()" @click="test(subMenu.id.toString())">
+										{{subMenu.name}}
+			  						</el-menu-item></el-col>
+								</el-row>						
 			  				</div>
 			  		</el-submenu>
 			  	</li>
@@ -37,6 +39,7 @@
 				menus:[],
 				theSelectedMenu:'',
 				theSelectedSubMenu:'',
+				isShow:true,
 			}
 		},
 		methods:{
@@ -56,12 +59,12 @@
 					alert("请求异常");
 				});
 			},
-			changSubMenu(e,i){
-				this.theSelectedSubMenu=i;
-			},
 			test(e){
-				
+				this.theSelectedSubMenu = e;
 			},
+			showList(){
+				this.isShow=!this.isShow;
+			}
 		},
 		beforeMount:function() {
 			this.getUserMenu();
@@ -71,6 +74,23 @@
 	
 <style>
 	.theSelectedMenu{
-		background-color: black;
+		background-color: #24375E;
+	}
+	.otherSubMenu{
+		background-color: #334E85;
+	}
+	.showListButton{
+		position: fixed;
+		left: 208px;
+		top: 350px;
+		width: 15px;
+		height: 35px;
+	}
+	.hideListButton{
+		position: fixed;
+		left: 0px;
+		top: 350px;
+		width: 15px;
+		height: 35px;
 	}
 </style>

@@ -4,8 +4,8 @@
     	<!-- <div style="margin-left: 12%;"><h3>登录</h3></div> -->
     	<img style="margin-left: 25%;" src="../assets/logo.png"/>
     	<div style="margin-left: 25%;margin-top: 50px;">
-    		<a :class="{theChosenOne:isNormalUser}" @click="login_changeToNormalUser()">本系统用户</a>
-    		<a :class="{theChosenOne:isPrimelUser}" style="margin-left: 35px" @click="login_changeToPrimeUser()">上级系统用户</a>
+    		<a :class="{'theChosenOne':isNormalUser}" @click="login_changeToNormalUser()">本系统用户</a>
+    		<a :class="{'theChosenOne':isPrimelUser}" style="margin-left: 35px" @click="login_changeToPrimeUser()">上级系统用户</a>
     	</div>
     	<el-form label-width="80px" style="margin-top: 50px;">
     		<el-form-item label="用户名">
