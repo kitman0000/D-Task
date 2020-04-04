@@ -15,4 +15,6 @@ public interface IUser {
     ResponseData addUser(UserAddEntity userAddEntity);
 
     ResponseData editUser(UserAddEntity userAddEntity);
+
+    void deleteUser(int[] userID);
 }

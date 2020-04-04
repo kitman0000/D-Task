@@ -27,12 +27,12 @@ public interface UserDao {
     // 获取单个用户详细信息
     UserDetailBo getUserDetail(int userID);
 
-    // 删除单个用户(注销账号)
-    void deleteUser(int userID);
-
     // 添加用户
     void addUser(@Param("userAddEntity") UserAddEntity userAddEntity);
 
     // 修改用户(管理员)
     void updateUser(@Param("userAddEntity") UserAddEntity userAddEntity);
+
+    // 批量删除用户
+    void deleteUser(@Param("userID") int[] userID);
 }

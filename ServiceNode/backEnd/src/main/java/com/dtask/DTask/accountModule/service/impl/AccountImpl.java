@@ -112,4 +112,10 @@ public class AccountImpl implements IAccount{
         pwd =UserCommon.encodePwd(pwd);
         accountDao.updateUserPwd(id,pwd);
     }
+
+    @Override
+    public ResponseData deleteUser(int[] userID) {
+        accountDao.deleteAccount(userID);
+        return new ResponseData(1,"删除成功",null);
+    }
 }

@@ -20,4 +20,6 @@ public interface AccountDao {
     void addAccount(@Param("username") String username, @Param("pwd") String pwd);
 
     int checkUsernameExist(String username);
+
+    void deleteAccount(@Param("userID") int[] userID);
 }

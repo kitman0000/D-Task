@@ -59,4 +59,12 @@ public class UserCl {
         return user.editUser(userAddEntity);
     }
 
+    @RequiresPermissions("user:userList:delete")
+    @Transactional
+    @RequestMapping(value = "api/user/user",method = RequestMethod.DELETE)
+    public ResponseData deleteUser(int[] userID){
+        user.deleteUser(userID);
+        return account.deleteUser(userID);
+    }
+
 }

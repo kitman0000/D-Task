@@ -17,4 +17,6 @@ public interface IAccount {
     void addAccount(String username, String pwd) throws Exception;
 
     void updatePwd(int id,String pwd);
+
+    ResponseData deleteUser(int[] id);
 }
