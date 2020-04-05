@@ -31,8 +31,7 @@
                 INNER JOIN
             tb_role ON tb_user_info.roleID = tb_role.id
         <where>
-            tb_user_info.id = 1001
-                AND tb_role.id = 1
+            tb_user_info.id = #{userID}
         </where>
     </select>
 

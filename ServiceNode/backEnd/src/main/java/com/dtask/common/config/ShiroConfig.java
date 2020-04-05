@@ -22,9 +22,9 @@ public class ShiroConfig {
 	@Bean
 	public Realm myShiroRealm() {
 		MyShiroRealm myShiroRealm = new MyShiroRealm();
-
+		myShiroRealm.setCachingEnabled(false);
 		// 设置缓存管理
-		myShiroRealm.setCacheManager(new EhCacheManager());
+		//myShiroRealm.setCacheManager(new EhCacheManager());
 
 		return myShiroRealm;
 	}

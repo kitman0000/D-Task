@@ -151,7 +151,7 @@
     <delete id="deleteUser">
         DELETE FROM tb_user_info WHERE id IN
         <foreach collection="userID" item="id" open="(" close=")" separator=",">
-            id
+            #{id}
         </foreach>
     </delete>
 </mapper>

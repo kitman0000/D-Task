@@ -6,10 +6,12 @@ import com.dtask.DTask.userModule.bo.RoleBo;
 import com.dtask.DTask.accountModule.bo.AccountBo;
 import com.dtask.DTask.userModule.dao.RoleDao;
 import com.dtask.DTask.userModule.dao.UserDao;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.realm.CachingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -91,5 +93,6 @@ public class MyShiroRealm extends AuthorizingRealm {
 		}
 		return simpleAuthorizationInfo;
 	}
+
 
 }

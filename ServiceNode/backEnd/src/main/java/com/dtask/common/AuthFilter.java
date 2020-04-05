@@ -1,11 +1,13 @@
 package com.dtask.common;
 
 import com.dtask.DTask.accountModule.bo.TokenBo;
+import com.dtask.common.config.MyShiroRealm;
 import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.EncodeUtil;
 import com.dtask.common.util.JsonUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +71,9 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         // 尝试登录，校验token信息正确
         UsernamePasswordToken token = new UsernamePasswordToken(tokenBo.getUsername(),pwd);
         SecurityUtils.getSubject().login(token);
+
+        RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();
+        MyShiroRealm myShiroRealm = (MyShiroRealm) rsm.getRealms().iterator().next();
 
         return true;
     }

@@ -11,7 +11,14 @@ import net.sf.ehcache.Element;
 public class EcacheUtil implements ICacheManager{
 
     private CacheManager cacheManager = CacheManager.create();
-    private Cache cache = cacheManager.getCache("ehcache");
+    private Cache cache;
+
+    public EcacheUtil() {
+        if(cache == null){
+            cache = new net.sf.ehcache.Cache("ehcache",1024 * 1024,true,true,0,0);
+            cacheManager.addCache(cache);
+        }
+    }
 
     @Override
     public void write(String key, String value) {
