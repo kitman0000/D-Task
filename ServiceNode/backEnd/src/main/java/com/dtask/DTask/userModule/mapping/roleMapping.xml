@@ -4,18 +4,38 @@
 
     <!-- 添加角色-->
     <insert id="addRole">
-
+        INSERT INTO tb_role
+        <set>
+            name = #{roleName}
+        </set>
     </insert>
+
+    <!-- 编辑某角色名-->
+    <update id="editRole">
+        UPDATE tb_role
+        <set>
+            name = #{roleName}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!-- 删除角色 -->
+    <delete id="deleteRole">
+        DELETE FROM tb_role
+        WHERE id IN
+        <foreach collection="id" item="roleID" open="(" close=")" separator=",">
+            #{roleID}
+        </foreach>
+    </delete>
 
     <!-- 添加权限 -->
     <insert id="addRolePermission">
 
     </insert>
 
-    <!-- 删除权限 -->
-    <delete id="deleteRole">
 
-    </delete>
 
     <!-- 删除角色的权限 -->
     <delete id="deleteRolePermission">
@@ -42,7 +62,7 @@
 
     <!-- 获取所有角色 -->
     <select id="getAllRole" resultType="com.dtask.DTask.userModule.bo.RoleBo">
-
+        SELECT id,name as roleName FROM tb_role
     </select>
 
     <!-- 获取某角色拥有的权限-->

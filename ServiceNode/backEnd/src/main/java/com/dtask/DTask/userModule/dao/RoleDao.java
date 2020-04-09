@@ -24,8 +24,11 @@ public interface RoleDao {
     // 添加新角色
     void addRole(String roleName);
 
+    // 编辑某角色名
+    void editRole(@Param("id") int id, @Param("roleName") String roleName);
+
     // 删除角色
-    void deleteRole(int roleID);
+    void deleteRole(@Param("id") int[] id);
 
     // 检查某角色是否拥有某权限
     int checkRolePermission(@Param("roleID") int roleID, @Param("permissionID") int permissionID);
