@@ -30,16 +30,24 @@
         </foreach>
     </delete>
 
-    <!-- 添加权限 -->
+    <!-- 为角色添加权限 -->
     <insert id="addRolePermission">
-
+        INSERT INTO tb_role_permission
+        <set>
+            roleID = #{roleID},
+            permissionID = #{permissionID}
+        </set>
     </insert>
 
 
 
     <!-- 删除角色的权限 -->
     <delete id="deleteRolePermission">
-
+        DELETE FROM tb_role_permission
+        <where>
+            roleID = #{roleID} AND
+            permissionID = #{permissionID}
+        </where>
     </delete>
 
     <!-- 获取用户的角色 -->
@@ -57,7 +65,11 @@
 
     <!-- 检查某角色是否有某权限 -->
     <select id="checkRolePermission" resultType="java.lang.Integer">
-
+        SELECT count(id) FROM tb_role_permission
+        <where>
+            roleID = #{roleID} AND
+            permissionID = #{permissionID}
+        </where>
     </select>
 
     <!-- 获取所有角色 -->
@@ -78,6 +90,10 @@
         </where>
     </select>
 
+    <!-- 获取所有权限 -->
+    <select id="getAllPermission" resultType="com.dtask.DTask.userModule.bo.PermissionBo">
+        SELECT * FROM tb_permission
+    </select>
 
 
 </mapper>

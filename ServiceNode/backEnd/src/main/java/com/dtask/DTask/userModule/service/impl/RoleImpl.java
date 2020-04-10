@@ -7,8 +7,6 @@ import com.dtask.common.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 /**
@@ -45,6 +43,30 @@ public class RoleImpl implements IRole{
         }catch (Exception e){
             return new ResponseData(2,"删除失败",null);
         }
-
     }
+
+    @Override
+    public ResponseData addRolePermission(int roleID, int permissionID) {
+        int hasPermission = roleDao.checkRolePermission(roleID,permissionID);
+        if(hasPermission >= 1){
+            return new ResponseData(2,"添加失败",null);
+        }
+
+        roleDao.addRolePermission(roleID,permissionID);
+        return new ResponseData(1,"添加成功",null);
+    }
+
+    @Override
+    public ResponseData deleteRolePermission(int roleID, int permissionID) {
+        roleDao.deleteRolePermission(roleID,permissionID);
+        return new ResponseData(1,"删除成功",null);
+    }
+
+    @Override
+    public ResponseData getAllPermission() {
+        Object permissions = roleDao.getAllPermission();
+        return new ResponseData(1,"查询成功",permissions);
+    }
+
+
 }

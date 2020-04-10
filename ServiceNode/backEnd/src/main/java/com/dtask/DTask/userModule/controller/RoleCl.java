@@ -40,4 +40,22 @@ public class RoleCl {
     public ResponseData deleteRole(int[] roleID){
         return role.deleteRole(roleID);
     }
+
+    @RequiresPermissions("user:role:setPermission")
+    @RequestMapping(value = "api/role/rolePermission",method = RequestMethod.POST)
+    public ResponseData addRolePermission(int roleID,int permissionID){
+        return role.addRolePermission(roleID,permissionID);
+    }
+
+    @RequiresPermissions("user:role:setPermission")
+    @RequestMapping(value = "api/role/rolePermission",method = RequestMethod.DELETE)
+    public ResponseData deleteRolePermission(int roleID,int permissionID){
+        return role.deleteRolePermission(roleID,permissionID);
+    }
+
+    @RequiresPermissions("user:role:setPermission")
+    @RequestMapping(value = "api/role/rolePermission",method = RequestMethod.GET)
+    public ResponseData getAllPermission(){
+        return role.getAllPermission();
+    }
 }

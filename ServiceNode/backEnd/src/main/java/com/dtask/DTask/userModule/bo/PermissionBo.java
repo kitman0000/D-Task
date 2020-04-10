@@ -11,4 +11,5 @@ public class PermissionBo {
     private String pCategory;
     private String pObject;
     private String pOperate;
+    private String pDescribe;
 }

@@ -57,4 +57,5 @@ public class UserImpl implements IUser {
     public void deleteUser(int[] userID) {
         userDao.deleteUser(userID);
     }
+
 }
