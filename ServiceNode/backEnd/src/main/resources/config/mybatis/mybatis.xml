@@ -18,6 +18,7 @@
         <mapper resource="com/dtask/DTask/userModule/mapping/userMapping.xml"/>
         <mapper resource="com/dtask/DTask/userModule/mapping/roleMapping.xml"/>
         <mapper resource="com/dtask/DTask/userModule/mapping/menuMapping.xml"/>
+        <mapper resource="com/dtask/DTask/noticeModule/mapping/emailMapping.xml"/>
     </mappers>
 
 </configuration>

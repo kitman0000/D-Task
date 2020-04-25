@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.DTask.noticeModule.dao.EmailDao">
+
+    <!-- 添加新邮件 -->
+    <insert id="insertEmail">
+        INSERT INTO tb_email
+          (senderID,receiverID,title,content,isImportant,attachment)
+        VALUES
+        <foreach collection="receiverID" item="id" separator=",">
+            ( #{senderID}, #{id}, #{title}, #{content}, #{isImportant}, #{attachment} )
+        </foreach>
+    </insert>
+
+    <!-- 设置邮件为已读 -->
+    <update id="setMailHasRead">
+        UPDATE tb_email
+        <set>
+            hasRead = 1
+        </set>
+        <where>
+            id = #{mailID}
+        </where>
+    </update>
+
+    <!-- 检索用户收件的邮件数量 -->
+    <select id="getMailNumber" resultType="java.lang.Integer">
+        SELECT count(id) FROM tb_email
+        <where>
+            receiverID = #{userID}
+            <include refid="emailSearchCondition"/>
+        </where>
+    </select>
+
+    <!-- 检索用户收件的邮件列表 -->
+    <select id="getMailList" resultType="com.dtask.DTask.noticeModule.bo.EmailBo">
+        SELECT
+            tb_email.id,tb_email.receiverID,
+            tb_email.title,tb_email.content,
+            tb_email.sendTime,tb_email.hasRead,
+            tb_email.isImportant,tb_email.attachment,
+            tb_user.userID,tb_user.username as sender
+        FROM
+            tb_email,tb_user
+        <where>
+            tb_email.senderID = tb_user.userID
+            AND
+            receiverID = #{userID}
+            <include refid="emailSearchCondition"/>
+
+            <!-- 分页的条件 -->
+            AND id Not In (Select * from (Select id From tb_email
+            <where>
+                receiverID = #{userID}
+                <include refid="emailSearchCondition"/>
+            </where>
+            Limit #{startRow})as t) Limit #{rowsOnePage}
+            <!-- 分页的条件结束-->
+        </where>
+    </select>
+
+    <!-- 获取用户的收件邮件详情 -->
+    <select id="getMailDetail" resultType="com.dtask.DTask.noticeModule.bo.EmailDetailBo">
+        SELECT * FROM tb_email
+        <where>
+            id = #{mailID} AND receiverID = #{userID}
+        </where>
+    </select>
+
+    <!-- 获取发件数量 -->
+    <select id="getSentMailNumber" resultType="java.lang.Integer">
+        SELECT count(id) FROM tb_email
+        <where>
+            senderID = #{userID}
+            <include refid="emailSearchCondition"/>
+        </where>
+    </select>
+
+    <!-- 检索用户发件的邮件列表 -->
+    <select id="getSentMailList" resultType="com.dtask.DTask.noticeModule.bo.EmailBo">
+        SELECT
+        tb_email.id,tb_email.receiverID,
+        tb_email.title,tb_email.content,
+        tb_email.sendTime,tb_email.hasRead,
+        tb_email.isImportant,tb_email.attachment,
+        tb_user.userID,tb_user.username as receiver
+        FROM
+        tb_email,tb_user
+        <where>
+            tb_email.receiverID = tb_user.userID
+            AND
+            senderID = #{userID}
+            <include refid="emailSearchCondition"/>
+
+            <!-- 分页的条件 -->
+            AND id Not In (Select * from (Select id From tb_email
+            <where>
+                senderID = #{userID}
+                <include refid="emailSearchCondition"/>
+            </where>
+            Limit #{startRow})as t) Limit #{rowsOnePage}
+            <!-- 分页的条件结束-->
+        </where>
+    </select>
+
+    <!-- 获取用户的已发邮件详情 -->
+    <select id="getSentMailDetail" resultType="com.dtask.DTask.noticeModule.bo.EmailDetailBo">
+        SELECT * FROM tb_email
+        <where>
+            id = #{mailID} AND senderID = #{userID}
+        </where>
+    </select>
+
+    <!-- 邮件查询条件 -->
+    <sql id="emailSearchCondition">
+
+        <if test="emailSearchEntity.keyword != ''">
+            AND
+            (content LIKE '%${emailSearchEntity.keyword}%' OR title LIKE '%${emailSearchEntity.keyword}%')
+        </if>
+
+        <if test="emailSearchEntity.hasRead != null">
+            AND hasRead = #{emailSearchEntity.hasRead}
+        </if>
+
+        <if test="emailSearchEntity.isImportant != null">
+            AND isImportant = #{emailSearchEntity.isImportant}
+        </if>
+
+        <if test="emailSearchEntity.sendTimeStart != ''">
+            AND sendTime > #{emailSearchEntity.sendTimeStart}
+        </if>
+
+        <if test="emailSearchEntity.sendTimeEnd != ''">
+            AND sendTime &lt; #{emailSearchEntity.sendTimeEnd}
+        </if>
+    </sql>
+</mapper>
