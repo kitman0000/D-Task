@@ -37,6 +37,12 @@ public class UserCl {
         return user.getUserList(userSelectEntity, page);
     }
 
+    @RequiresPermissions("user:userList:get")
+    @RequestMapping(value = "/api/user/userDetail",method = RequestMethod.GET)
+    public ResponseData getUserDetail(int userID){
+        return user.getUserDetail(userID);
+    }
+
     @RequiresPermissions("user:userList:add")
     @Transactional
     @RequestMapping(value = "api/user/user",method = RequestMethod.POST)

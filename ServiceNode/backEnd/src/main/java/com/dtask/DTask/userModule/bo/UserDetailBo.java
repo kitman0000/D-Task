@@ -8,14 +8,28 @@ import lombok.Data;
 @Data
 public class UserDetailBo {
     private int id;
+
     private String username;
+
     private String pwd;
+
     private String nickName = "";
+
     private int status;
+
     private int role;
+
     private String email = "";
+
     private String phoneNumber = "";
+
     private int sex;
+
     private String birthday = "";
+
     private String avatarUrl = "";
+
+    private String roleName;
+
+    private String departmentName;
 }

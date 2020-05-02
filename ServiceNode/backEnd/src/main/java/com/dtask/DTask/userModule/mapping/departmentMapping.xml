@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.DTask.userModule.dao.DepartmentDao">
+
+    <insert id="addDepartment">
+        INSERT INTO tb_department (name) VALUES #{name}
+    </insert>
+
+    <update id="updateDepartment">
+        UPDATE tb_department
+        <set>
+          name = #{name}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="deleteDepartment">
+        DELETE FROM tb_department
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <select id="getDepartment" resultType="com.dtask.DTask.userModule.bo.DepartmentBo">
+        SELECT id,name as departmentName FROM tb_department
+    </select>
+</mapper>

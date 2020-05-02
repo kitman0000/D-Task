@@ -147,6 +147,17 @@
         </where>
     </select>
 
+    <select id="getUserDetail" resultType="com.dtask.DTask.userModule.bo.UserDetailBo">
+        SELECT username,nickname,profileUrl,phone,email,onboardDate, tb_role.name as roleName,tb_department.name as departmentName
+        FROM tb_user_info
+        INNER JOIN tb_user ON tb_user_info.id = tb_user.id
+        INNER JOIN tb_role ON tb_user_info.roleID = tb_role.id
+        INNER JOIN tb_department ON tb_user_info.departmentID = tb_department.id
+        <where>
+            tb_user_info.id = #{userID}
+        </where>
+    </select>
+
     <!-- 批量删除用户 -->
     <delete id="deleteUser">
         DELETE FROM tb_user_info WHERE id IN

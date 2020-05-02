@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.service.impl;
 
+import com.dtask.DTask.userModule.bo.UserDetailBo;
 import com.dtask.DTask.userModule.bo.UserListBo;
 import com.dtask.DTask.userModule.dao.UserDao;
 import com.dtask.DTask.userModule.entity.UserAddEntity;
@@ -36,6 +37,12 @@ public class UserImpl implements IUser {
         List<UserListBo> userListBoList = userDao.getUserList(userSelectEntity,startRow,ROWS_ONE_PAGE);
 
         return new ResponseData(1,"查询成功",userListBoList);
+    }
+
+    @Override
+    public ResponseData getUserDetail(int userID) {
+        UserDetailBo userDetailBo = userDao.getUserDetail(userID);
+        return new ResponseData(1,"查询成功",userDetailBo);
     }
 
     @Override
