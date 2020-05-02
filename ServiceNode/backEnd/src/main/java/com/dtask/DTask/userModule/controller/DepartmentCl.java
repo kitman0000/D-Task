@@ -16,22 +16,22 @@ public class DepartmentCl {
     IDepartment department;
 
     @RequestMapping(value = "/api/department/department",method = RequestMethod.POST)
-    ResponseData addDepartment(String name){
+    public ResponseData addDepartment(String name){
         return department.addDepartment(name);
     }
 
     @RequestMapping(value = "/api/department/department",method = RequestMethod.PUT)
-    ResponseData editDepartment(int id,String name){
+    public ResponseData editDepartment(int id,String name){
         return department.editDepartment(id,name);
     }
 
     @RequestMapping(value = "/api/department/department",method = RequestMethod.DELETE)
-    ResponseData deleteDepartment(int id){
+    public ResponseData deleteDepartment(int id){
          return department.deleteDepartment(id);
     }
 
     @RequestMapping(value = "/api/department/department",method = RequestMethod.GET)
-    ResponseData getDepartment(){
+    public ResponseData getDepartment(){
         return department.getDepartment();
     }
 }
