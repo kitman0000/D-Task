@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Menu from "../components/menu.vue"
+import Role from "../components/role.vue"
+import test from "../components/justForTest.vue"
 Vue.use(VueRouter)
 
 const routes = [
@@ -13,8 +15,18 @@ const routes = [
   {
     path: '/Menu',
     name: 'Menu',
-	component: Menu
-  }
+	component: Menu,
+	children:[{
+	        path:'Role',
+	        component: Role,
+			}
+			]
+  },
+  {
+    path: '/test',
+    name: 'test',
+  	component: test
+  },
 ]
 
 const router = new VueRouter({
