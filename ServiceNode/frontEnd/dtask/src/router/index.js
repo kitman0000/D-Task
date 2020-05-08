@@ -16,11 +16,11 @@ const routes = [
     path: '/Menu',
     name: 'Menu',
 	component: Menu,
-	children:[{
-	        path:'Role',
-	        component: Role,
-			}
-			]
+  },
+  {
+    path: '/Role',
+    name: 'Role',
+	component: Role,
   },
   {
     path: '/test',
