@@ -18,9 +18,10 @@
         <mapper resource="com/dtask/DTask/userModule/mapping/userMapping.xml"/>
         <mapper resource="com/dtask/DTask/userModule/mapping/roleMapping.xml"/>
         <mapper resource="com/dtask/DTask/userModule/mapping/menuMapping.xml"/>
-        <mapper resource="com/dtask/DTask/userModule/mapping/DepartmentMapping.xml"/>
+        <mapper resource="com/dtask/DTask/userModule/mapping/departmentMapping.xml"/>
         <mapper resource="com/dtask/DTask/noticeModule/mapping/emailMapping.xml"/>
-
+        <mapper resource="com/dtask/DTask/localTaskModule/mapping/localTaskMapping.xml"/>
+        <mapper resource="com/dtask/DTask/localTaskModule/mapping/localSubTaskMapping.xml"/>
     </mappers>
 
 </configuration>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.DTask.localTaskModule.dao.LocalSubTaskDao">
+
+    <insert id="addLocalSubTask">
+        INSERT INTO tb_local_sub_task
+        <set>
+          taskID = #{localSubTaskEntity.taskID},
+            <include refid="set_tb_local_sub_task"/>
+        </set>
+    </insert>
+
+    <update id="updateLocalSubTask">
+        UPDATE tb_local_sub_task
+        <set>
+            <include refid="set_tb_local_sub_task"/>
+        </set>
+        <where>
+            id = #{localSubTaskEntity.id}
+        </where>
+    </update>
+
+    <update id="updateLocalSubTaskStatus">
+        UPDATE tb_local_sub_task
+        <set>
+            status = #{localSubTaskEntity.status}
+        </set>
+        <where>
+            id = #{localSubTaskEntity.id}
+        </where>
+    </update>
+
+    <delete id="deleteLocalSubTask">
+        DELETE FROM tb_local_sub_task
+        WHERE id IN
+        <foreach collection="id" item="subTaskID" open="(" close=")" separator=",">
+            #{subTaskID}
+        </foreach>
+    </delete>
+
+    <select id="getLocalSubTaskNumber" resultType="java.lang.Integer">
+        SELECT count(id) FROM tb_local_sub_task
+        <where>
+            taskID = #{taskID}
+        </where>
+    </select>
+
+    <select id="getLocalSubTaskList" resultType="com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo">
+        SELECT * FROM tb_local_sub_task
+        <where>
+            taskID = #{taskID}
+
+            <!-- 分页的条件 -->
+            AND id Not In (Select * from (Select id From tb_local_sub_task
+            <where>
+                taskID = #{taskID}
+            </where>
+            Limit #{startRow})as t) Limit #{rowsOnePage}
+            <!-- 分页的条件结束-->
+        </where>
+
+    </select>
+
+    <!-- 判断用户是否为管理员 -->
+    <select id="isUserAdmin" resultType="java.lang.Boolean">
+        SELECT isAdmin FROM tb_local_sub_task
+        LEFT JOIN tb_local_task_user
+        ON tb_local_sub_task.taskID = tb_local_task_user.taskID
+
+         <where>
+             userID = #{userID}
+         </where>
+    </select>
+
+    <!-- 判断任务是否允许用户修改状态 -->
+    <select id="isAllowUserChangeState" resultType="java.lang.Boolean">
+        SELECT allowedMemberChangeStatus FROM tb_local_sub_task LEFT JOIN tb_local_task ON tb_local_sub_task.taskID = tb_local_task.id
+        <where>
+            tb_local_task.id = #{taskID}
+        </where>
+    </select>
+
+    <sql id="set_tb_local_sub_task">
+        name = #{localSubTaskEntity.name},
+        content = #{localSubTaskEntity.content},
+        deadline = #{localSubTaskEntity.deadline},
+        status = #{localSubTaskEntity.status},
+        startTime = #{localSubTaskEntity.startTime},
+        level = #{localSubTaskEntity.level},
+        tag = #{localSubTaskEntity.tag},
+        star = #{localSubTaskEntity.star}
+    </sql>
+</mapper>
