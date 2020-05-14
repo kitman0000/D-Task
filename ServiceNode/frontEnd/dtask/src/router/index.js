@@ -6,31 +6,30 @@ import Role from "../components/role.vue"
 import test from "../components/justForTest.vue"
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/Menu',
-    name: 'Menu',
-	component: Menu,
-	children:[{
-	        path:'Role',
-	        component: Role,
-			}
-			]
-  },
-  {
-    path: '/test',
-    name: 'test',
-  	component: test
-  },
+const routes = [{
+		path: '/',
+		name: 'Home',
+		component: Home
+	},
+	{
+		path: '/Menu',
+		name: 'Menu',
+		component: Menu,
+		children: [{
+			path: "Role",
+			name: "Role",
+			component: Role
+		}]
+	},
+	{
+		path: '/test',
+		name: 'test',
+		component: test
+	}
 ]
 
 const router = new VueRouter({
-  routes
+	routes
 })
 
 export default router
