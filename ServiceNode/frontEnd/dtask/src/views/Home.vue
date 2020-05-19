@@ -52,8 +52,22 @@ import axios from 'axios';
 				axios.post('/api/account/localLogin', userLogin)
 					.then(res=> {
 						var response = res.data;
-						localStorage.setItem("token",response.data);
-						this.$router.push({path:"/Menu"});
+						if(response.ret == 1){
+							localStorage.setItem("token",response.data);
+							this.$router.push({path:"/Menu"});
+						}
+						else if(response.ret == 2){
+							alert("账号或者密码错误");
+							location.reload();
+						}
+						else if(response.ret == 3){
+							alert("该账号已被锁定");
+							location.reload();
+						}
+						else if(response.ret == 4){
+							alert("该账号已被禁止");
+							location.reload();
+						}
 						
 					}).catch(err=>{
 						alert("请求异常");

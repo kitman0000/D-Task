@@ -9,6 +9,7 @@ import adduser from "../components/adduser.vue"
 import getuser from "../components/getuser.vue"
 Vue.use(VueRouter)
 
+<<<<<<< HEAD
 const routes = [
   {
     path: '/',
@@ -45,10 +46,32 @@ const routes = [
   	name:'getuser',
   	component:getuser
   },
+=======
+const routes = [{
+		path: '/',
+		name: 'Home',
+		component: Home
+	},
+	{
+		path: '/Menu',
+		name: 'Menu',
+		component: Menu,
+		children: [{
+			path: "Role",
+			name: "Role",
+			component: Role
+		}]
+	},
+	{
+		path: '/test',
+		name: 'test',
+		component: test
+	}
+>>>>>>> 147aa816bca191018e492d102e198f3565cb2fa8
 ]
 
 const router = new VueRouter({
-  routes
+	routes
 })
 
 export default router

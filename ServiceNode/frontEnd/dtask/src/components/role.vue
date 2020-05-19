@@ -1,6 +1,6 @@
 <template>
 	<div>
-			<el-button style="margin-top: 15px;margin-left: 15px;" @click="handleChange()">反选</el-button>
+			<el-button style="float: right;margin-top: 15px;" @click="deleteRoles()">删除所选角色</el-button>
 			<el-button style="float: right;margin-top: 15px;" @click="addRole()">添加角色</el-button>
 		<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 			<el-table-column type="selection" width="55"></el-table-column>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+	import axios from 'axios';
+	import qs from 'qs';
 	export default {
 		data() {
 			return {
@@ -30,6 +32,7 @@
 		},
 
 		methods: {
+			//反选方法(测试结果失败)
 			handleSelectionChange(val) {
 				let that_ = this;
 				that_.multipleSelection = val;
@@ -58,41 +61,59 @@
 					}
 				}
 			},
+			//删除单个角色
 			deleteRole(index){
-				axios.delete('/api/role/role', {
-						params: {
-							roleID: index.roleID,
-						},
 				
-						headers: {
-							"token": localStorage.getItem("token"),
-						}
-					})
-					.then(function(response) {
+				        this.$confirm('删除该角色, 是否确定?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+				        }).then(() => {
+				          axios.delete('/api/role/role', {
+				          		params: {
+				          			roleID: index.roleID,
+				          		},
+				          
+				          		headers: {
+				          			"token": localStorage.getItem("token"),
+				          		}
+				          	})
+				          	.then(function(response) {
+				          
+				          		if (response.data.ret == 1) {
+				          			alert("删除成功");
+				          		}
+				          		else{
+				          			alert("删除失败请重试");
+				          		}
+				          	})
+				          	.catch(function(error) {
+				          		console.log(error);
+				          	});
+				        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消删除'
+				          });          
+				        });
 				
-						if (response == "ROLE_DELETE_SUCCESS") {
-							alert("删除成功");
-						}
-					})
-					.catch(function(error) {
-						console.log(error);
-					});
+				
 			},
 			addRole() {
-				var addroleID;
-				this.$prompt('请输入角色id', {
+				var addroleName;
+				this.$prompt('请输入角色名', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 				}).then(({
 					value
 				}) => {
-					addroleID = value;
+					addroleName = value;
 					this.$message({
 						type: 'success',
 						message: 'id: ' + value
 					});
 					var roleid = new URLSearchParams();
-					roleid.append("id", addroleID);
+					roleid.append("roleName", addroleName);
 					axios.post('/api/role/role', roleid, {
 							headers: {
 								"token": localStorage.getItem("token"),
@@ -128,7 +149,7 @@
 					var title = new URLSearchParams();
 					title.append("roleName", index.roleName);
 					title.append("roleID", newID);
-					axios.post('/api/role/role', title, {
+					axios.put('/api/role/role', title, {
 							headers: {
 								"token": localStorage.getItem("token"),
 							}
@@ -155,7 +176,7 @@
 					var title = new URLSearchParams();
 					title.append("roleID", index.roleID);
 					title.append("roleName", newName);
-					axios.post('/api/role/role', title, {
+					axios.put('/api/role/role', title, {
 							headers: {
 								"token": localStorage.getItem("token"),
 							}
@@ -165,23 +186,71 @@
 						})
 				});
 			},
+			getRole(){
+				axios.get('/api/role/role', {
+						params: {},
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {
+						var response = res.data.data;
+						this.tableData = eval(response);
+					})
+					.catch(function(error) {
+						console.log(error);
+					});
+			},
+			//删除多个角色
+			deleteRoles(){
+				var selectedArray = new Array();
+				for(var i=0;i<this.multipleSelection.length;i++){
+					selectedArray.push(this.multipleSelection[i].roleID);
+				}
+				
+				this.$confirm('删除这些角色, 是否确定?', '提示', {
+				  confirmButtonText: '确定',
+				  cancelButtonText: '取消',
+				  type: 'warning'
+				}).then(() => {
+				  axios.delete('/api/role/role', {
+				  		params: {
+				  			roleID: selectedArray,
+				  		},
+				  		paramsSerializer: params => {
+				  		      return qs.stringify(params, { indices: false })
+				  		    },
+				  		headers: {
+				  			"token": localStorage.getItem("token"),
+				  		}
+				  	})
+				  	.then(function(response) {
+				  
+				  		if (response.data.ret == 1) {
+				  			alert("删除成功");
+				  		}
+				  		else{
+				  			alert("删除失败请重试");
+				  		}
+				  	})
+				  	.catch(function(error) {
+				  		console.log(error);
+				  	});
+				}).catch(() => {
+				  this.$message({
+				    type: 'info',
+				    message: '已取消删除'
+				  });          
+				});
+				
+				
+				
+			},
 			
 		},
 		
-		created: function() {
-			axios.get('/api/role/role', {
-					params: {},
-					headers: {
-						"token": localStorage.getItem("token"),
-					}
-				})
-				.then(res => {
-					var response = res.data;
-					this.tableData = eval(response);
-				})
-				.catch(function(error) {
-					console.log(error);
-				});
+		beforeMount: function() {
+			this.getRole();
 		}
 	}
 </script>
