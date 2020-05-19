@@ -4,6 +4,9 @@ import Home from '../views/Home.vue'
 import Menu from "../components/menu.vue"
 import Role from "../components/role.vue"
 import test from "../components/justForTest.vue"
+import user from "../components/user.vue"
+import adduser from "../components/adduser.vue"
+import getuser from "../components/getuser.vue"
 Vue.use(VueRouter)
 
 const routes = [
@@ -26,6 +29,21 @@ const routes = [
     path: '/test',
     name: 'test',
   	component: test
+  },
+  {
+	path:'/user',
+	name:'user',
+	component:user
+  },
+  {
+  	path:'/user/adduser',
+  	name:'adduser',
+  	component:adduser
+  },
+  {
+  	path:'/user/getuser',
+  	name:'getuser',
+  	component:getuser
   },
 ]
 
