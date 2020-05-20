@@ -109,8 +109,9 @@
 					params.append("departmentID",this.department);
 					params.append("birthday",birthday);
 					params.append("onboardDate",onboardDate);
-					axios.post("/api/user/user",{
-						params:params,
+					axios.post("/api/user/user",
+					params,
+					{
 						headers:{
 							token:localStorage.getItem("token"),
 						}
@@ -123,9 +124,9 @@
 					.catch(function(error) {
 						console.log(error);
 					});
-					// this.$router.push({
-					// 	path:'/user',
-					// })
+					this.$router.push({
+						path:'/user',
+					})
 				}
 			},
 			getRole(){
