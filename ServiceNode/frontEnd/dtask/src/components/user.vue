@@ -72,8 +72,8 @@
 				 :page-sizes="[10]" :page-size="pagesize" layout=" sizes, prev, pager, next, jumper" :total="userNumber">
 				</el-pagination>
 				<el-button type="primary" @click="addUser()" icon="el-icon-search" style="margin-left: 10px;">增加</el-button>
-				<el-input placeholder="userID" v-model="userID" style="width: 300px;"></el-input>
-				<el-button type="primary" @click="getUserDetail()" icon="el-icon-search" style="margin-left: 10px;">查询</el-button>
+				<!-- <el-input placeholder="userID" v-model="userID" style="width: 300px;"></el-input>
+				<el-button type="primary" @click="changeUser()" icon="el-icon-search" style="margin-left: 10px;">修改</el-button> -->
 			</el-main>
 		</el-container>
 	</div>
@@ -84,6 +84,7 @@
 	export default {
 		data() {
 			return {
+				userID:"",
 				onboardDate:"",
 				birthday:"",
 				role:"",
@@ -244,12 +245,12 @@
 					path:'/user/adduser',
 				})
 			},
-			getUserDetail(){
-				localStorage.setItem("userID", this.userID);
-				this.$router.push({
-					path:'/user/getuser',
-				})
-			}
+			// changeUser(){
+			// 	localStorage.setItem("userID", this.userID);
+			// 	this.$router.push({
+			// 		path:'/user/changeuser',
+			// 	})
+			// },
 			showList() {
 				this.isShow = !this.isShow;
 			},

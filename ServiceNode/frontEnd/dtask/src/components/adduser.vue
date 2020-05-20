@@ -69,43 +69,43 @@
 		},
 		methods:{
 			addUser(){
-				if (!this.usename) {
-					this.message = 'username不可为空';
+				if (!this.username) {
+					this.message = '用户名不可为空';
 				}
 				else if (!this.pwd) {
-					this.message = 'pwd不可为空';
+					this.message = '密码不可为空';
 				}
 				else if (!this.nickname) {
-					this.message = 'nickname不能为空';
+					this.message = '昵称不能为空';
 				}
 				else if (!this.phone) {
-					this.message = 'phone不可为空';
+					this.message = '手机号不可为空';
 				}
 				else if (!this.email) {
-					this.message = 'email不能为空';
-				}
-				else if (!this.roleID) {
-					this.message = 'role不可为空';
-				}
-				else if (!this.departmentID) {
-					this.message = 'department不能为空';
-				}
-				else if (!this.birthday) {
-					this.message = 'birthday不可为空';
+					this.message = '邮箱不能为空';
 				}
 				else if (!this.onboardDate) {
-					this.message = 'onboardDate不能为空';
+					this.message = '入职日期不能为空';
+				}
+				else if (!this.birthday) {
+					this.message = '出生日期不可为空';
+				}
+				else if (!this.role) {
+					this.message = '角色不可为空';
+				}
+				else if (!this.department) {
+					this.message = '部门不能为空';
 				}
 				else{
 					var params = new URLSearchParams();
 					var onboardDate = new Date(this.onboardDate).toLocaleDateString().replace(/\//g, '-');
 					var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');
-					params.append("usename",this.username);
+					params.append("username",this.username);
 					params.append("pwd",this.pwd);
 					params.append("nickname",this.nickname);
 					params.append("phone",this.phone);
 					params.append("email",this.email);
-					params.append("roleID",this.roleID);
+					params.append("roleID",this.role);
 					params.append("departmentID",this.department);
 					params.append("birthday",birthday);
 					params.append("onboardDate",onboardDate);
@@ -119,12 +119,13 @@
 						var response = res.data;
 						var retObj = eval(response.data);
 						console.log(retObj);
-						if(retObj.message=="添加成功"){
-							this.$router.push({
-								path:'/user',
-							})
-						}
 					})
+					.catch(function(error) {
+						console.log(error);
+					});
+					// this.$router.push({
+					// 	path:'/user',
+					// })
 				}
 			},
 			getRole(){

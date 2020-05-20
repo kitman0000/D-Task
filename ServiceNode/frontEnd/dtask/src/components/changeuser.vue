@@ -9,7 +9,6 @@
 			<el-input placeholder="昵称" v-model="nickname" style="width: 300px;"></el-input>
 			<el-input placeholder="手机号" v-model="phone" style="width: 300px;"></el-input>
 			<el-input placeholder="邮箱" v-model="email" style="width: 300px;"></el-input>
-			<el-input placeholder="性别" v-model="sex" style="width: 300px;"></el-input>
 			 <div class="block">
 			    <span class="demonstration">入职日期</span>
 			    <el-date-picker
@@ -55,7 +54,6 @@
 			return{
 				userID:1,
 				pwd:"",
-				sex:"",
 				role:"",
 				department:"",
 				onboardDate:"",
@@ -72,32 +70,32 @@
 		},
 		methods:{
 			changeUser(){
-				if (!this.usename) {
-					this.message = 'username不可为空';
+				if (!this.username) {
+					this.message = '用户名不可为空';
 				}
 				else if (!this.pwd) {
-					this.message = 'pwd不可为空';
+					this.message = '密码不可为空';
 				}
 				else if (!this.nickname) {
-					this.message = 'nickname不能为空';
+					this.message = '昵称不能为空';
 				}
 				else if (!this.phone) {
-					this.message = 'phone不可为空';
+					this.message = '手机号不可为空';
 				}
 				else if (!this.email) {
-					this.message = 'email不能为空';
-				}
-				else if (!this.roleID) {
-					this.message = 'role不可为空';
-				}
-				else if (!this.departmentID) {
-					this.message = 'department不能为空';
-				}
-				else if (!this.birthday) {
-					this.message = 'birthday不可为空';
+					this.message = '邮箱不能为空';
 				}
 				else if (!this.onboardDate) {
-					this.message = 'onboardDate不能为空';
+					this.message = '入职日期不能为空';
+				}
+				else if (!this.birthday) {
+					this.message = '出生日期不可为空';
+				}
+				else if (!this.role) {
+					this.message = '角色不可为空';
+				}
+				else if (!this.department) {
+					this.message = '部门不能为空';
 				}
 				else{
 					var params = new URLSearchParams();
@@ -108,7 +106,7 @@
 					params.append("nickname",this.nickname);
 					params.append("phone",this.phone);
 					params.append("email",this.email);
-					params.append("roleID",this.roleID);
+					params.append("roleID",this.role);
 					params.append("departmentID",this.department);
 					params.append("birthday",birthday);
 					params.append("onboardDate",onboardDate);
@@ -124,7 +122,7 @@
 						console.log(retObj);
 						if(retObj.message=="修改成功"){
 							this.$router.push({
-								path:'/user',
+								path:'/userlist',
 							})
 						}
 					})
@@ -148,7 +146,6 @@
 					this.email = userObj.email;
 					this.role = userObj.role;
 					this.phone = userObj.phoneNumber;
-					this.sex = userObj.sex;
 					this.birthday = userObj.birthday;
 					this.department = userObj.department;
 					this.onboardDate = userObj.onboardDate;
