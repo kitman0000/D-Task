@@ -73,9 +73,9 @@
 				if (!this.username) {
 					this.message = '用户名不可为空';
 				}
-				else if (!this.pwd) {
-					this.message = '密码不可为空';
-				}
+				// else if (!this.pwd) {
+				// 	this.message = '密码不可为空';
+				// }
 				else if (!this.nickname) {
 					this.message = '昵称不能为空';
 				}
@@ -101,7 +101,8 @@
 					var params = new URLSearchParams();
 					var onboardDate = new Date(this.onboardDate).toLocaleDateString().replace(/\//g, '-');
 					var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');
-					params.append("usename",this.username);
+					var userID =parseInt(localStorage.getItem("userID"));
+					params.append("id",userID);
 					params.append("pwd",this.pwd);
 					params.append("nickname",this.nickname);
 					params.append("phone",this.phone);
@@ -110,8 +111,9 @@
 					params.append("departmentID",this.department);
 					params.append("birthday",birthday);
 					params.append("onboardDate",onboardDate);
-					axios.post("/api/user/user",{
-						params:params,
+					axios.put("/api/user/user",
+					params,
+					{
 						headers:{
 							token:localStorage.getItem("token"),
 						}
@@ -120,18 +122,18 @@
 						var response = res.data;
 						var retObj = eval(response.data);
 						console.log(retObj);
-						if(retObj.message=="修改成功"){
-							this.$router.push({
-								path:'/userlist',
-							})
-						}
+					})
+					this.$router.push({
+						path:'/user',
 					})
 				}
 			},
 			getUserDetail(){
-				var userID = localStorage.getItem("userID");
-				axios.get("/api/user/userDetail?userID=1001",{
-					userID:userID,
+				var params = new URLSearchParams();
+				var userID =parseInt(localStorage.getItem("userID"));
+				params.append("userID",userID);
+				axios.get("/api/user/userDetail",{
+					params:params,
 					headers:{
 						token:localStorage.getItem("token"),
 					}
@@ -144,10 +146,10 @@
 					this.pwd = userObj.pwd;
 					this.nickname = userObj.nickName;
 					this.email = userObj.email;
-					this.role = userObj.role;
-					this.phone = userObj.phoneNumber;
+					this.role = userObj.roleID;
+					this.phone = userObj.phone;
 					this.birthday = userObj.birthday;
-					this.department = userObj.department;
+					this.department = userObj.departmentID;
 					this.onboardDate = userObj.onboardDate;
 				})
 			},
@@ -184,6 +186,7 @@
 		beforeMount:function() {
 			this.getDepartment();
 			this.getRole();
+			this.getUserDetail();
 		}
 	}
 </script>

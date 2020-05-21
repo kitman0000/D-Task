@@ -13,6 +13,7 @@
 					<el-button type="text" size="small" @click="deleteRole(scope.row)">删除角色</el-button>
 					<el-button type="text" size="small" @click="editRoleID(scope.row)">编辑角色ID</el-button>
 					<el-button type="text" size="small" @click="editRoleName(scope.row)">编辑角色名</el-button>
+					<el-button type="text" size="small" @click="editPermission(scope.row)">查看权限</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -246,6 +247,11 @@
 				
 				
 			},
+			
+			editPermission(index){
+				localStorage.setItem("roleID",index.roleID);
+				this.$router.push({path:"/PermissionOperation"});
+			}
 			
 		},
 		

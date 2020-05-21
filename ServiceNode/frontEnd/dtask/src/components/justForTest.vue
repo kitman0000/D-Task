@@ -1,89 +1,68 @@
 <template>
 	<div>
-  <el-table
-    ref="multipleTable"
-    :data="tableData"
-    tooltip-effect="dark"
-    style="width: 100%"
-    @selection-change="handleSelectionChange">
-    <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
-      label="日期"
-      width="120">
-      <template slot-scope="scope">{{ scope.row.date }}</template>
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      show-overflow-tooltip>
-    </el-table-column>
-  </el-table>
-  <div style="margin-top: 20px">
-    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
-    <el-button @click="toggleSelection()">取消选择</el-button>
-  </div>
-  </div>
+		<label style="margin-left: 10px;">关键词：</label>
+		<el-input placeholder="关键词" style="width: 200px;"></el-input>
+		<label style="margin-left: 15px;">是否重要：</label>
+		<el-select filterable placeholder="请选择状态" ref="statusSelector" v-model="IsImportantValue" style="width: 150px;">
+			<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+			</el-option>
+		</el-select>
+		<label style="margin-left: 15px;">是否已读：</label>
+		<el-select filterable placeholder="请选择状态" ref="statusSelector" v-model="hasReadValue" style="width: 150px;">
+			<el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
+			</el-option>
+		</el-select>
+
+		<label style="margin-left: 15px;">日期选择：</label>
+		<el-date-picker v-model="dateValue" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+		</el-date-picker>
+
+		<el-button type="primary" icon="el-icon-search" @click="test01()" style="margin-left: 10px;">搜索</el-button>
+	</div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-        multipleSelection: []
-      }
-    },
+	export default {
+		data() {
+			return {
+				options: [{
+					value: true,
+					label: '重要信息'
+				}, {
+					value: false,
+					label: '非重要信息'
+				}],
 
-    methods: {
-      toggleSelection(rows) {
-		  console.log(rows);
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      }
-    }
-  }
+				options2: [{
+					value: true,
+					label: '已读'
+				}, {
+					value: false,
+					label: '未读'
+				}],
+
+				IsImportantValue: true,
+				hasReadValue: false,
+				dateValue:'',
+			}
+		},
+
+		methods: {
+			toggleSelection(rows) {
+				if (rows) {
+					rows.forEach(row => {
+						this.$refs.multipleTable.toggleRowSelection(row);
+					});
+				} else {
+					this.$refs.multipleTable.clearSelection();
+				}
+			},
+			handleSelectionChange(val) {
+				this.multipleSelection = val;
+			},
+			test01(){
+				console.log(this.dateValue);
+			}
+		}
+	}
 </script>
