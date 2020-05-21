@@ -109,10 +109,10 @@
 					params.append("departmentID",this.department);
 					params.append("birthday",birthday);
 					params.append("onboardDate",onboardDate);
-					axios.post("/api/user/user",{
-						params:params,
-						headers:{
-							token:localStorage.getItem("token"),
+					
+					axios.post('/api/user/user', params, {
+						headers: {
+							"token": localStorage.getItem("token"),
 						}
 					})
 					.then(res => {
