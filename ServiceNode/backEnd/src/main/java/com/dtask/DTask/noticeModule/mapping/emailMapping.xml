@@ -39,17 +39,17 @@
             tb_email.title,tb_email.content,
             tb_email.sendTime,tb_email.hasRead,
             tb_email.isImportant,tb_email.attachment,
-            tb_user.userID,tb_user.username as sender
+            tb_user.username as sender
         FROM
             tb_email,tb_user
         <where>
-            tb_email.senderID = tb_user.userID
+            tb_email.senderID = tb_user.id
             AND
             receiverID = #{userID}
             <include refid="emailSearchCondition"/>
 
             <!-- 分页的条件 -->
-            AND id Not In (Select * from (Select id From tb_email
+            AND tb_email.id Not In (Select * from (Select id From tb_email
             <where>
                 receiverID = #{userID}
                 <include refid="emailSearchCondition"/>
@@ -83,17 +83,17 @@
         tb_email.title,tb_email.content,
         tb_email.sendTime,tb_email.hasRead,
         tb_email.isImportant,tb_email.attachment,
-        tb_user.userID,tb_user.username as receiver
+        tb_user.username as receiver
         FROM
         tb_email,tb_user
         <where>
-            tb_email.receiverID = tb_user.userID
+            tb_email.receiverID = tb_user.id
             AND
             senderID = #{userID}
             <include refid="emailSearchCondition"/>
 
             <!-- 分页的条件 -->
-            AND id Not In (Select * from (Select id From tb_email
+            AND tb_email.id Not In (Select * from (Select id From tb_email
             <where>
                 senderID = #{userID}
                 <include refid="emailSearchCondition"/>

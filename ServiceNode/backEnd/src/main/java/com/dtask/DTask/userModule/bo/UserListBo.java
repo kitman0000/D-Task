@@ -23,12 +23,16 @@ public class UserListBo implements Serializable{
 
     private String profileUrl;
 
-    private String role;
+    private String roleID;
 
     private String department;
+
+    private int departmentID;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date onboardDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDay;
 
-    private Date onboardDate;
 }

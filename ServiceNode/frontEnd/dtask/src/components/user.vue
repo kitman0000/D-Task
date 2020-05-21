@@ -5,13 +5,18 @@
 			<el-aside width="200px" style="min-height: 700px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
 			</el-aside>
 			<el-main>
-				<el-input placeholder="用户名" v-model="username" style="width: 300px;"></el-input>
-				<el-input placeholder="昵称" v-model="nickname" style="width: 300px;"></el-input>
-				<el-input placeholder="手机号" v-model="phone" style="width: 300px;"></el-input>
-				<el-input placeholder="邮箱" v-model="email" style="width: 300px;"></el-input>
-				<div class="block">
-				    <span class="demonstration">入职日期</span>
+				<span class="demonstration">用户名：</span>
+				<el-input placeholder="用户名" v-model="username"  style="width: 15%; margin: 20px;"></el-input>
+				<span class="demonstration">昵称：</span>
+				<el-input placeholder="昵称" v-model="nickname"  style="width: 15%; margin: 20px;"></el-input>
+				<span class="demonstration">手机号：</span>
+				<el-input placeholder="手机号" v-model="phone"  style="width: 15%; margin: 20px;"></el-input>
+				<span class="demonstration">邮箱：</span>
+				<el-input placeholder="邮箱" v-model="email"  style="width: 15%; margin: 20px;"></el-input>
+				</br>
+				    <span class="demonstration">入职日：</span>
 				    <el-date-picker
+					 style="width: 15%; margin: 20px;"
 				      v-model="onboardDate"
 				      type="daterange"
 					  unlink-panels
@@ -19,10 +24,9 @@
 				      start-placeholder="开始日期"
 				      end-placeholder="结束日期">
 				    </el-date-picker>
-				  </div>
-				  <div class="block">
-				    <span class="demonstration">出生日期</span>
+				    <span class="demonstration">生日：</span>
 				    <el-date-picker
+					 style="width: 15%; margin: 20px;"
 				      v-model="birthday"
 				      type="daterange"
 				      unlink-panels
@@ -30,8 +34,8 @@
 				      start-placeholder="开始日期"
 				      end-placeholder="结束日期">
 				    </el-date-picker>
-				  </div>
-				<el-select v-model="role" placeholder="请选择角色">
+				<span class="demonstration">角色名：</span>
+				<el-select v-model="role" placeholder="请选择角色"  style="width: 15%; margin: 20px;">
 				    <el-option
 				      v-for="item in roleList"
 				      :key="item.roleID"
@@ -39,7 +43,8 @@
 				      :value="item.roleID">
 				    </el-option>
 				  </el-select>
-				  <el-select v-model="department" placeholder="请选择部门">
+				  <span class="demonstration">部门：</span>
+				  <el-select v-model="department" placeholder="请选择部门" style="width: 15%; margin: 20px;">
 				      <el-option
 				        v-for="item in departmentList"
 				        :key="item.id"
@@ -51,22 +56,12 @@
 				<el-table style="width: 100%;" :data="userList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
 					<el-table-column type="index" width="50">
 					</el-table-column>
-					<el-table-column label="username" prop="username" width="180">
+					<el-table-column label="用户名" prop="username" width="180">
 					</el-table-column>
-					<el-table-column label="nickname" prop="nickname" width="180">
+					<el-table-column label="昵称" prop="nickname" width="180">
 					</el-table-column>
-					<el-table-column label="email" prop="email" width="180">
+					<el-table-column label="邮箱" prop="email" width="180">
 					</el-table-column>
-					<!-- <el-table-column label="profileUrl" prop="profileUrl" width="180">
-					</el-table-column>
-					<el-table-column label="role" prop="role" width="180">
-					</el-table-column>
-					<el-table-column label="department" prop="department" width="180">
-					</el-table-column>
-					<el-table-column label="brithDay" prop="brithDay" width="180">
-					</el-table-column>
-					<el-table-column label="onboardDate" prop="onboardDate" width="180">
-					</el-table-column> -->
 				</el-table>
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
 				 :page-sizes="[10]" :page-size="pagesize" layout=" sizes, prev, pager, next, jumper" :total="userNumber">
@@ -82,7 +77,8 @@
 <script>
 	import axios from 'axios';
 	export default {
-		data() {
+		
+		data() {			
 			return {
 				userID:"",
 				onboardDate:"",
@@ -100,9 +96,9 @@
 				departmentList:[],
 				userList:[
 				{
-					username:'Frank',
-					nickname:'Miku',
-					email:'l27133047@126.com'
+					username:'',
+					nickname:'',
+					email:''
 				},
 				],
 				isShow: true,
@@ -129,6 +125,22 @@
 				var birthdayEnd = new Date(this.birthday[1]).toLocaleDateString().replace(/\//g, '-');
 				var roleID;
 				var departmentID;
+				if(onboardDateStart == "Invalid Date"){
+					onboardDateStart = "";
+				}
+				
+				if(onboardDateEnd == "Invalid Date"){
+					onboardDateEnd = "";
+				}
+				
+				if(birthdayStart == "Invalid Date"){
+					birthdayStart = "";
+				}
+				
+				if(birthdayEnd == "Invalid Date"){
+					birthdayEnd = "";
+				}
+					
 				if(!this.role){
 					roleID = -1;
 				}
@@ -265,6 +277,7 @@
 </script>
 
 <style>
+	
 	.theSelectedMenu {
 		background-color: #24375E;
 	}

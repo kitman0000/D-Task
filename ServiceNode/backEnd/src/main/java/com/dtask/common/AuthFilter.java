@@ -50,6 +50,21 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
 
         // 获取用户信息
         String base64Token = httpServletRequest.getHeader("token");
+
+        if(base64Token == null)
+        {
+            // token不在header里
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+            try {
+                // 向前端返回token过期
+                PrintWriter printWriter = httpServletResponse.getWriter();
+                printWriter.print("NO_TOKEN_IN_HEADER");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
         String json = EncodeUtil.decodeBase64(base64Token);
         TokenBo tokenBo = (TokenBo) JsonUtil.jsonToObject(json,TokenBo.class);
 

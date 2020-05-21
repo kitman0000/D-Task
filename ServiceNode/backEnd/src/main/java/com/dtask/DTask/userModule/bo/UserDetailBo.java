@@ -2,6 +2,8 @@ package com.dtask.DTask.userModule.bo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * Created by zhong on 2019-12-3.
  */
@@ -15,21 +17,22 @@ public class UserDetailBo {
 
     private String nickName = "";
 
-    private int status;
-
-    private int role;
+    private int roleID;
 
     private String email = "";
 
-    private String phoneNumber = "";
+    private String phone = "";
 
-    private int sex;
-
-    private String birthday = "";
-
-    private String avatarUrl = "";
+    private Date birthday;
 
     private String roleName;
 
+    private int departmentID;
+
     private String departmentName;
+
+    private String profileUrl;
+
+    private Date onboardDate;
+
 }

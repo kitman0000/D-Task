@@ -14,9 +14,12 @@ public interface IRole {
 
     ResponseData deleteRole(int[] roleID);
 
+    ResponseData getRolePermission(int roleID);
+
     ResponseData addRolePermission(int roleID, int permissionID);
 
     ResponseData deleteRolePermission(int roleID,int permissionID);
 
     ResponseData getAllPermission();
+
 }

@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.service.impl;
 
+import com.dtask.DTask.userModule.bo.PermissionBo;
 import com.dtask.DTask.userModule.bo.RoleBo;
 import com.dtask.DTask.userModule.dao.RoleDao;
 import com.dtask.DTask.userModule.service.IRole;
@@ -25,7 +26,7 @@ public class RoleImpl implements IRole{
 
     @Override
     public ResponseData editRole(int roleID, String roleName) {
-        roleDao.editRole(1,roleName);
+        roleDao.editRole(roleID,roleName);
         return new ResponseData(1,"编辑成功",null);
     }
 
@@ -54,6 +55,12 @@ public class RoleImpl implements IRole{
 
         roleDao.addRolePermission(roleID,permissionID);
         return new ResponseData(1,"添加成功",null);
+    }
+
+    @Override
+    public ResponseData getRolePermission(int roleID) {
+        List<PermissionBo> permissionBoList = roleDao.getRolePermission(roleID);
+        return new ResponseData(1,"查询成功",permissionBoList);
     }
 
     @Override

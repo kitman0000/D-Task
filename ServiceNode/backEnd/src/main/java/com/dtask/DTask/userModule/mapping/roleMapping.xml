@@ -74,13 +74,13 @@
 
     <!-- 获取所有角色 -->
     <select id="getAllRole" resultType="com.dtask.DTask.userModule.bo.RoleBo">
-        SELECT id,name as roleName FROM tb_role
+        SELECT id as roleID,name as roleName FROM tb_role
     </select>
 
     <!-- 获取某角色拥有的权限-->
     <select id="getRolePermission" resultType="com.dtask.DTask.userModule.bo.PermissionBo">
         SELECT
-            tb_permission.id,pCategory,pObject,pOperate
+            tb_permission.id,pCategory,pObject,pOperate,pDescribe
         FROM
             dtask_db.tb_role_permission
                 INNER JOIN

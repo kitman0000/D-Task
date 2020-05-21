@@ -3,6 +3,7 @@ package com.dtask.DTask.noticeModule.service;
 import com.dtask.DTask.noticeModule.bo.EmailBo;
 import com.dtask.DTask.noticeModule.bo.EmailDetailBo;
 import com.dtask.DTask.noticeModule.entity.EmailSearchEntity;
+import com.dtask.common.ResponseData;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -11,17 +12,17 @@ import java.util.List;
  * Created by zhong on 2020-4-13.
  */
 public interface IEmail {
-    String sendMail(int[] receiverID, String title, String content, boolean isImportant, MultipartFile[] file);
+    ResponseData sendMail(int[] receiverID, String title, String content, boolean isImportant, MultipartFile[] file);
 
-    int getMailNumber(EmailSearchEntity emailSearchEntity);
+    ResponseData getMailNumber(EmailSearchEntity emailSearchEntity);
 
-    List<EmailBo> getReceiveEmailList(EmailSearchEntity emailSearchEntity);
+    ResponseData getReceiveEmailList(EmailSearchEntity emailSearchEntity);
 
-    EmailDetailBo getEmailDetail(int emailID);
+    ResponseData getEmailDetail(int emailID);
 
-    int getSentMailPageNumber(EmailSearchEntity emailSearchEntity);
+    ResponseData getSentMailPageNumber(EmailSearchEntity emailSearchEntity);
 
-    List<EmailBo> getSentEmailList(EmailSearchEntity emailSearchEntity);
+    ResponseData getSentEmailList(EmailSearchEntity emailSearchEntity);
 
-    EmailDetailBo getSentEmailDetail(int emailID);
+    ResponseData getSentEmailDetail(int emailID);
 }
