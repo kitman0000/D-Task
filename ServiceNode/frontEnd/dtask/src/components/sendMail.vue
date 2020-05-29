@@ -1,6 +1,12 @@
 <template>
 	<div>
 		<el-form label-width="80px">
+			<el-form-item label="部门">
+				<el-select v-model="value6" placeholder="请选择" @change="getUser()">
+					<el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value">
+					</el-option>
+				</el-select>
+			</el-form-item>
 			<el-form-item label="收件人">
 				<el-select v-model="value5" multiple placeholder="请选择">
 					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -13,7 +19,7 @@
 			<el-form-item label="内容">
 				<el-input v-model="content" type="textarea"></el-input>
 			</el-form-item>
-			<el-form-item label="是否重要">
+			<el-form-item label="是否紧急">
 				<el-select filterable placeholder="请选择状态" ref="isImportantSelector" v-model="IsImportantValue" style="width: 150px;">
 					<el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
@@ -39,23 +45,48 @@
 				options: [],
 				options2: [{
 					value: true,
-					label: '重要信息'
+					label: '紧急信息'
 				}, {
 					value: false,
-					label: '非重要信息'
+					label: '普通信息'
 				}],
+				options3:[],
 				value5: [],
 				title: '',
 				content: '',
 				IsImportantValue: true,
 				fileList3: [],
+				value6:[],
+				fileData:[],
 			}
 		},
 		methods: {
 			handleChange(file, fileList) {
 				this.fileList3 = fileList.slice(-3);
 			},
+			department(){
+				axios.get('/api/department/department', {
+						params: {},
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {
+						var response = res.data.data;
+						var a = eval(response);
+						a.forEach((res)=>{
+							this.options3.push({
+								value: res.id,
+								label:res.departmentName
+								});
+						})
+					})
+					.catch(function(error) {
+						console.log(error);
+					});
+			},
 			getUser(){
+				console.log(this.value6);
 				axios.get('/api/user/userList', {
 						params: {
 							username:"",
@@ -65,7 +96,7 @@
 							onboardDateStart:"",
 							onboardDateEnd:"",
 							roleID:-1,
-							departmentID:-1,
+							departmentID:this.value6,
 							birthdayStart:"",
 							birthdayEnd:"",
 							page:1,
@@ -77,7 +108,6 @@
 					.then(res => {
 						var response = res.data.data;
 						var a = eval(response);
-						console.log(a);
 						a.forEach((res)=>{
 							this.options.push({
 								value: res.id,
@@ -97,8 +127,10 @@
 				parmas.append("title",this.title);
 				parmas.append("content",this.content);
 				parmas.append("isImportant",this.IsImportantValue);
-				parmas.append("file",this.fileList3[0].raw);
-
+				for(var i = 0;i<this.fileList3.length;i++){
+					this.fileData.push(this.fileList3[i].raw);
+				}
+				parmas.append("file",this.fileData);
 				axios.post('/api/mail/mail', parmas, {
 					paramsSerializer: params => {
 					      return qs.stringify(params, { indices: false })
@@ -118,7 +150,7 @@
 			}
 		},
 		beforeMount: function() {
-				this.getUser();
+				this.department();
 		}
 	}
 </script>

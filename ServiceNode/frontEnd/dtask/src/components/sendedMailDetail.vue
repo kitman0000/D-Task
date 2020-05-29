@@ -1,10 +1,11 @@
 <template>
 	<div>
 		<h3>发件详情</h3>
+		<p>收件人:{{receiver}}</p>
 		<p>标题: {{title}}</p>
-		<p>内容: {{content}}</p>
+		<p>内容: </br>{{content}}</p>
 		<p>发件时间: {{sendTime}}</p>
-		<p>是否重要: {{isImportant}}</p>
+		<p>是否紧急: {{isImportant}}</p>
 		<label>附件：</label>
 		<p v-for="item1 in attachment">{{item1}}</p>
 	</div>
@@ -20,6 +21,7 @@
 				sendTime:'',
 				isImportant:'',
 				attachment:[],
+				receiver:'',
 			}
 		},
 		methods:{
@@ -38,6 +40,7 @@
 						this.title = response.title;
 						this.content = response.content;
 						this.sendTime = response.sendTime;
+						this.receiver = localStorage.getItem("receiver");
 						if(response.important == true){
 							this.isImportant = "是";
 						}
@@ -47,7 +50,7 @@
 						}
 						var a = JSON.parse(response.attachment);
 						for(var i =0 ;i<a.filenameList.length;i++){
-							this.attachment[i]=  "aaa" +"\\"+a.filenameList[i];
+							this.attachment[i]=  window.location.protocol+"//"+window.location.host +"//"+a.filenameList[i];
 						}
 					})
 				  .catch(err=> {
@@ -57,7 +60,7 @@
 		},
 		beforeMount:function(){
 			this.getMailDetail();
-		}
+		},
 		}
 </script>
 

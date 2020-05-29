@@ -3,7 +3,7 @@
 		<div>
 			<label style="margin-left: 10px;">关键词：</label>
 			<el-input placeholder="关键词" v-model="keyword" style="width: 150px;"></el-input>
-			<label style="margin-left: 15px;">是否重要：</label>
+			<label style="margin-left: 15px;">是否紧急：</label>
 			<el-select filterable placeholder="请选择状态" ref="isImportantSelector" v-model="IsImportantValue" style="width: 100px;">
 				<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 				</el-option>
@@ -20,7 +20,7 @@
 		
 			<el-button type="primary" icon="el-icon-search" @click="searchMail_searchButton()" style="margin-left: 10px;">搜索</el-button>
 		</div>
-		<el-table :data="tableData2" style="width: 100%"  @row-dblclick="MailDetail">
+		<el-table :data="tableData2" style="width: 100%"  @row-click="MailDetail">
 			<el-table-column prop="id" label="邮件id" width="200">
 			</el-table-column>
 			<el-table-column prop="receiver" label="收件人" width="220">
@@ -44,10 +44,10 @@
 			return {
 				options: [{
 					value: true,
-					label: '重要信息'
+					label: '紧急信息'
 				}, {
 					value: false,
-					label: '非重要信息'
+					label: '普通信息'
 				}],
 			
 				options2: [{
@@ -122,14 +122,24 @@
 					});
 			},
 			searchMail(currentpage){
-				
+				var sendTimeEnd,sendTimeStart;
+				console.log(this.dateValue);
+				if(this.dateValue == ''){
+					sendTimeStart = '';
+					sendTimeEnd = '';
+				}
+				else
+				{
+					sendTimeStart = this.dateValue[0];
+					sendTimeEnd = this.dateValue[1];
+				}
 				axios.get('/api/mail/sentMailPage', {
 						params: {
 							keyword:this.keyword,
 							hasRead:this.$refs.hasReadSelector.value,
 							isImportant:this.$refs.isImportantSelector.value,
-							sendTimeStart:this.dateValue[0],
-							sendTimeEnd:this.dateValue[1],
+							sendTimeStart:sendTimeStart,
+							sendTimeEnd:sendTimeEnd,
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -148,8 +158,8 @@
 				      keyword:this.keyword,
 				      hasRead:this.$refs.hasReadSelector.value,
 				      isImportant:this.$refs.isImportantSelector.value,
-				      sendTimeStart:this.dateValue[0],
-				      sendTimeEnd:this.dateValue[1],
+				      sendTimeStart:sendTimeStart,
+				      sendTimeEnd:sendTimeStart,
 					  page:currentpage,
 				    },headers:{
 					"token":localStorage.getItem("token"),
@@ -166,14 +176,24 @@
 				  });
 			},
 			searchMail_searchButton(){
+				var sendTimeEnd,sendTimeStart;
 				console.log(this.dateValue);
+				if(this.dateValue == ''){
+					sendTimeStart = '';
+					sendTimeEnd = '';
+				}
+				else
+				{
+					sendTimeStart = this.dateValue[0];
+					sendTimeEnd = this.dateValue[1];
+				}
 				axios.get('/api/mail/sentMailPage', {
 						params: {
 							keyword:this.keyword,
 							hasRead:this.$refs.hasReadSelector.value,
 							isImportant:this.$refs.isImportantSelector.value,
-							sendTimeStart:this.dateValue[0],
-							sendTimeEnd:this.dateValue[1],
+							sendTimeStart:sendTimeStart,
+							sendTimeEnd:sendTimeEnd,
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -193,8 +213,8 @@
 				      keyword:this.keyword,
 				      hasRead:this.$refs.hasReadSelector.value,
 				      isImportant:this.$refs.isImportantSelector.value,
-				      sendTimeStart:this.dateValue[0],
-				      sendTimeEnd:this.dateValue[1],
+				      sendTimeStart:sendTimeStart,
+				      sendTimeEnd:sendTimeEnd,
 					  page:this.currentpage,
 				    },headers:{
 					"token":localStorage.getItem("token"),
@@ -212,6 +232,7 @@
 			},
 			MailDetail(row,event){
 				localStorage.setItem("chosenSendedMail",row.id);
+				localStorage.setItem("receiver",row.receiver);
 				this.$router.push({path:"/SendedMailDetail"});
 			}
 		},

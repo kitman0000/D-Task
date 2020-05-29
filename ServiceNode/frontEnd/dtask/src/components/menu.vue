@@ -2,15 +2,15 @@
 	<div>
 		<el-container>
 		<img src="../assets/TIM图片20200401203159.png"  @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
-		  <el-aside width="200px" style="min-height: 700px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
-			  <el-menu :default-openeds="['1']"  text-color="#fff" active-text-color="#FFF" >
+		  <el-aside width="200px" style="min-height: 1000px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
+			  <el-menu   text-color="#fff" active-text-color="#FFF" >
 			  	<li v-for="menu in menus">
 			  		<el-submenu :index="menu.id.toString()" style="background-color: #10192B;">
 			  			<template slot="title"  >{{menu.name}}</template>
 			  				<div  v-for="subMenu in menu.childMenuBoList" style="border-bottom:1px solid #5C75A7;">
 								<el-row>
 								  <el-col :span="4" :class="{'theSelectedMenu':theSelectedSubMenu==subMenu.id.toString(),'otherSubMenu':theSelectedSubMenu!=subMenu.id.toString()}" :index="subMenu.id.toString()" style="height: 50px;"></el-col>
-								  <el-col :span="20" style="height: 50px;background-color: #334E85;"><el-menu-item :index="subMenu.id.toString()" @click="test(subMenu.id.toString())">
+								  <el-col :span="20" style="height: 50px;background-color: #334E85;"><el-menu-item :index="subMenu.id.toString()" @click="test(subMenu)">
 										{{subMenu.name}}
 			  						</el-menu-item></el-col>
 								</el-row>						
@@ -40,6 +40,7 @@
 				theSelectedMenu:'',
 				theSelectedSubMenu:'',
 				isShow:true,
+				routerLink:'',
 			}
 		},
 		methods:{
@@ -60,7 +61,9 @@
 				});
 			},
 			test(e){
-				this.theSelectedSubMenu = e;
+				this.theSelectedSubMenu = e.id.toString();
+				this.routerLink = e.url.toString();
+				 this.$router.push({path:this.routerLink});
 			},
 			showList(){
 				this.isShow=!this.isShow;
