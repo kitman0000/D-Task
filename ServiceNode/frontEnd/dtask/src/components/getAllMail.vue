@@ -43,10 +43,10 @@
 		data() {
 			return {
 				options: [{
-					value: true,
+					value: 1,
 					label: '紧急信息'
 				}, {
-					value: false,
+					value: 0,
 					label: '普通信息'
 				},{
 					value: -1,
@@ -54,10 +54,10 @@
 				},],
 			
 				options2: [{
-					value: true,
+					value: 1,
 					label: '已读'
 				}, {
-					value: false,
+					value: 0,
 					label: '未读'
 				},{
 					value: -1,
@@ -92,8 +92,7 @@
 						}
 					})
 					.then(res => {
-						var response = res.data.data;
-						this.tableData2 = eval(response);
+						var response = res.data;
 						this.pageNumber = response.data;
 					})
 					.catch(function(error) {
@@ -108,7 +107,7 @@
 				var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
 				axios.get('/api/mail/mailList', {
 						params: {
-							keyword:' ',
+							keyword:'',
 							hasRead:'',
 							isImportant:'',
 							sendTimeStart:'2020-1-1',
@@ -120,7 +119,9 @@
 						}
 					})
 					.then(res => {
-						var response = res.data;
+						var response = res.data.data;
+						this.tableData2=[];
+						this.tableData2=eval(response);
 						this.pageNumber = response.data;
 					})
 					.catch(function(error) {
@@ -128,12 +129,25 @@
 					});
 			},
 			searchMail(currentpage){
+				var hasRead,isImportant;
 				var sendTimeEnd,sendTimeStart;
 				if(this.IsImportantValue == -1){
-					this.IsImportantValue = '';
+					isImportant = '';
+				}
+				else if(this.IsImportantValue == 0){
+					isImportant = false;
+				}
+				else{
+					isImportant = true;
 				}
 				if(this.hasReadValue == -1){
-					this.hasReadValue='';
+					hasRead = '';
+				}
+				else if(this.IsImportantValue == 0){
+					hasRead = false;
+				}
+				else{
+					hasRead = true;
 				}
 				if(this.dateValue == ''){
 					sendTimeStart = '';
@@ -147,8 +161,8 @@
 				axios.get('/api/mail/mailPage', {
 						params: {
 							keyword:this.keyword,
-							hasRead:this.$refs.hasReadSelector.value,
-							isImportant:this.$refs.isImportantSelector.value,
+							hasRead:hasRead,
+							isImportant:isImportant,
 							sendTimeStart:sendTimeStart,
 							sendTimeEnd:sendTimeEnd,
 						},
@@ -167,8 +181,8 @@
 				axios.get('/api/mail/mailList', {
 				    params: {
 				      keyword:this.keyword,
-				      hasRead:this.$refs.hasReadSelector.value,
-				      isImportant:this.$refs.isImportantSelector.value,
+				      hasRead:hasRead,
+				      isImportant:isImportant,
 				      sendTimeStart:sendTimeStart,
 				      sendTimeEnd:sendTimeEnd,
 					  page:currentpage,
@@ -187,12 +201,25 @@
 				  });
 			},
 			searchMail_searchButton(){
+				var hasRead,isImportant;
 				var sendTimeEnd,sendTimeStart;
 				if(this.IsImportantValue == -1){
-					this.IsImportantValue = '';
+					isImportant = '';
+				}
+				else if(this.IsImportantValue == 0){
+					isImportant = false;
+				}
+				else{
+					isImportant = true;
 				}
 				if(this.hasReadValue == -1){
-					this.hasReadValue='';
+					hasRead = '';
+				}
+				else if(this.IsImportantValue == 0){
+					hasRead = false;
+				}
+				else{
+					hasRead = true;
 				}
 				if(this.dateValue == ''){
 					sendTimeStart = '';
@@ -206,8 +233,8 @@
 				axios.get('/api/mail/mailPage', {
 						params: {
 							keyword:this.keyword,
-							hasRead:this.$refs.hasReadSelector.value,
-							isImportant:this.$refs.isImportantSelector.value,
+							hasRead:hasRead,
+							isImportant:isImportant,
 							sendTimeStart:sendTimeStart,
 							sendTimeEnd:sendTimeEnd,
 						},
@@ -227,8 +254,8 @@
 				axios.get('/api/mail/mailList', {
 				    params: {
 				      keyword:this.keyword,
-				      hasRead:this.$refs.hasReadSelector.value,
-				      isImportant:this.$refs.isImportantSelector.value,
+				      hasRead:hasRead,
+				      isImportant:isImportant,
 				      sendTimeStart:sendTimeStart,
 				      sendTimeEnd:sendTimeEnd,
 					  page:this.currentpage,
@@ -253,8 +280,8 @@
 			}
 		},
 		beforeMount:function() {
-			this.getDefaultMailPage();
 			this.getDefaultMailList();
+			this.getDefaultMailPage();
 		}
 		}
 </script>

@@ -43,10 +43,10 @@
 		data() {
 			return {
 				options: [{
-					value: true,
+					value: 1,
 					label: '紧急信息'
 				}, {
-					value: false,
+					value: 0,
 					label: '普通信息'
 				},{
 					value: -1,
@@ -54,11 +54,11 @@
 				}],
 			
 				options2: [{
-					value: true,
+					value: 1,
 					label: '已读'
 				}, {
-					value: true,
-					label: '已读'
+					value: 0,
+					label: '未读'
 				},{
 					value: -1,
 					label: '全部'
@@ -107,7 +107,7 @@
 				var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
 				axios.get('/api/mail/mailSentList', {
 						params: {
-							keyword:' ',
+							keyword:'',
 							hasRead:'',
 							isImportant:'',
 							sendTimeStart:'2020-1-1',
@@ -128,12 +128,25 @@
 					});
 			},
 			searchMail(currentpage){
+				var hasRead,isImportant;
 				var sendTimeEnd,sendTimeStart;
 				if(this.IsImportantValue == -1){
-					this.IsImportantValue = '';
+					isImportant = '';
+				}
+				else if(this.IsImportantValue == 0){
+					isImportant = false;
+				}
+				else{
+					isImportant = true;
 				}
 				if(this.hasReadValue == -1){
-					this.hasReadValue='';
+					hasRead = '';
+				}
+				else if(this.IsImportantValue == 0){
+					hasRead = false;
+				}
+				else{
+					hasRead = true;
 				}
 				if(this.dateValue == ''){
 					sendTimeStart = '';
@@ -147,8 +160,8 @@
 				axios.get('/api/mail/sentMailPage', {
 						params: {
 							keyword:this.keyword,
-							hasRead:this.$refs.hasReadSelector.value,
-							isImportant:this.$refs.isImportantSelector.value,
+							hasRead:hasRead,
+							isImportant:isImportant,
 							sendTimeStart:sendTimeStart,
 							sendTimeEnd:sendTimeEnd,
 						},
@@ -167,8 +180,8 @@
 				axios.get('/api/mail/mailSentList', {
 				    params: {
 				      keyword:this.keyword,
-				      hasRead:this.$refs.hasReadSelector.value,
-				      isImportant:this.$refs.isImportantSelector.value,
+				      hasRead:hasRead,
+				      isImportant:isImportant,
 				      sendTimeStart:sendTimeStart,
 				      sendTimeEnd:sendTimeStart,
 					  page:currentpage,
@@ -187,12 +200,25 @@
 				  });
 			},
 			searchMail_searchButton(){
+				var hasRead,isImportant;
 				var sendTimeEnd,sendTimeStart;
 				if(this.IsImportantValue == -1){
-					this.IsImportantValue = '';
+					isImportant = '';
+				}
+				else if(this.IsImportantValue == 0){
+					isImportant = false;
+				}
+				else{
+					isImportant = true;
 				}
 				if(this.hasReadValue == -1){
-					this.hasReadValue='';
+					hasRead = '';
+				}
+				else if(this.IsImportantValue == 0){
+					hasRead = false;
+				}
+				else{
+					hasRead = true;
 				}
 				if(this.dateValue == ''){
 					sendTimeStart = '';
@@ -206,8 +232,8 @@
 				axios.get('/api/mail/sentMailPage', {
 						params: {
 							keyword:this.keyword,
-							hasRead:this.$refs.hasReadSelector.value,
-							isImportant:this.$refs.isImportantSelector.value,
+							hasRead:hasRead,
+							isImportant:isImportant,
 							sendTimeStart:sendTimeStart,
 							sendTimeEnd:sendTimeEnd,
 						},
@@ -227,8 +253,8 @@
 				axios.get('/api/mail/mailSentList', {
 				    params: {
 				      keyword:this.keyword,
-				      hasRead:this.$refs.hasReadSelector.value,
-				      isImportant:this.$refs.isImportantSelector.value,
+				      hasRead:hasRead,
+				      isImportant:isImportant,
 				      sendTimeStart:sendTimeStart,
 				      sendTimeEnd:sendTimeEnd,
 					  page:this.currentpage,
