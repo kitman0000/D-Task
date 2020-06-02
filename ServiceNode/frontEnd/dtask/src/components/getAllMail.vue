@@ -48,7 +48,10 @@
 				}, {
 					value: false,
 					label: '普通信息'
-				}],
+				},{
+					value: -1,
+					label: '全部'
+				},],
 			
 				options2: [{
 					value: true,
@@ -56,10 +59,13 @@
 				}, {
 					value: false,
 					label: '未读'
+				},{
+					value: -1,
+					label: '全部'
 				}],
 				tableData2:[],
-				IsImportantValue: true,
-				hasReadValue: false,
+				IsImportantValue: -1,
+				hasReadValue: -1,
 				dateValue:'',
 				pageNumber:1,
 				currentpage:0,
@@ -76,8 +82,8 @@
 				axios.get('/api/mail/mailPage', {
 						params: {
 							keyword:'',
-							hasRead:false,
-							isImportant:true,
+							hasRead:'',
+							isImportant:'',
 							sendTimeStart:'2020-1-1',
 							sendTimeEnd:nowDate,
 						},
@@ -103,8 +109,8 @@
 				axios.get('/api/mail/mailList', {
 						params: {
 							keyword:' ',
-							hasRead:false,
-							isImportant:true,
+							hasRead:'',
+							isImportant:'',
 							sendTimeStart:'2020-1-1',
 							sendTimeEnd:nowDate,
 							page:1,
@@ -123,7 +129,12 @@
 			},
 			searchMail(currentpage){
 				var sendTimeEnd,sendTimeStart;
-				console.log(this.dateValue);
+				if(this.IsImportantValue == -1){
+					this.IsImportantValue = '';
+				}
+				if(this.hasReadValue == -1){
+					this.hasReadValue='';
+				}
 				if(this.dateValue == ''){
 					sendTimeStart = '';
 					sendTimeEnd = '';
@@ -177,7 +188,12 @@
 			},
 			searchMail_searchButton(){
 				var sendTimeEnd,sendTimeStart;
-				console.log(this.dateValue);
+				if(this.IsImportantValue == -1){
+					this.IsImportantValue = '';
+				}
+				if(this.hasReadValue == -1){
+					this.hasReadValue='';
+				}
 				if(this.dateValue == ''){
 					sendTimeStart = '';
 					sendTimeEnd = '';
