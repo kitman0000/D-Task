@@ -12,6 +12,7 @@ import GetSendedMail from '../components/getAllSendMail.vue'
 import SendedMailDetail from '../components/sendedMailDetail.vue'
 import user from "../components/user.vue"
 import adduser from "../components/adduser.vue"
+import checkuser from "../components/checkuser.vue"
 import changeuser from "../components/changeuser.vue"
 Vue.use(VueRouter)
 
@@ -95,6 +96,11 @@ const routes = [{
 		path:'/user/adduser',
 		name:'adduser',
 		component:adduser
+	},
+	{
+		path:'/user/checkuser',
+		name:'checkuser',
+		component:checkuser
 	},
 	{
 		path:'/user/changeuser',
