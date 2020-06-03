@@ -4,28 +4,45 @@
 		<el-aside width="200px" style="min-height: 700px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
 		</el-aside>
 		<el-main>
+			<div class="demo-input-suffix" style="height: 60px;">
+				<div style="float: left; line-height: 35px; width: 100px;">用户名</div>
 			<el-input placeholder="用户名" v-model="username" style="width: 300px;"></el-input>
+			</div>
+			<div class="demo-input-suffix" style="height: 60px;">
+				<div style="float: left; line-height: 35px; width: 100px;">密码</div>
 			<el-input placeholder="密码" v-model="pwd" style="width: 300px;"></el-input>
+			</div>
+			<div class="demo-input-suffix" style="height: 60px;">
+				<div style="float: left; line-height: 35px; width: 100px;">昵称</div>
 			<el-input placeholder="昵称" v-model="nickname" style="width: 300px;"></el-input>
+			</div>
+			<div class="demo-input-suffix" style="height: 60px;">
+				<div style="float: left; line-height: 35px; width: 100px;">手机号</div>
 			<el-input placeholder="手机号" v-model="phone" style="width: 300px;"></el-input>
+			</div>
+			<div class="demo-input-suffix" style="height: 60px;">
+				<div style="float: left; line-height: 35px; width: 100px;">邮箱</div>
 			<el-input placeholder="邮箱" v-model="email" style="width: 300px;"></el-input>
-			 <div class="block">
-			    <span class="demonstration">入职日期</span>
+			</div>
+			 <div class="block" style="height: 60px;">
+			    <span style="float: left; line-height: 35px; width: 100px;">入职日期</span>
 			    <el-date-picker
 			      v-model="onboardDate"
 			      type="date"
 			      placeholder="选择日期">
 			    </el-date-picker>
 			  </div>
-			 <div class="block">
-			    <span class="demonstration">出生日期</span>
+			 <div class="block" style="height: 60px;">
+			    <span style="float: left; line-height: 35px; width: 100px;">出生日期</span>
 			    <el-date-picker
 			      v-model="birthday"
 			      type="date"
 			      placeholder="选择日期">
 			    </el-date-picker>
 			  </div>
-			<el-select v-model="role" placeholder="请选择角色">
+			  <div class="demo-input-suffix" style="height: 60px;">
+			<div style="float: left; line-height: 35px; width: 100px;">角色</div>
+			<el-select style="float: left;" v-model="role" placeholder="请选择角色">
 			    <el-option
 			      v-for="item in roleList"
 			      :key="item.roleID"
@@ -33,7 +50,10 @@
 			      :value="item.roleID">
 			    </el-option>
 			  </el-select>
-			  <el-select v-model="department" placeholder="请选择部门">
+			  </div>
+			  <div class="demo-input-suffix" style="height: 60px;">
+			  <div style="float: left; line-height: 35px; width: 100px;">部门</div>
+			  <el-select style="float: left;" v-model="department" placeholder="请选择部门">
 			      <el-option
 			        v-for="item in departmentList"
 			        :key="item.id"
@@ -41,8 +61,9 @@
 			        :value="item.id">
 			      </el-option>
 			    </el-select>
+				</div>
 			<span style="color: red; font-size: 10px;">{{message}}</span>
-			<el-button type="primary" @click="addUser()" icon="el-icon-search" style="margin-left: 10px;">增加</el-button>
+			<el-button type="primary" @click="addUser()" icon="el-icon-add" style="position: relative; left: 90px; margin-left: 10px;">增加</el-button>
 		</el-main>
 	</el-container>
 </template>
