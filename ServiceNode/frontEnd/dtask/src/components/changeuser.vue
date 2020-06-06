@@ -1,7 +1,5 @@
 <template>
 	<el-container>
-		<img src="../assets/TIM图片20200401203159.png" @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
-		<el-aside width="200px" style="min-height: 700px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
 		</el-aside>
 		<el-main>
 			<div class="demo-input-suffix" style="height: 60px;">

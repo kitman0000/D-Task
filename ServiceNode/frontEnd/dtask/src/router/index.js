@@ -65,54 +65,35 @@ const routes = [{
 			path: '/SendedMailDetail',
 			name: 'SendedMailDetail',
 			component: SendedMailDetail
+		},
+		{
+			path: '/test',
+			name: 'test',
+			component: test
+		},
+		{
+			path:'/user',
+			name:'user',
+			component:user
+		},
+		{
+			path:'/user/adduser',
+			name:'adduser',
+			component:adduser
+		},
+		{
+			path:'/user/checkuser',
+			name:'checkuser',
+			component:checkuser
+		},
+		{
+			path:'/user/changeuser',
+			name:'changeuser',
+			component:changeuser
 		}
 		]
-	},
-	{
-		path: '/test',
-		name: 'test',
-		component: test
-	},
-	{
-		path: '/',
-		name: 'Home',
-		component: Home
-	},
-	{
-		path: '/Menu',
-		name: 'Menu',
-		component: Menu,
-		children:[{
-				path:'Role',
-				component: Role,
-				}
-				]
-	},
-	{
-		path: '/test',
-		name: 'test',
-		component: test
-	},
-	{
-		path:'/user',
-		name:'user',
-		component:user
-	},
-	{
-		path:'/user/adduser',
-		name:'adduser',
-		component:adduser
-	},
-	{
-		path:'/user/checkuser',
-		name:'checkuser',
-		component:checkuser
-	},
-	{
-		path:'/user/changeuser',
-		name:'changeuser',
-		component:changeuser
-	},
+	}
+	
 ]
 
 const router = new VueRouter({
