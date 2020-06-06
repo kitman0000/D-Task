@@ -13,6 +13,7 @@ import SendedMailDetail from '../components/sendedMailDetail.vue'
 import user from "../components/user.vue"
 import adduser from "../components/adduser.vue"
 import changeuser from "../components/changeuser.vue"
+import DepartmentManagement from '../components/departmentManagement.vue'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -38,6 +39,11 @@ const routes = [{
 			path: '/GetMail',
 			name: 'GetMail',
 			component: GetMail
+		},
+		{
+			path: '/DepartmentManagement',
+			name: 'DepartmentManagement',
+			component: DepartmentManagement
 		},
 		{
 			path: '/MailDetail',
