@@ -3,7 +3,7 @@
 <mapper namespace="com.dtask.DTask.userModule.dao.DepartmentDao">
 
     <insert id="addDepartment">
-        INSERT INTO tb_department (name) VALUES #{name}
+        INSERT INTO tb_department (name) VALUES (#{name})
     </insert>
 
     <update id="updateDepartment">
