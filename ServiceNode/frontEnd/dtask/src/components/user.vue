@@ -54,7 +54,7 @@
 				    </el-select>
 				<el-button type="primary" @click="getUserNumber(),handleUserList()" icon="el-icon-search" style="margin-left: 10px;">搜索</el-button>
 				<el-table style="width: 100%;" :data="userList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
-					<el-table-column type="index" width="50">
+					<el-table-column prop="id" label="用户id" width="180">
 					</el-table-column>
 					<el-table-column label="用户名" prop="username" width="180">
 					</el-table-column>
@@ -62,13 +62,23 @@
 					</el-table-column>
 					<el-table-column label="邮箱" prop="email" width="180">
 					</el-table-column>
+					<el-table-column label="生日" prop="birthDay" width="180">
+					</el-table-column>
+					<el-table-column label="详情" align="center" min-width="100">
+						<template slot-scope="scope">
+							<el-button type="text" @click="checkUser(scope.row.id)">查看详情</el-button>
+						</template>
+					</el-table-column>
+					<el-table-column label="修改" align="center" min-width="100">
+						<template slot-scope="scope">
+							<el-button type="text" @click="changeUser(scope.row.id)">修改</el-button>
+						</template>
+					</el-table-column>
 				</el-table>
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
-				 :page-sizes="[10]" :page-size="pagesize" layout=" sizes, prev, pager, next, jumper" :total="userNumber">
+				layout=" prev, pager, next, jumper" :total="userNumber">
 				</el-pagination>
-				<el-button type="primary" @click="addUser()" icon="el-icon-search" style="margin-left: 10px;">增加</el-button>
-				<el-input placeholder="userID" v-model="userID" style="width: 300px;"></el-input>
-				<el-button type="primary" @click="changeUser()" icon="el-icon-search" style="margin-left: 10px;">修改</el-button>
+				<el-button type="primary" @click="addUser()" icon="el-icon-add" style="margin-left: 10px;">增加</el-button>
 			</el-main>
 		</el-container>
 	</div>
@@ -95,11 +105,6 @@
 				roleList:[],
 				departmentList:[],
 				userList:[
-				{
-					username:'',
-					nickname:'',
-					email:''
-				},
 				],
 				isShow: true,
 			}
@@ -257,8 +262,14 @@
 					path:'/user/adduser',
 				})
 			},
-			changeUser(){
-				localStorage.setItem("userID", this.userID);
+			checkUser(userID){
+				localStorage.setItem("userID", userID);
+				this.$router.push({
+					path:'/user/checkuser',
+				})
+			},
+			changeUser(userID){
+				localStorage.setItem("userID", userID);
 				this.$router.push({
 					path:'/user/changeuser',
 				})
@@ -266,7 +277,6 @@
 			showList() {
 				this.isShow = !this.isShow;
 			},
-			
 		},
 		beforeMount: function() {
 			this.getDepartment();

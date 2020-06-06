@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface DepartmentDao {
-    void addDepartment(String name);
+    void addDepartment(@Param("name") String name);
 
     void updateDepartment(@Param("id") int id, @Param("name") String name);
 

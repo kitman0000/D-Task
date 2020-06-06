@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -23,6 +24,7 @@ public class UserDetailBo {
 
     private String phone = "";
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     private String roleName;
@@ -33,6 +35,7 @@ public class UserDetailBo {
 
     private String profileUrl;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date onboardDate;
 
 }
