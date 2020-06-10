@@ -30,12 +30,12 @@ public class LocalTaskCl {
         return localTask.deleteLocalTask(id);
     }
 
-    @RequestMapping(value = "/api/localTask/localTask",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/localTask/localTaskPage",method = RequestMethod.GET)
     public ResponseData getLocalTaskNumber(LocalTaskSearchEntity localTaskSearchEntity){
         return localTask.getLocalTaskNumber(localTaskSearchEntity);
     }
 
-    @RequestMapping(value = "/api/localTask/localTask",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/localTask/localTaskList",method = RequestMethod.GET)
     public ResponseData getLocalTaskList(LocalTaskSearchEntity localTaskSearchEntity,int page){
         return localTask.getLocalTaskList(localTaskSearchEntity,page);
     }
@@ -50,6 +50,7 @@ public class LocalTaskCl {
         return localTask.removeLocalTaskMember(taskID,userID);
     }
 
+    // Todo:未获取用户姓名
     @RequestMapping(value = "/api/localTask/LocalTaskMember",method = RequestMethod.GET)
     public ResponseData getLocalTaskMember(int taskID){
         return localTask.getLocalTaskMember(taskID);

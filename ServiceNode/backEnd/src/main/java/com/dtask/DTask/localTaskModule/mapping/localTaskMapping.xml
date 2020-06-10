@@ -126,7 +126,7 @@
             name LIKE '%${localTaskSearchEntity.taskName}%'
         </if>
         <if test="localTaskSearchEntity.creator != -1">
-            creator = #{localTaskSearchEntity.creator}
+            creator LIKE '%${localTaskSearchEntity.creator}%'
         </if>
     </sql>
 </mapper>
