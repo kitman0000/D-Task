@@ -76,7 +76,7 @@
     <insert id="addTaskMember">
         INSERT INTO tb_local_task_user
         <set>
-            taskID = #{taskID} AND
+            taskID = #{taskID},
             userID = #{userID}
         </set>
     </insert>
