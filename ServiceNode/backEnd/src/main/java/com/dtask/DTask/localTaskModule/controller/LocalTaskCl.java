@@ -40,6 +40,16 @@ public class LocalTaskCl {
         return localTask.getLocalTaskList(localTaskSearchEntity,page);
     }
 
+    @RequestMapping(value = "/api/localTask/UserLocalTaskPage",method = RequestMethod.GET)
+    public ResponseData getUserLocalTaskNumber(LocalTaskSearchEntity localTaskSearchEntity){
+        return localTask.getUserTaskNumber(localTaskSearchEntity);
+    }
+
+    @RequestMapping(value = "/api/localTask/UserLocalTaskList",method = RequestMethod.GET)
+    public ResponseData getUserLocalTaskList(LocalTaskSearchEntity localTaskSearchEntity,int page){
+        return localTask.getUserTaskList(localTaskSearchEntity,page);
+    }
+
     @RequestMapping(value = "/api/localTask/LocalTaskMember",method = RequestMethod.POST)
     public ResponseData addLocalTaskMember(int taskID,int userID){
         return localTask.addLocalTaskMember(taskID,userID);
@@ -59,4 +69,6 @@ public class LocalTaskCl {
     public ResponseData toggleTaskAdmin(int taskID,int userID,boolean isAdmin){
         return localTask.toggleTaskAdmin(taskID,userID,isAdmin);
     }
+
+
 }

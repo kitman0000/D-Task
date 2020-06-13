@@ -91,7 +91,7 @@ public class UserImpl implements IUser {
 
         // 发送数据到中心调配节点
         SyncUserInfoBo syncUserInfoBo = new SyncUserInfoBo();
-        syncUserInfoBo.setNodeID(2); // Todo 暂时使用1为节点ID
+        syncUserInfoBo.setNodeID(1); // Todo 暂时使用1为节点ID
         syncUserInfoBo.setUserListBo(userList);
         String msg = JsonUtil.objectToJson(syncUserInfoBo);
         rabbitSender.send("dtask.syncUserInfo",msg);

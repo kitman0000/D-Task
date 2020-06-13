@@ -26,6 +26,10 @@ public interface LocalTaskDao {
 
     List<LocalTaskBo> getLocalTaskList(@Param("localTaskSearchEntity") LocalTaskSearchEntity localTaskSearchEntity, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
 
+    int getUserLocalTaskNumber(@Param("localTaskSearchEntity") LocalTaskSearchEntity localTaskSearchEntity, @Param("userID") int userID);
+
+    List<LocalTaskBo> getUserLocalTaskList(@Param("localTaskSearchEntity") LocalTaskSearchEntity localTaskSearchEntity,int userID, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
+
     int checkTaskMemberExist(@Param("taskID") int taskID, @Param("userID") int userID);
 
     void addTaskMember(@Param("taskID") int taskID, @Param("userID") int userID);

@@ -63,6 +63,36 @@
         </where>
     </select>
 
+    <!-- 获取用户的任务数量 -->
+    <select id="getUserLocalTaskNumber" resultType="java.lang.Integer">
+        SELECT COUNT (id) FROM tb_local_task
+        <where>
+            <include refid="localTaskSearchCondition"/>
+            AND
+            id in (SELECT id FROM tb_local_task_user WHERE userID = #{userID})
+        </where>
+    </select>
+
+    <!-- 获取用户的任务列表 -->
+    <select id="getUserLocalTaskList" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskBo">
+        SELECT name,creator FROM tb_local_task
+        <where>
+            <include refid="localTaskSearchCondition"/>
+            AND
+            id in (SELECT id FROM tb_local_task_user WHERE userID = #{userID})
+            <!-- 分页的条件 -->
+            AND id Not In (Select * from (Select id From tb_local_task
+            <where>
+                <include refid="localTaskSearchCondition"/>
+                AND
+                id in (SELECT id FROM tb_local_task_user WHERE userID = #{userID})
+            </where>
+            Limit #{startRow})as t) Limit #{rowsOnePage}
+            <!-- 分页的条件结束-->
+        </where>
+    </select>
+
+
     <!-- 判断一个成员是否在一个任务中 -->
     <select id="checkTaskMemberExist" resultType="java.lang.Integer">
         SELECT count(id) FROM tb_local_task_user
@@ -119,7 +149,6 @@
     <select id="getCurrentTaskID" resultType="java.lang.Integer">
         SELECT @@IDENTITY
     </select>
-
 
     <sql id="localTaskSearchCondition">
         <if test="localTaskSearchEntity.taskName != ''">

@@ -63,6 +63,26 @@ public class LocalTaskImpl implements ILocalTask {
     }
 
     @Override
+    public ResponseData getUserTaskNumber(LocalTaskSearchEntity localTaskSearchEntity) {
+        int userID = UserCommon.getUserBo().getUserID();
+
+        int amount = localTaskDao.getUserLocalTaskNumber(localTaskSearchEntity,userID);
+        int page = PageDivideUtil.getCountOfPages(amount,COUNT_ONE_PAGE);
+
+        return new ResponseData(1,"查询成功",page);
+    }
+
+    @Override
+    public ResponseData getUserTaskList(LocalTaskSearchEntity localTaskSearchEntity, int page) {
+        int userID = UserCommon.getUserBo().getUserID();
+
+        int startRow = (page -1) * COUNT_ONE_PAGE;
+        List<LocalTaskBo> localTaskBoList = localTaskDao.getUserLocalTaskList(localTaskSearchEntity,userID,startRow,COUNT_ONE_PAGE);
+
+        return new ResponseData(1,"查询成功",localTaskBoList);
+    }
+
+    @Override
     public ResponseData addLocalTaskMember(int taskID, int userID) {
         if(!checkUserHasPermission(taskID,userID)){
             return new ResponseData(2,"权限不足",null);
