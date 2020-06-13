@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.center.bindingModule.dao.BindingDao">
+
+    <insert id="insertNode">
+        INSERT IGNORE  INTO tb_node (nodeName,inheritRp) values (#{nodeName},NULL);
+    </insert>
+
+    <insert id="addBindingRequest">
+        INSERT INTO tb_bind_request(requestNodeID,requestBindID) VALUES (#{requestNodeID},#{requestBindID})
+    </insert>
+
+    <!-- 已经有绑定请求 -->
+    <select id="getUnhandleRequest" resultType="java.lang.Integer">
+        SELECT count(id) FROM tb_bind_request
+        <where>
+            requestNodeID = #{nodeID}
+            AND isAccept is NULL
+        </where>
+    </select>
+
+    <update id="updateBindingRequest">
+        UPDATE tb_bind_request
+        <set>
+            isAccept = #{isAccept}
+        </set>
+        <where>
+            id = #{requestID}
+        </where>
+    </update>
+
+    <!-- 绑定 -->
+    <update id="updateBindingRp">
+        UPDATE tb_node SET
+        inheritRp = concat((SELECT * FROM (SELECT inheritRp FROM tb_node WHERE id = #{requestBindID} ) as x),':',#{requestNodeID}),
+         parentNode = #{requestBindID}
+        where id = #{requestNodeID}
+    </update>
+
+    <select id="getRequest" resultType="com.dtask.center.bindingModule.bo.BindingRequestBo">
+        SELECT requestNodeID,requestBindID FROM tb_bind_request
+        <where>
+            id = #{requestID}
+        </where>
+    </select>
+
+    <select id="getNodeID" resultType="java.lang.Integer">
+        SELECT id FROM tb_node
+        <where>
+            nodeName = #{nodeName}
+        </where>
+    </select>
+
+    <select id="getAllNodes" resultType="com.dtask.center.bindingModule.bo.NodeBo">
+        SELECT * FROM tb_node;
+    </select>
+
+    <!-- 通过节点名称获取继承关系 -->
+    <select id="getNodeInheritRp" resultType="java.lang.String">
+        SELECT inheritRp FROM tb_node
+        <where>
+            nodeName = #{nodeName}
+        </where>
+    </select>
+
+    <!-- 通过节点ID获取继承关系 -->
+    <select id="getNodeInheritRpByNodeID" resultType="java.lang.String">
+        SELECT inheritRp FROM tb_node
+        <where>
+            id = #{nodeID}
+        </where>
+    </select>
+
+    <!-- 获取节点的未处理请求 -->
+    <select id="getNodeBindRequest" resultType="com.dtask.center.bindingModule.bo.BindingRequestBo">
+        SELECT tb_bind_request.id,nodeName as requestNodeName,requestNodeID,requestBindID FROM tb_bind_request,tb_node
+        <where>
+            requestBindID = #{nodeID}
+            AND isAccept is NULL
+            AND tb_node.id = requestNodeID
+        </where>
+    </select>
+
+    <!-- 通过继承关系，解绑节点及其子节点-->
+    <update id="unbindNode">
+        UPDATE tb_node
+        <set>
+            inheritRp = NULL,
+            parentNode = -1
+        </set>
+        <where>
+            inheritRp LIKE '%${inheritRp}%'
+        </where>
+    </update>
+
+    <!-- 获取根节点 -->
+    <select id="checkRoot" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM tb_node
+        <where>
+            inheritRp = 'root'
+        </where>
+    </select>
+
+    <!-- 设置根节点 -->
+    <update id="setRoot">
+        UPDATE tb_node
+        <set>
+            inheritRp = 'root',
+            parentNode = 0
+        </set>
+        <where>
+            id = #{nodeID}
+        </where>
+    </update>
+
+</mapper>
