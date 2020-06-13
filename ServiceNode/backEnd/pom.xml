@@ -108,6 +108,13 @@
 			<artifactId>ehcache</artifactId>
 		</dependency>
 
+		<!-- 消息队列 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

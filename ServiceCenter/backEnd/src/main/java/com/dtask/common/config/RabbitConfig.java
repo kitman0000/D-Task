@@ -87,6 +87,16 @@ public class RabbitConfig {
         return BindingBuilder.bind(getBindRequest()).to(topicExchange()).with("dtask.binding.getBindRequest");
     }
 
+    @Bean
+    public Queue setRoot(){
+        return new Queue("dtask.binding.setRoot",true);
+    }
+
+    @Bean
+    public Binding bindSetRoot(){
+        return BindingBuilder.bind(setRoot()).to(topicExchange()).with("dtask.binding.setRoot");
+    }
+
     //声明交换器
     @Bean
     TopicExchange topicExchange() {

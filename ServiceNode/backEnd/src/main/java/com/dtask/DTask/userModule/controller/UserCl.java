@@ -7,6 +7,9 @@ import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.ResponseData;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Created by zhong on 2020-3-24.
  */
-
+@EnableScheduling
 @RestController
 public class UserCl {
 
@@ -73,6 +76,9 @@ public class UserCl {
         return account.deleteUser(userID);
     }
 
-
-
+    //@Scheduled(cron = "0 0/30 * * * ? ")
+    @Scheduled(cron = "0/30 * * * * ? ") // 开发期间，30秒一次
+    public void syncUserInfo(){
+        user.syncUserInfo();
+    }
 }

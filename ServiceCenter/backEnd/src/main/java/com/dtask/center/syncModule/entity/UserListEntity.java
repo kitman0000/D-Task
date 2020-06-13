@@ -1,7 +1,6 @@
-package com.dtask.DTask.userModule.bo;
+package com.dtask.center.syncModule.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,8 +11,8 @@ import java.util.Date;
  */
 
 @Data
-public class UserListBo implements Serializable{
-    private int id;
+public class UserListEntity implements Serializable{
+    private String id;
 
     private String username;
 
@@ -29,10 +28,8 @@ public class UserListBo implements Serializable{
 
     private int departmentID;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date onboardDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDay;
 
     private boolean available;

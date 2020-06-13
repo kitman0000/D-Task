@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-container>
-		<img src="../assets/TIM图片20200401203159.png"  @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
+		<img src="../assets/menuShowBtn.png"  @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
 		  <el-aside width="200px" style="min-height: 1000px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
 			  <el-menu   text-color="#fff" active-text-color="#FFF" >
 			  	<li v-for="menu in menus">
@@ -76,6 +76,10 @@
 </script>
 	
 <style>
+	body{
+  margin:0;
+}
+	
 	.theSelectedMenu{
 		background-color: #24375E;
 	}
@@ -84,16 +88,16 @@
 	}
 	.showListButton{
 		position: fixed;
-		left: 208px;
-		top: 350px;
-		width: 15px;
+		left: 200px !important;
+		top: 48% !important;
+		width: 10px !important;
 		height: 35px;
 	}
 	.hideListButton{
 		position: fixed;
 		left: 0px;
-		top: 350px;
-		width: 15px;
+		top: 48% !important;
+		width: 10px !important;
 		height: 35px;
 	}
 </style>

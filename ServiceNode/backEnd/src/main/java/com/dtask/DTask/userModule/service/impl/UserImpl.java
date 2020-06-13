@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.service.impl;
 
+import com.dtask.DTask.userModule.bo.SyncUserInfoBo;
 import com.dtask.DTask.userModule.bo.UserDetailBo;
 import com.dtask.DTask.userModule.bo.UserListBo;
 import com.dtask.DTask.userModule.dao.UserDao;
@@ -8,6 +9,10 @@ import com.dtask.DTask.userModule.entity.UserSelectEntity;
 import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
+import com.dtask.common.config.RabbitSender;
+import com.dtask.common.util.CacheUtil;
+import com.dtask.common.util.DateUtil;
+import com.dtask.common.util.JsonUtil;
 import com.dtask.common.util.PageDivideUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +26,13 @@ import java.util.List;
 public class UserImpl implements IUser {
     private static final int ROWS_ONE_PAGE = 10;
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
+
+    @Autowired
+    private CacheUtil cacheUtil;
+
+    @Autowired
+    private RabbitSender rabbitSender;
 
     @Override
     public ResponseData getUserNumber(UserSelectEntity userSelectEntity) {
@@ -65,4 +76,27 @@ public class UserImpl implements IUser {
         userDao.deleteUser(userID);
     }
 
+    @Override
+    public void syncUserInfo() {
+        Object lastUpdateTime = cacheUtil.read("userInfo.lastUpdateTime");
+        String lastUpdateTimeStr = "";
+        if(lastUpdateTime == null){
+            // 如果之前没有保存，就从2020年1月1日开始
+            lastUpdateTimeStr = "2020-01-01 00:00:00";
+        }else {
+            lastUpdateTimeStr = String.valueOf(lastUpdateTime);
+        }
+
+        List<UserListBo> userList = userDao.getUnsyncUserList(lastUpdateTimeStr);
+
+        // 发送数据到中心调配节点
+        SyncUserInfoBo syncUserInfoBo = new SyncUserInfoBo();
+        syncUserInfoBo.setNodeID(2); // Todo 暂时使用1为节点ID
+        syncUserInfoBo.setUserListBo(userList);
+        String msg = JsonUtil.objectToJson(syncUserInfoBo);
+        rabbitSender.send("dtask.syncUserInfo",msg);
+
+        lastUpdateTimeStr = DateUtil.getTimestamp();
+        cacheUtil.write("userInfo.lastUpdateTime",lastUpdateTimeStr);
+    }
 }

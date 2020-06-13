@@ -14,7 +14,10 @@
     </typeAliases>
 
     <mappers>
-        <mapper resource="com/dtask/center/bindingModule/mapping/BindingDao.xml"/>
+        <mapper resource="com/dtask/center/bindingModule/mapping/bindingDao.xml"/>
+        <mapper resource="com/dtask/center/syncModule/mapping/SyncUserMapping.xml"/>
+        <mapper resource="com/dtask/center/remoteTaskModule/mapping/remoteSubTaskMapping.xml"/>
+        <mapper resource="com/dtask/center/remoteTaskModule/mapping/remoteTaskMapping.xml"/>
     </mappers>
 
 </configuration>
