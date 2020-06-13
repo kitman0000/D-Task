@@ -15,7 +15,7 @@ public interface ILocalSubTask {
 
     ResponseData getLocalSubTaskNumber(LocalSubTaskEntity localSubTaskEntity);
 
-    ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity);
+    ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page);
 
     ResponseData editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity);
 

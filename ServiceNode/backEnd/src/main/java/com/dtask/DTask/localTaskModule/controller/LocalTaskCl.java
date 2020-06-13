@@ -50,7 +50,6 @@ public class LocalTaskCl {
         return localTask.removeLocalTaskMember(taskID,userID);
     }
 
-    // Todo:未获取用户姓名
     @RequestMapping(value = "/api/localTask/LocalTaskMember",method = RequestMethod.GET)
     public ResponseData getLocalTaskMember(int taskID){
         return localTask.getLocalTaskMember(taskID);

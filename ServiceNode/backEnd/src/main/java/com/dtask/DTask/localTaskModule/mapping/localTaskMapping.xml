@@ -109,7 +109,7 @@
 
     <!-- 获取用户列表 -->
     <select id="getTaskUser" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskMemberBo">
-        SELECT userID,isAdmin FROM tb_local_task_user
+        SELECT userID,isAdmin,username FROM tb_local_task_user RIGHT JOIN tb_user ON tb_local_task_user.userID = tb_user.id
         <where>
             taskID = #{taskID}
         </where>

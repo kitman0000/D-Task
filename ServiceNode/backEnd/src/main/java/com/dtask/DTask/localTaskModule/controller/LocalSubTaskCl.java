@@ -38,11 +38,10 @@ public class LocalSubTaskCl{
     }
 
     @RequestMapping(value = "/api/localTask/localSubTaskList",method = RequestMethod.GET)
-    public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity) {
-        return localSubTask.getLocalSubTaskList(localSubTaskEntity);
+    public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity,int page) {
+        return localSubTask.getLocalSubTaskList(localSubTaskEntity,page);
     }
 
-    // Todo: 页数没有传入
     @RequestMapping(value = "/api/localTask/localSubTaskStatus",method = RequestMethod.PUT)
     public ResponseData editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity) {
         return localSubTask.editLocalSubTaskStatus(localSubTaskEntity);
