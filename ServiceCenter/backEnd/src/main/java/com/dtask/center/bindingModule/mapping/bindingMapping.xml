@@ -26,6 +26,8 @@
         </set>
         <where>
             id = #{requestID}
+            AND
+            requestBindID = #{nodeID}
         </where>
     </update>
 

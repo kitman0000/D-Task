@@ -43,7 +43,7 @@ public class ServiceCenterApplicationTests {
 	//HANDLE_SUCCESS
 	@Test
 	public void handleRequest(){
-		String res = rabbitSender.send("dtask.binding.handle","{\"requestID\":9,\"accept\":true}");
+		String res = rabbitSender.send("dtask.binding.handle","{\"requestID\":9,\"accept\":true,\"nodeID\":15}");
 		logger.info(res);
 	}
 

@@ -29,7 +29,7 @@ public class BindingImpl implements IBinding {
             return "BIND_FAILED_1";
         }
 
-        // 若无绑定，则查找是否有为null的请求
+        // 若无绑定，则查找是否有为null的请求(已发送未处理的请求)
         // 此时若有为true的请求，只是已解绑的请求
         int intResult = bindingDao.getUnhandleRequest(askBindingEntity.getNodeID());
         if(intResult != 0){
@@ -45,6 +45,7 @@ public class BindingImpl implements IBinding {
         bindingDao.insertNode(nodeEntity.getNodeName());
     }
 
+    //TODO 需增加判断是否有权限处理
     @Override
     public String handleBinding(HandleBindingEntity handleBindingEntity) {
         bindingDao.updateBindingRequest(handleBindingEntity.getRequestID(),handleBindingEntity.isAccept());

@@ -20,7 +20,7 @@ public interface BindingDao {
 
     int getUnhandleRequest(int nodeID);
 
-    void updateBindingRequest(@Param("requestID") int requestID, @Param("isAccept") boolean isAccept);
+    void updateBindingRequest(@Param("requestID") int requestID, @Param("nodeID") int nodeID, @Param("isAccept") boolean isAccept);
 
     void updateBindingRp(@Param("requestNodeID") int requestNodeID, @Param("requestBindID") int requestBindID);
 
