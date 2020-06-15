@@ -7,6 +7,7 @@ import com.dtask.DTask.userModule.dao.UserDao;
 import com.dtask.DTask.userModule.entity.UserAddEntity;
 import com.dtask.DTask.userModule.entity.UserSelectEntity;
 import com.dtask.DTask.userModule.service.IUser;
+import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.config.RabbitSender;
@@ -91,7 +92,11 @@ public class UserImpl implements IUser {
 
         // 发送数据到中心调配节点
         SyncUserInfoBo syncUserInfoBo = new SyncUserInfoBo();
-        syncUserInfoBo.setNodeID(1); // Todo 暂时使用1为节点ID
+        int nodeID = NodeCommon.getNodeID();
+        if(nodeID == -1){
+            return;
+        }
+        syncUserInfoBo.setNodeID(1);
         syncUserInfoBo.setUserListBo(userList);
         String msg = JsonUtil.objectToJson(syncUserInfoBo);
         rabbitSender.send("dtask.syncUserInfo",msg);
