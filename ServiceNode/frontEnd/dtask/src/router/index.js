@@ -15,6 +15,9 @@ import adduser from "../components/adduser.vue"
 import checkuser from "../components/checkuser.vue"
 import changeuser from "../components/changeuser.vue"
 import DepartmentManagement from '../components/departmentManagement.vue'
+import websiteSetting from "../components/websiteSetting.vue"
+import userSetting from "../components/userSetting.vue"
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -90,7 +93,17 @@ const routes = [{
 			path:'/user/changeuser',
 			name:'changeuser',
 			component:changeuser
-		}
+		},
+		{
+			path:'/websiteSetting',
+			name:'websiteSetting',
+			component:websiteSetting
+		},
+		{
+			path:'/userSetting',
+			name:'userSetting',
+			component:userSetting
+		},
 		]
 	}
 	

@@ -156,7 +156,7 @@
 				else{
 					departmentID = this.department;
 				}
-				params.append("usename",this.username);
+				params.append("username",this.username);
 				params.append("nickname",this.nickname);
 				params.append("phone",this.phone);
 				params.append("email",this.email);
@@ -203,7 +203,7 @@
 				else{
 					departmentID = this.department;
 				}
-				params.append("usename",this.username);
+				params.append("username",this.username);
 				params.append("nickname",this.nickname);
 				params.append("phone",this.phone);
 				params.append("email",this.email);
