@@ -28,11 +28,8 @@ public class MenuImpl implements IMenu{
     @Autowired
     private MenuDao menuDao;
 
-    Logger logger = LoggerFactory.getLogger(MenuImpl.class);
-
     @Override
     public ResponseData getUserMenu() {
-         logger.info(String.valueOf(SecurityUtils.getSubject().getPrincipal() == null));
 
         // 获取登录用户名
         String username = SecurityUtils.getSubject().getPrincipal().toString();
