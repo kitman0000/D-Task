@@ -9,4 +9,5 @@ import lombok.Data;
 public class HandleBindingEntity {
     int requestID;
     boolean accept;
+    int nodeID;
 }

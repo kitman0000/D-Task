@@ -3,7 +3,7 @@
 <mapper namespace="com.dtask.center.bindingModule.dao.BindingDao">
 
     <insert id="insertNode">
-        INSERT IGNORE  INTO tb_node (nodeName,inheritRp) values (#{nodeName},NULL);
+        INSERT IGNORE INTO tb_node (nodeName,inheritRp) values (#{nodeName},NULL);
     </insert>
 
     <insert id="addBindingRequest">

@@ -45,10 +45,9 @@ public class BindingImpl implements IBinding {
         bindingDao.insertNode(nodeEntity.getNodeName());
     }
 
-    //TODO 需增加判断是否有权限处理
     @Override
     public String handleBinding(HandleBindingEntity handleBindingEntity) {
-        bindingDao.updateBindingRequest(handleBindingEntity.getRequestID(),handleBindingEntity.isAccept());
+        bindingDao.updateBindingRequest(handleBindingEntity.getRequestID(),handleBindingEntity.getNodeID(),handleBindingEntity.isAccept());
         if(!handleBindingEntity.isAccept()) {
             return "HANDLE_SUCCESS";
         }

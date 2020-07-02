@@ -7,13 +7,18 @@ import com.dtask.common.config.RabbitSender;
 import com.dtask.common.util.CacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 /**
  * Created by zhong on 2020-6-14.
  */
 @Service
-public class BindingImpl implements IBinding{
+@PropertySource(value="classpath:application.properties",encoding = "utf-8")
+public class BindingImpl implements IBinding,ApplicationRunner{
     @Autowired
     RabbitSender rabbitSender;
 
@@ -23,6 +28,9 @@ public class BindingImpl implements IBinding{
     @Value("${nodeName}")
     private String nodeName;
 
+    @Autowired
+    NodeCommon nodeCommon;
+
     @Override
     public ResponseData getAllNodes() {
         String res = rabbitSender.send("dtask.getAllNodes","");
@@ -31,9 +39,13 @@ public class BindingImpl implements IBinding{
 
     @Override
     public ResponseData askBinding(int requestBindID) {
-        int nodeID = NodeCommon.getNodeID();
+        int nodeID = nodeCommon.getNodeID();
         if(nodeID == -1){
             return new ResponseData(2,"SYS_FAILED",null);
+        }
+        if(requestBindID == nodeID){
+            // 当前端试图申请绑定的节点等于本节点时。返回错误
+            return new ResponseData(3,"BINDING_YOURSELF",null);
         }
 
         String res = rabbitSender.send("dtask.binding.ask","{\"nodeID\":"+nodeID+",\"requestBindID\":"+requestBindID+"}");
@@ -46,7 +58,7 @@ public class BindingImpl implements IBinding{
 
     @Override
     public ResponseData getBindRequest() {
-        int nodeID = NodeCommon.getNodeID();
+        int nodeID = nodeCommon.getNodeID();
         if(nodeID == -1){
             return new ResponseData(2,"SYS_FAILED",null);
         }
@@ -56,7 +68,7 @@ public class BindingImpl implements IBinding{
 
     @Override
     public ResponseData handleBindingRequest(int request, boolean accept) {
-        int nodeID = NodeCommon.getNodeID();
+        int nodeID = nodeCommon.getNodeID();
         if(nodeID == -1){
             return new ResponseData(2,"SYS_FAILED",null);
         }
@@ -66,7 +78,7 @@ public class BindingImpl implements IBinding{
 
     @Override
     public ResponseData setRoot() {
-        int nodeID = NodeCommon.getNodeID();
+        int nodeID = nodeCommon.getNodeID();
         if(nodeID == -1){
             return new ResponseData(2,"SYS_FAILED",null);
         }
@@ -77,13 +89,13 @@ public class BindingImpl implements IBinding{
             return new ResponseData(2,"根节点已存在",null);
         }else {
             // 未知错误
-            return new ResponseData(2,res,null);
+            return new ResponseData(3,res,null);
         }
     }
 
     @Override
     public ResponseData unbind() {
-        int nodeID = NodeCommon.getNodeID();
+        int nodeID = nodeCommon.getNodeID();
         if(nodeID == -1){
             return new ResponseData(2,"SYS_FAILED",null);
         }
@@ -93,10 +105,11 @@ public class BindingImpl implements IBinding{
         if(res.equals("UNBIND_SUCCESS")){
             return new ResponseData(1,"解绑成功",null);
         }else if(res.equals("UNBIND_FAILED")){
+            // 当自身没有绑定时，返回解绑失败
             return new ResponseData(2,"解绑失败",null);
         }else {
             // 未知错误
-            return new ResponseData(2,res,null);
+            return new ResponseData(3,res,null);
         }
     }
 
@@ -104,13 +117,21 @@ public class BindingImpl implements IBinding{
 
     @Override
     public void addNode() {
-        String sendJsonMsg = "{\"nodeName\":\""+nodeName+"\"}";
+        String sendJsonMsg = "{\"nodeName\":"+nodeName+"}";
         rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
     }
 
     @Override
     public void getNodeID() {
-        String nodeID = rabbitSender.send("dtask.getNodeID","{\"nodeName\":\"" + nodeName + "\"}");
+        String nodeID = rabbitSender.send("dtask.getNodeID","{\"nodeName\":" + nodeName + "}");
         cacheUtil.write("nodeID",nodeID);
+    }
+
+    @Order(value = 1)
+    @Override
+    public void run(ApplicationArguments applicationArguments) throws Exception {
+        addNode();
+        Thread.sleep(3000);
+        getNodeID();
     }
 }

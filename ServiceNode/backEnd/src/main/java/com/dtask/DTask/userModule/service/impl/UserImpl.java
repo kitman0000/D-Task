@@ -35,6 +35,9 @@ public class UserImpl implements IUser {
     @Autowired
     private RabbitSender rabbitSender;
 
+    @Autowired
+    private NodeCommon nodeCommon;
+
     @Override
     public ResponseData getUserNumber(UserSelectEntity userSelectEntity) {
         int userNumber = userDao.getUserNumber(userSelectEntity);
@@ -92,7 +95,7 @@ public class UserImpl implements IUser {
 
         // 发送数据到中心调配节点
         SyncUserInfoBo syncUserInfoBo = new SyncUserInfoBo();
-        int nodeID = NodeCommon.getNodeID();
+        int nodeID = nodeCommon.getNodeID();
         if(nodeID == -1){
             return;
         }
