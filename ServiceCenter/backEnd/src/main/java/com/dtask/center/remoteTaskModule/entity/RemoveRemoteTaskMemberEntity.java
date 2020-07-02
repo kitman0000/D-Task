@@ -10,4 +10,7 @@ public class RemoveRemoteTaskMemberEntity {
     int taskID;
     int userID;
     int nodeID;
+
+    int removeUserID;
+    int removeUserNodeID;
 }

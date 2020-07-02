@@ -10,4 +10,7 @@ public class AddRemoteTaskMemberEntity {
     int taskID;
     int nodeID;
     int userID;
+
+    int newUserID;
+    int newUserNodeID;
 }

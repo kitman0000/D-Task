@@ -11,4 +11,7 @@ public class ToggleTaskAdminEntity {
     int userID;
     int nodeID;
     boolean isAdmin;
+
+    int toggleUserID;
+    int toggleUserNodeID;
 }
