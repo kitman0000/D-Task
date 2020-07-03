@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @PropertySource(value="classpath:application.properties",encoding = "utf-8")
-public class BindingImpl implements IBinding,ApplicationRunner{
+public class BindingImpl implements IBinding{
     @Autowired
     RabbitSender rabbitSender;
 
@@ -125,13 +125,5 @@ public class BindingImpl implements IBinding,ApplicationRunner{
     public void getNodeID() {
         String nodeID = rabbitSender.send("dtask.getNodeID","{\"nodeName\":" + nodeName + "}");
         cacheUtil.write("nodeID",nodeID);
-    }
-
-    @Order(value = 1)
-    @Override
-    public void run(ApplicationArguments applicationArguments) throws Exception {
-        addNode();
-        Thread.sleep(3000);
-        getNodeID();
     }
 }

@@ -24,9 +24,20 @@ public class UserCommon {
      * @return Token对象
      */
     public static TokenBo getUserBo(){
-        // 获取当前请求
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
+        HttpServletRequest request = null;
+
+        try {
+            // 获取当前请求
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            request = requestAttributes.getRequest();
+        } catch (Exception NullPointerException){
+            // 没有获取到请求，说明不是来自外部系统调用
+            // 可能是日志功能试图获取用户ID
+            // 返回999表示是系统操作，而不是用户操作
+            TokenBo tokenBo = new TokenBo();
+            tokenBo.setUserID(999);
+            return tokenBo;
+        }
 
         // 在Header中获取token
         String base64Token = request.getHeader("token");

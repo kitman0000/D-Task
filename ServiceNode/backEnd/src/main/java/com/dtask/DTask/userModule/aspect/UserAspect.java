@@ -31,6 +31,7 @@ public class UserAspect {
 
     @Before("userPointCut()")
     public void doBeforePointCut(JoinPoint joinPoint) {
+
         int userID = UserCommon.getUserBo().getUserID();
         String methodName = joinPoint.getSignature().getName();
         String args = JsonUtil.objectToJson(joinPoint.getArgs());

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Aspect
+// todo:添加任务日志
 public class LocalTaskAspect {
     Logger logger = LoggerFactory.getLogger(LocalTaskAspect.class);
 

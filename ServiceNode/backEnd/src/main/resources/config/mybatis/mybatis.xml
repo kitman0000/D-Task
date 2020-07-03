@@ -22,6 +22,7 @@
         <mapper resource="com/dtask/DTask/noticeModule/mapping/emailMapping.xml"/>
         <mapper resource="com/dtask/DTask/localTaskModule/mapping/localTaskMapping.xml"/>
         <mapper resource="com/dtask/DTask/localTaskModule/mapping/localSubTaskMapping.xml"/>
+        <mapper resource="com/dtask/DTask/settingModule/mapping/settingsMapping.xml"/>
     </mappers>
 
 </configuration>
