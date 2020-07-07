@@ -3,7 +3,7 @@
 <mapper namespace="com.dtask.DTask.localTaskModule.dao.LocalTaskDao">
 
     <insert id="insertLocalTask">
-        INSERT INTO tb_local_task (name,creator)  VALUES #{name},#{creatorID}
+        INSERT INTO tb_local_task (name,creator)  VALUES (#{name},#{creatorID})
     </insert>
 
     <update id="updateLocalTask">
@@ -41,7 +41,7 @@
 
     <!-- 获取任务数量 -->
     <select id="getLocalTaskNumber" resultType="java.lang.Integer">
-        SELECT COUNT (id) FROM tb_local_task
+        SELECT count(id) FROM tb_local_task
         <where>
           <include refid="localTaskSearchCondition"/>
         </where>
@@ -49,23 +49,25 @@
 
     <!-- 获取任务列表 -->
     <select id="getLocalTaskList" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskBo">
-        SELECT name,creator FROM tb_local_task
+        SELECT name,creator,username as creatorName FROM tb_local_task
+        LEFT JOIN tb_user ON creator = tb_user.id
         <where>
             <include refid="localTaskSearchCondition"/>
 
             <!-- 分页的条件 -->
-            AND id Not In (Select * from (Select id From tb_local_task
+            AND tb_local_task.id Not In (Select * from (Select tb_local_task.id From tb_local_task
             <where>
                 <include refid="localTaskSearchCondition"/>
             </where>
             Limit #{startRow})as t) Limit #{rowsOnePage}
             <!-- 分页的条件结束-->
         </where>
+
     </select>
 
     <!-- 获取用户的任务数量 -->
     <select id="getUserLocalTaskNumber" resultType="java.lang.Integer">
-        SELECT COUNT (id) FROM tb_local_task
+        SELECT count(id) FROM tb_local_task
         <where>
             <include refid="localTaskSearchCondition"/>
             AND
@@ -154,8 +156,8 @@
         <if test="localTaskSearchEntity.taskName != ''">
             name LIKE '%${localTaskSearchEntity.taskName}%'
         </if>
-        <if test="localTaskSearchEntity.creator != -1">
-            creator LIKE '%${localTaskSearchEntity.creator}%'
+        <if test="localTaskSearchEntity.taskCreatorID != -1">
+            creator LIKE '%${localTaskSearchEntity.taskCreatorID}%'
         </if>
     </sql>
 </mapper>

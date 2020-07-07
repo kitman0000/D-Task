@@ -7,9 +7,9 @@ import lombok.Data;
  */
 @Data
 public class LocalTaskBo {
-    private String taskName;
+    private String name;
 
-    private int creatorID;
+    private int creator;
 
     private String creatorName;
 }

@@ -3,17 +3,17 @@
 <mapper namespace="com.dtask.center.remoteTaskModule.dao.RemoteSubTaskDao">
 
     <insert id="addRemoteSubTask">
-        INSERT INTO tb_local_sub_task
+        INSERT INTO tb_remote_sub_task
         <set>
           taskID = #{remoteSubTaskEntity.taskID},
-            <include refid="set_tb_local_sub_task"/>
+            <include refid="set_tb_remote_sub_task"/>
         </set>
     </insert>
 
     <update id="updateRemoteSubTask">
-        UPDATE tb_local_sub_task
+        UPDATE tb_remote_sub_task
         <set>
-            <include refid="set_tb_local_sub_task"/>
+            <include refid="set_tb_remote_sub_task"/>
         </set>
         <where>
             id = #{remoteSubTaskEntity.id}
@@ -21,7 +21,7 @@
     </update>
 
     <update id="updateRemoteSubTaskStatus">
-        UPDATE tb_local_sub_task
+        UPDATE tb_remote_sub_task
         <set>
             status = #{remoteSubTaskEntity.status}
         </set>
@@ -31,7 +31,7 @@
     </update>
 
     <delete id="deleteRemoteSubTask">
-        DELETE FROM tb_local_sub_task
+        DELETE FROM tb_remote_sub_task
         WHERE id IN
         <foreach collection="id" item="subTaskID" open="(" close=")" separator=",">
             #{subTaskID}
@@ -39,19 +39,19 @@
     </delete>
 
     <select id="getRemoteSubTaskNumber" resultType="java.lang.Integer">
-        SELECT count(id) FROM tb_local_sub_task
+        SELECT count(id) FROM tb_remote_sub_task
         <where>
             taskID = #{taskID}
         </where>
     </select>
 
     <select id="getRemoteSubTaskList" resultType="com.dtask.center.remoteTaskModule.bo.RemoteSubTaskBo">
-        SELECT * FROM tb_local_sub_task
+        SELECT * FROM tb_remote_sub_task
         <where>
             taskID = #{taskID}
 
             <!-- 分页的条件 -->
-            AND id Not In (Select * from (Select id From tb_local_sub_task
+            AND id Not In (Select * from (Select id From tb_remote_sub_task
             <where>
                 taskID = #{taskID}
             </where>
@@ -63,24 +63,23 @@
 
     <!-- 判断用户是否为管理员 -->
     <select id="isUserAdmin" resultType="java.lang.Boolean">
-        SELECT isAdmin FROM tb_local_sub_task
-        LEFT JOIN tb_local_task_user
-        ON tb_local_sub_task.taskID = tb_local_task_user.taskID
-
-         <where>
-             userID = #{userID}
-         </where>
+        SELECT isAdmin FROM tb_remote_task_user
+        <where>
+            taskID = #{taskID}
+            AND userID = #{userID}
+            AND nodeID = #{nodeID}
+        </where>
     </select>
 
     <!-- 判断任务是否允许用户修改状态 -->
     <select id="isAllowUserChangeState" resultType="java.lang.Boolean">
-        SELECT allowedMemberChangeStatus FROM tb_local_sub_task LEFT JOIN tb_local_task ON tb_local_sub_task.taskID = tb_local_task.id
+        SELECT allowedMemberChangeStatus FROM tb_remote_task
         <where>
-            tb_local_task.id = #{taskID}
+            tb_remote_task.id = #{taskID}
         </where>
     </select>
 
-    <sql id="set_tb_local_sub_task">
+    <sql id="set_tb_remote_sub_task">
         name = #{remoteSubTaskEntity.name},
         content = #{remoteSubTaskEntity.content},
         deadline = #{remoteSubTaskEntity.deadline},

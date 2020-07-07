@@ -28,8 +28,8 @@ public class LocalSubTaskCl{
     }
 
     @RequestMapping(value = "/api/localTask/localSubTask",method = RequestMethod.DELETE)
-    public ResponseData deleteLocalSubTask(int[] id) {
-        return localSubTask.deleteLocalSubTask(id);
+    public ResponseData deleteLocalSubTask(int taskID,int[] id) {
+        return localSubTask.deleteLocalSubTask(taskID, id);
     }
 
     @RequestMapping(value = "/api/localTask/localSubTaskNumber",method = RequestMethod.GET)

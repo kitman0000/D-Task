@@ -31,6 +31,8 @@ public class LocalTaskImpl implements ILocalTask {
 
         int taskID = localTaskDao.getCurrentTaskID();
         localTaskDao.addTaskMember(taskID,userID);
+        // 将拥有者设为管理员
+        localTaskDao.setLocalTaskAdmin(taskID,userID,true);
         return new ResponseData(1,"添加成功",null);
     }
 
@@ -84,7 +86,9 @@ public class LocalTaskImpl implements ILocalTask {
 
     @Override
     public ResponseData addLocalTaskMember(int taskID, int userID) {
-        if(!checkUserHasPermission(taskID,userID)){
+        int opUserID = UserCommon.getUserBo().getUserID();
+
+        if(!checkUserHasPermission(taskID,opUserID)){
             return new ResponseData(2,"权限不足",null);
         }
 
@@ -98,7 +102,9 @@ public class LocalTaskImpl implements ILocalTask {
 
     @Override
     public ResponseData removeLocalTaskMember(int taskID, int userID) {
-        if(!checkUserHasPermission(taskID,userID)){
+        int opUserID = UserCommon.getUserBo().getUserID();
+
+        if(!checkUserHasPermission(taskID,opUserID)){
             return new ResponseData(2,"权限不足",null);
         }
 
@@ -124,7 +130,9 @@ public class LocalTaskImpl implements ILocalTask {
 
     @Override
     public ResponseData toggleTaskAdmin(int taskID, int userID, boolean isAdmin) {
-        if(!checkUserHasPermission(taskID,userID)){
+        int opUserID = UserCommon.getUserBo().getUserID();
+
+        if(!checkUserHasPermission(taskID,opUserID)){
             return new ResponseData(2,"权限不足",null);
         }
 
@@ -142,6 +150,11 @@ public class LocalTaskImpl implements ILocalTask {
      */
     private boolean checkUserHasPermission(int taskID,int userID){
         // 一般情况下任务所有者和管理员都拥有管理权限，但防止后期变化，特此列出
-        return localTaskDao.checkIsAdmin(taskID,userID);
+        try {
+            return localTaskDao.checkIsAdmin(taskID, userID);
+        } catch (Exception ex){
+            // 如果用户不在该任务中，会返回null并抛出异常
+            return false;
+        }
     }
 }

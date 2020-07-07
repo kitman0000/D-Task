@@ -43,7 +43,6 @@ public class RemoteTaskImpl implements IRemoteTask{
     }
 
 
-    // todo 可能需要多项删除
     @Override
     public ResponseData deleteRemoteTask(int id) {
         String res = rabbitSender.send("dtask.remoteTask.deleteRemoteTask","{\"id\":"+id+"}");
@@ -123,6 +122,7 @@ public class RemoteTaskImpl implements IRemoteTask{
     //todo 获取用户的任务
     @Override
     public ResponseData getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity) {
+
         return null;
     }
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.dtask.center.remoteTaskModule.dao.RemoteTaskDao">
 
     <insert id="insertRemoteTask">
-        INSERT INTO tb_remote_task (name,creator,creatorNode)  VALUES #{name},#{creatorID},#{creatorNode}
+        INSERT INTO tb_remote_task (name,creator,creatorNode)  VALUES (#{name},#{creatorID},#{creatorNode})
     </insert>
 
     <update id="updateRemoteTask">
@@ -44,7 +44,7 @@
 
     <!-- 获取任务数量 -->
     <select id="getRemoteTaskNumber" resultType="java.lang.Integer">
-        SELECT COUNT (id) FROM tb_remote_task
+        SELECT count(id) FROM tb_remote_task
         <where>
           <include refid="remoteTaskSearchCondition"/>
         </where>
@@ -53,11 +53,12 @@
     <!-- 获取任务列表 -->
     <select id="getRemoteTaskList" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskBo">
         SELECT name,creator FROM tb_remote_task
+        LEFT JOIN tb_user_info ON creator = tb_user_info.id
         <where>
             <include refid="remoteTaskSearchCondition"/>
 
             <!-- 分页的条件 -->
-            AND id Not In (Select * from (Select id From tb_remote_task
+            AND tb_remote_task.id Not In (Select * from (Select tb_remote_task.id From tb_remote_task
             <where>
                 <include refid="remoteTaskSearchCondition"/>
             </where>

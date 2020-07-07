@@ -31,6 +31,8 @@ public class RemoteTaskImpl implements IRemoteTask {
 
         int taskID = remoteTaskDao.getCurrentTaskID();
         remoteTaskDao.addTaskMember(taskID, addRemoteTaskEntity.getNodeID(),addRemoteTaskEntity.getUserID());
+        // 将拥有者设为管理员
+        remoteTaskDao.setRemoteTaskAdmin(taskID,addRemoteTaskEntity.getNodeID(),addRemoteTaskEntity.getUserID(),true);
         return "ADD_SUCCESS";
     }
 
@@ -145,6 +147,10 @@ public class RemoteTaskImpl implements IRemoteTask {
      */
     private boolean checkUserHasPermission(int taskID,int nodeID,int userID){
         // 一般情况下任务所有者和管理员都拥有管理权限，但防止后期变化，特此列出
-        return remoteTaskDao.checkIsAdmin(taskID,nodeID,userID);
+        try {
+            return remoteTaskDao.checkIsAdmin(taskID, nodeID, userID);
+        }catch (Exception ex){
+            return false;
+        }
     }
 }

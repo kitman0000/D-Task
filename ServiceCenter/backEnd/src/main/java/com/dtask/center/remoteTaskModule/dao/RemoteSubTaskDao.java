@@ -2,6 +2,7 @@ package com.dtask.center.remoteTaskModule.dao;
 import com.dtask.center.remoteTaskModule.bo.RemoteSubTaskBo;
 import com.dtask.center.remoteTaskModule.entity.RemoteSubTaskEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public interface RemoteSubTaskDao {
 
     void updateRemoteSubTaskStatus(RemoteSubTaskEntity localSubTaskEntity);
 
-    boolean isUserAdmin(int userID);
+    boolean isUserAdmin(@Param("userID") int userID, @Param("nodeID") int nodeID, @Param("taskID") int taskID);
 
     boolean isAllowUserChangeState(int taskID);
 }
