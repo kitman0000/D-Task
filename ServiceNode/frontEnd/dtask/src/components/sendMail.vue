@@ -130,6 +130,7 @@
 				for(var i = 0;i<this.fileList3.length;i++){
 					this.fileData.push(this.fileList3[i].raw);
 				}
+				console.log(this.fileData[0]);
 				parmas.append("file",this.fileData);
 				axios.post('/api/mail/mail', parmas, {
 					paramsSerializer: params => {

@@ -15,6 +15,7 @@ import adduser from "../components/adduser.vue"
 import checkuser from "../components/checkuser.vue"
 import changeuser from "../components/changeuser.vue"
 import DepartmentManagement from '../components/departmentManagement.vue'
+import Node from '../components/node.vue'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -65,7 +66,12 @@ const routes = [{
 			path: '/SendedMailDetail',
 			name: 'SendedMailDetail',
 			component: SendedMailDetail
-		}
+		},
+		{
+			path: '/Node',
+			name: 'Node',
+			component: Node
+		},
 		]
 	},
 	{
