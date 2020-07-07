@@ -1,8 +1,6 @@
 <template>
 	<div>
 		<el-container>
-			<img src="../assets/TIM图片20200401203159.png" @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
-			<el-aside width="200px" style="min-height: 700px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
 			</el-aside>
 			<el-main>
 				<span class="demonstration">用户名：</span>
@@ -52,7 +50,7 @@
 				        :value="item.id">
 				      </el-option>
 				    </el-select>
-				<el-button type="primary" @click="getUserNumber(),handleUserList()" icon="el-icon-search" style="margin-left: 10px;">搜索</el-button>
+				<el-button type="primary" @click="getUserNumber(),handleUserList()" icon="el-icon-search" style="margin-left: 10px;background: #24375E;border: 0px ;">搜索</el-button>
 				<el-table style="width: 100%;" :data="userList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
 					<el-table-column prop="id" label="用户id" width="180">
 					</el-table-column>
@@ -78,7 +76,7 @@
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
 				layout=" prev, pager, next, jumper" :total="userNumber">
 				</el-pagination>
-				<el-button type="primary" @click="addUser()" icon="el-icon-add" style="margin-left: 10px;">增加</el-button>
+				<el-button type="primary" @click="addUser()" icon="el-icon-plus" style="margin-left: 10px;background: #24375E;border: 0px ;">增加</el-button>
 			</el-main>
 		</el-container>
 	</div>
@@ -158,7 +156,7 @@
 				else{
 					departmentID = this.department;
 				}
-				params.append("usename",this.username);
+				params.append("username",this.username);
 				params.append("nickname",this.nickname);
 				params.append("phone",this.phone);
 				params.append("email",this.email);
@@ -205,7 +203,7 @@
 				else{
 					departmentID = this.department;
 				}
-				params.append("usename",this.username);
+				params.append("username",this.username);
 				params.append("nickname",this.nickname);
 				params.append("phone",this.phone);
 				params.append("email",this.email);
@@ -287,6 +285,7 @@
 </script>
 
 <style>
+	
 	
 	.theSelectedMenu {
 		background-color: #24375E;

@@ -27,7 +27,8 @@
             onboardDate = #{userAddEntity.onboardDate},
             roleID = #{userAddEntity.roleID},
             departmentID = #{userAddEntity.departmentID},
-            birthday = #{userAddEntity.birthday}
+            birthday = #{userAddEntity.birthday},
+            lastUpdateTime = NOW()
         </set>
         <where>
             id = #{userAddEntity.id}
@@ -38,36 +39,7 @@
     <select id="getUserNumber" resultType="java.lang.Integer">
         SELECT count(id) FROM  tb_user NATURAL JOIN tb_user_info
         <where>
-            <if test="userSelectEntity.username != ''">
-                username LIKE '%${userSelectEntity.username}%'
-            </if>
-            <if test="userSelectEntity.nickname != ''">
-                AND nickname LIKE '%${userSelectEntity.nickname}%'
-            </if>
-            <if test="userSelectEntity.phone != ''">
-                AND phone LIKE '%${userSelectEntity.phone}%'
-            </if>
-            <if test="userSelectEntity.email != ''">
-                AND phone LIKE '%${userSelectEntity.email}%'
-            </if>
-            <if test="userSelectEntity.roleID != -1">
-                AND roleID = #{userSelectEntity.roleID}
-            </if>
-            <if test="userSelectEntity.departmentID != -1">
-                AND departmentID = #{userSelectEntity.departmentID}
-            </if>
-            <if test="userSelectEntity.onboardDateStart != ''">
-                AND onboardDate > #{userSelectEntity.onboardDateStart}
-            </if>
-            <if test="userSelectEntity.onboardDateEnd != ''">
-                AND onboardDate &lt; #{userSelectEntity.onboardDateEnd}<!-- 小于 -->
-            </if>
-            <if test="userSelectEntity.birthdayStart != ''">
-                AND birthday > #{userSelectEntity.birthdayStart}
-            </if>
-            <if test="userSelectEntity.birthdayEnd != ''">
-                AND birthday &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
-            </if>
+            <include refid="userSelectCondition"/>
         </where>
     </select>
 
@@ -77,70 +49,12 @@
 
         <where>
             <!-- 查询条件 -->
-            <if test="userSelectEntity.username != ''">
-                username LIKE '%${userSelectEntity.username}%'
-            </if>
-            <if test="userSelectEntity.nickname != ''">
-                AND nickname LIKE '%${userSelectEntity.nickname}%'
-            </if>
-            <if test="userSelectEntity.phone != ''">
-                AND phone LIKE '%${userSelectEntity.phone}%'
-            </if>
-            <if test="userSelectEntity.email != ''">
-                AND phone LIKE '%${userSelectEntity.email}%'
-            </if>
-            <if test="userSelectEntity.roleID != -1">
-                AND roleID = #{userSelectEntity.roleID}
-            </if>
-            <if test="userSelectEntity.departmentID != -1">
-                AND departmentID = #{userSelectEntity.departmentID}
-            </if>
-            <if test="userSelectEntity.onboardDateStart != ''">
-                AND onboardDate > #{userSelectEntity.onboardDateStart}
-            </if>
-            <if test="userSelectEntity.onboardDateEnd != ''">
-                AND onboardDate &lt; #{userSelectEntity.onboardDateEnd}<!-- 小于 -->
-            </if>
-            <if test="userSelectEntity.birthdayStart != ''">
-                AND birthday > #{userSelectEntity.birthdayStart}
-            </if>
-            <if test="userSelectEntity.birthdayEnd != ''">
-                AND birthday &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
-            </if>
+            <include refid="userSelectCondition"/>
             <!-- 查询条件结束 -->
             AND id Not In (Select * from (Select id From tb_user NATURAL JOIN tb_user_info
             <where>
                 <!-- 查询条件 -->
-                <if test="userSelectEntity.username != ''">
-                    username LIKE '%${userSelectEntity.username}%'
-                </if>
-                <if test="userSelectEntity.nickname != ''">
-                    AND nickname LIKE '%${userSelectEntity.nickname}%'
-                </if>
-                <if test="userSelectEntity.phone != ''">
-                    AND phone LIKE '%${userSelectEntity.phone}%'
-                </if>
-                <if test="userSelectEntity.email != ''">
-                    AND phone LIKE '%${userSelectEntity.email}%'
-                </if>
-                <if test="userSelectEntity.roleID != -1">
-                    AND roleID = #{userSelectEntity.roleID}
-                </if>
-                <if test="userSelectEntity.departmentID != -1">
-                    AND departmentID = #{userSelectEntity.departmentID}
-                </if>
-                <if test="userSelectEntity.onboardDateStart != ''">
-                    AND onboardDate > #{userSelectEntity.onboardDateStart}
-                </if>
-                <if test="userSelectEntity.onboardDateEnd != ''">
-                    AND onboardDate &lt; #{userSelectEntity.onboardDateEnd}<!-- 小于 -->
-                </if>
-                <if test="userSelectEntity.birthdayStart != ''">
-                    AND onboardDate > #{userSelectEntity.birthdayStart}
-                </if>
-                <if test="userSelectEntity.birthdayEnd != ''">
-                    AND onboardDate &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
-                </if>
+                <include refid="userSelectCondition"/>
                 <!-- 查询条件结束 -->
             </where>
             Limit #{startRow})as t) Limit #{rowsOnePage}
@@ -159,11 +73,58 @@
         </where>
     </select>
 
+    <!-- 获取未同步的数据 -->
+    <select id="getUnsyncUserList" resultType="com.dtask.DTask.userModule.bo.UserListBo">
+        SELECT * FROM tb_user_info
+        <where>
+            lastUpdateTime > #{lastUpdateTime}
+        </where>
+    </select>
+
     <!-- 批量删除用户 -->
-    <delete id="deleteUser">
-        DELETE FROM tb_user_info WHERE id IN
+    <update id="deleteUser">
+        UPDATE tb_user_info
+        SET available = FALSE,
+        lastUpdateTime = NOW()
+        WHERE id IN
         <foreach collection="userID" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
-    </delete>
+    </update>
+
+    <sql id="userSelectCondition">
+        <!-- 查询条件 -->
+        <if test="userSelectEntity.username != ''">
+            username LIKE '%${userSelectEntity.username}%'
+        </if>
+        <if test="userSelectEntity.nickname != ''">
+            AND nickname LIKE '%${userSelectEntity.nickname}%'
+        </if>
+        <if test="userSelectEntity.phone != ''">
+            AND phone LIKE '%${userSelectEntity.phone}%'
+        </if>
+        <if test="userSelectEntity.email != ''">
+            AND phone LIKE '%${userSelectEntity.email}%'
+        </if>
+        <if test="userSelectEntity.roleID != -1">
+            AND roleID = #{userSelectEntity.roleID}
+        </if>
+        <if test="userSelectEntity.departmentID != -1">
+            AND departmentID = #{userSelectEntity.departmentID}
+        </if>
+        <if test="userSelectEntity.onboardDateStart != ''">
+            AND onboardDate > #{userSelectEntity.onboardDateStart}
+        </if>
+        <if test="userSelectEntity.onboardDateEnd != ''">
+            AND onboardDate &lt; #{userSelectEntity.onboardDateEnd}<!-- 小于 -->
+        </if>
+        <if test="userSelectEntity.birthdayStart != ''">
+            AND onboardDate > #{userSelectEntity.birthdayStart}
+        </if>
+        <if test="userSelectEntity.birthdayEnd != ''">
+            AND onboardDate &lt; #{userSelectEntity.birthdayEnd} <!-- 小于 -->
+        </if>
+        AND available = True
+        <!-- 查询条件结束 -->
+    </sql>
 </mapper>

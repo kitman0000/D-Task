@@ -1,7 +1,7 @@
 <template>
 	<div>
 			<el-button style="float: right;margin-top: 15px;" @click="deleteRoles()">删除所选角色</el-button>
-			<el-button style="float: right;margin-top: 15px;" @click="addRole()">添加角色</el-button>
+			<el-button style="float: right;margin-top: 15px;margin-right: 10px;" @click="addRole()">添加角色</el-button>
 		<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="roleID" label="角色ID" width="120">

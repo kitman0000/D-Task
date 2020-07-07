@@ -35,4 +35,7 @@ public interface UserDao {
 
     // 批量删除用户
     void deleteUser(@Param("userID") int[] userID);
+
+    // 获取未同步数据
+    List<UserListBo> getUnsyncUserList(@Param("lastUpdateTime") String lastUpdateTime);
 }

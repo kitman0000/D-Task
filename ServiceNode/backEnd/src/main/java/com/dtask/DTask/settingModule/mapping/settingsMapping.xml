@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.DTask.settingModule.dao.SettingDao">
+
+    <!-- 更新网站设置 -->
+    <update id="updateSettings">
+        UPDATE tb_settings
+        <set>
+            websiteName = #{settingEntity.websiteName},
+            cache = #{settingEntity.cache},
+            maxLogin = #{settingEntity.maxLogin},
+            taskLog = #{settingEntity.taskLog},
+            userLog = #{settingEntity.userLog}
+        </set>
+    </update>
+
+    <!-- 获取所有的网站设置 -->
+    <select id="getSettings" resultType="com.dtask.DTask.settingModule.bo.SettingBo">
+        SELECT * FROM tb_settings
+    </select>
+</mapper>

@@ -49,8 +49,9 @@ public class LocalSubTaskImpl implements ILocalSubTask{
     }
 
     @Override
-    public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity) {
-        List<LocalSubTaskBo> localSubTaskBoList = localSubTaskDao.getLocalSubTaskList(localSubTaskEntity.getTaskID());
+    public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page) {
+        int startRow = (page -1) * COUNT_ONE_PAGE;
+        List<LocalSubTaskBo> localSubTaskBoList = localSubTaskDao.getLocalSubTaskList(localSubTaskEntity.getTaskID(),startRow,COUNT_ONE_PAGE);
         return new ResponseData(1,"查询成功",localSubTaskBoList);
     }
 

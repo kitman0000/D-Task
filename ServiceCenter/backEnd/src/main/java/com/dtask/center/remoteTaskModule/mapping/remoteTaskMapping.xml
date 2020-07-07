@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.center.remoteTaskModule.dao.RemoteTaskDao">
+
+    <insert id="insertRemoteTask">
+        INSERT INTO tb_remote_task (name,creator,creatorNode)  VALUES #{name},#{creatorID},#{creatorNode}
+    </insert>
+
+    <update id="updateRemoteTask">
+        UPDATE tb_remote_task
+        <set>
+            name = #{name},
+            creator = #{creator},
+            creatorNode = #{creatorNode}
+            allowedMemberChangeStatus = #{allowedMemberChangeStatus}
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!-- 设置任务管理员 -->
+    <update id="setRemoteTaskAdmin">
+        UPDATE tb_remote_task_user
+        <set>
+            isAdmin = #{isAdmin}
+        </set>
+        <where>
+            taskID = #{taskID}
+            AND
+            userID = #{userID}
+            AND
+            nodeID = #{nodeID}
+        </where>
+    </update>
+
+    <delete id="deleteRemoteTask">
+        DELETE FROM tb_remote_task
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+
+    <!-- 获取任务数量 -->
+    <select id="getRemoteTaskNumber" resultType="java.lang.Integer">
+        SELECT COUNT (id) FROM tb_remote_task
+        <where>
+          <include refid="remoteTaskSearchCondition"/>
+        </where>
+    </select>
+
+    <!-- 获取任务列表 -->
+    <select id="getRemoteTaskList" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskBo">
+        SELECT name,creator FROM tb_remote_task
+        <where>
+            <include refid="remoteTaskSearchCondition"/>
+
+            <!-- 分页的条件 -->
+            AND id Not In (Select * from (Select id From tb_remote_task
+            <where>
+                <include refid="remoteTaskSearchCondition"/>
+            </where>
+            Limit #{startRow})as t) Limit #{rowsOnePage}
+            <!-- 分页的条件结束-->
+        </where>
+    </select>
+
+    <!-- 判断一个成员是否在一个任务中 -->
+    <select id="checkTaskMemberExist" resultType="java.lang.Integer">
+        SELECT count(id) FROM tb_remote_task_user
+        <where>
+            taskID = #{taskID} AND
+            userID = #{userID} AND
+            nodeID = #{nodeID}
+        </where>
+    </select>
+
+    <!-- 向任务添加成员 -->
+    <insert id="addTaskMember">
+        INSERT INTO tb_remote_task_user
+        <set>
+            taskID = #{taskID},
+            userID = #{userID},
+            nodeID = #{nodeID}
+        </set>
+    </insert>
+
+    <!-- 删除任务中的用户 -->
+    <delete id="removeTaskMember">
+        DELETE FROM tb_remote_task_user
+        <where>
+            taskID = #{taskID} AND
+            userID = #{userID} AND
+            nodeID = #{nodeID}
+        </where>
+    </delete>
+
+    <!-- 获取任务拥有者ID -->
+    <select id="getTaskCreator" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskMemberBo">
+        SELECT creator,nodeID FROM tb_remote_task
+        <where>
+            id = #{taskID}
+        </where>
+    </select>
+
+    <!-- 判断用户是否是任务管理员 -->
+    <select id="checkIsAdmin" resultType="java.lang.Boolean">
+        SELECT isAdmin FROM tb_remote_task_user
+        <where>
+            taskID = #{taskID}
+            AND userID = #{userID}
+            AND nodeID = #{nodeID}
+        </where>
+    </select>
+
+    <!-- 获取用户列表 -->
+    <select id="getTaskUser" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskMemberBo">
+        SELECT userID,isAdmin FROM tb_remote_task_user
+        <where>
+            taskID = #{taskID}
+        </where>
+    </select>
+
+    <!-- 用于刚创建好的任务 -->
+    <select id="getCurrentTaskID" resultType="java.lang.Integer">
+        SELECT @@IDENTITY
+    </select>
+
+
+    <sql id="remoteTaskSearchCondition">
+        <if test="remoteTaskSearchEntity.taskName != ''">
+            name LIKE '%${remoteTaskSearchEntity.taskName}%'
+        </if>
+    </sql>
+</mapper>

@@ -1,7 +1,5 @@
 <template>
 	<el-container>
-		<img src="../assets/TIM图片20200401203159.png" @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
-		<el-aside width="200px" style="min-height: 700px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
 		</el-aside>
 		<el-main>
 			<div class="demo-input-suffix" style="height: 60px;">
@@ -94,9 +92,6 @@
 				if (!this.username) {
 					this.message = '用户名不可为空';
 				}
-				// else if (!this.pwd) {
-				// 	this.message = '密码不可为空';
-				// }
 				else if (!this.nickname) {
 					this.message = '昵称不能为空';
 				}
@@ -119,6 +114,11 @@
 					this.message = '部门不能为空';
 				}
 				else{
+					// 如果密码为空，则不修改密码
+					if (!this.pwd) {
+						this.pwd = '';
+					}
+					
 					var params = new URLSearchParams();
 					var onboardDate = new Date(this.onboardDate).toLocaleDateString().replace(/\//g, '-');
 					var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');

@@ -6,10 +6,12 @@ import com.dtask.common.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by zhong on 2020-5-3.
  */
+@RestController
 public class LocalTaskCl {
 
     @Autowired
@@ -30,14 +32,24 @@ public class LocalTaskCl {
         return localTask.deleteLocalTask(id);
     }
 
-    @RequestMapping(value = "/api/localTask/localTask",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/localTask/localTaskPage",method = RequestMethod.GET)
     public ResponseData getLocalTaskNumber(LocalTaskSearchEntity localTaskSearchEntity){
         return localTask.getLocalTaskNumber(localTaskSearchEntity);
     }
 
-    @RequestMapping(value = "/api/localTask/localTask",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/localTask/localTaskList",method = RequestMethod.GET)
     public ResponseData getLocalTaskList(LocalTaskSearchEntity localTaskSearchEntity,int page){
         return localTask.getLocalTaskList(localTaskSearchEntity,page);
+    }
+
+    @RequestMapping(value = "/api/localTask/UserLocalTaskPage",method = RequestMethod.GET)
+    public ResponseData getUserLocalTaskNumber(LocalTaskSearchEntity localTaskSearchEntity){
+        return localTask.getUserTaskNumber(localTaskSearchEntity);
+    }
+
+    @RequestMapping(value = "/api/localTask/UserLocalTaskList",method = RequestMethod.GET)
+    public ResponseData getUserLocalTaskList(LocalTaskSearchEntity localTaskSearchEntity,int page){
+        return localTask.getUserTaskList(localTaskSearchEntity,page);
     }
 
     @RequestMapping(value = "/api/localTask/LocalTaskMember",method = RequestMethod.POST)
@@ -59,4 +71,6 @@ public class LocalTaskCl {
     public ResponseData toggleTaskAdmin(int taskID,int userID,boolean isAdmin){
         return localTask.toggleTaskAdmin(taskID,userID,isAdmin);
     }
+
+
 }

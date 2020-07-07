@@ -26,4 +26,7 @@ public interface ILocalTask {
 
     ResponseData toggleTaskAdmin(int taskID,int userID,boolean isAdmin);
 
+    ResponseData getUserTaskNumber(LocalTaskSearchEntity localTaskSearchEntity);
+
+    ResponseData getUserTaskList(LocalTaskSearchEntity localTaskSearchEntity,int page);
 }

@@ -15,7 +15,13 @@ import adduser from "../components/adduser.vue"
 import checkuser from "../components/checkuser.vue"
 import changeuser from "../components/changeuser.vue"
 import DepartmentManagement from '../components/departmentManagement.vue'
+<<<<<<< HEAD
 import Node from '../components/node.vue'
+=======
+import websiteSetting from "../components/websiteSetting.vue"
+import userSetting from "../components/userSetting.vue"
+
+>>>>>>> 6365015c941bd1fdcdf071a9ff2734bed0fb24a7
 Vue.use(VueRouter)
 
 const routes = [{
@@ -68,57 +74,49 @@ const routes = [{
 			component: SendedMailDetail
 		},
 		{
+<<<<<<< HEAD
 			path: '/Node',
 			name: 'Node',
 			component: Node
+=======
+			path: '/test',
+			name: 'test',
+			component: test
+		},
+		{
+			path:'/user',
+			name:'user',
+			component:user
+		},
+		{
+			path:'/user/adduser',
+			name:'adduser',
+			component:adduser
+		},
+		{
+			path:'/user/checkuser',
+			name:'checkuser',
+			component:checkuser
+		},
+		{
+			path:'/user/changeuser',
+			name:'changeuser',
+			component:changeuser
+		},
+		{
+			path:'/websiteSetting',
+			name:'websiteSetting',
+			component:websiteSetting
+		},
+		{
+			path:'/userSetting',
+			name:'userSetting',
+			component:userSetting
+>>>>>>> 6365015c941bd1fdcdf071a9ff2734bed0fb24a7
 		},
 		]
-	},
-	{
-		path: '/test',
-		name: 'test',
-		component: test
-	},
-	{
-		path: '/',
-		name: 'Home',
-		component: Home
-	},
-	{
-		path: '/Menu',
-		name: 'Menu',
-		component: Menu,
-		children:[{
-				path:'Role',
-				component: Role,
-				}
-				]
-	},
-	{
-		path: '/test',
-		name: 'test',
-		component: test
-	},
-	{
-		path:'/user',
-		name:'user',
-		component:user
-	},
-	{
-		path:'/user/adduser',
-		name:'adduser',
-		component:adduser
-	},
-	{
-		path:'/user/checkuser',
-		name:'checkuser',
-		component:checkuser
-	},
-	{
-		path:'/user/changeuser',
-		name:'changeuser',
-		component:changeuser
-	},
+	}
+	
 ]
 
 const router = new VueRouter({

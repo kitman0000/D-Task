@@ -21,7 +21,7 @@ public interface LocalSubTaskDao {
 
     int getLocalSubTaskNumber(int taskID);
 
-    List<LocalSubTaskBo> getLocalSubTaskList(int taskID);
+    List<LocalSubTaskBo> getLocalSubTaskList(int taskID,int startRow,int rowsOnePage);
 
     void updateLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity);
 

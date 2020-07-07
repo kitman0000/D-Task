@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <!--开启SQL调试 -->
-        <settings>
-            <setting name="logImpl" value="STDOUT_LOGGING" />
-        </settings>
+        <!--<settings>-->
+            <!--<setting name="logImpl" value="STDOUT_LOGGING" />-->
+        <!--</settings>-->
      <!---->
 
     <typeAliases>
@@ -22,6 +22,7 @@
         <mapper resource="com/dtask/DTask/noticeModule/mapping/emailMapping.xml"/>
         <mapper resource="com/dtask/DTask/localTaskModule/mapping/localTaskMapping.xml"/>
         <mapper resource="com/dtask/DTask/localTaskModule/mapping/localSubTaskMapping.xml"/>
+        <mapper resource="com/dtask/DTask/settingModule/mapping/settingsMapping.xml"/>
     </mappers>
 
 </configuration>

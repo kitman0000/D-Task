@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 public class LocalTaskMemberBo {
     int userID;
-
+    String username;
     boolean isAdmin;
 }

@@ -35,4 +35,8 @@ public class UserListBo implements Serializable{
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDay;
 
+    private boolean available;
+
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date lastUpdateTime;
 }
