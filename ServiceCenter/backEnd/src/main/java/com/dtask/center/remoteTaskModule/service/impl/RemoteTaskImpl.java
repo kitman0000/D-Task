@@ -142,6 +142,21 @@ public class RemoteTaskImpl implements IRemoteTask {
         return "EDIT_SUCCESS";
     }
 
+    @Override
+    public String getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity) {
+        int numbers = remoteTaskDao.getUserTaskNumber(remoteTaskSearchEntity);
+        int page = PageDivideUtil.getCountOfPages(numbers,COUNT_ONE_PAGE);
+
+        return String.valueOf(page);
+    }
+
+    @Override
+    public String getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
+        int startRow = (page -1) * COUNT_ONE_PAGE;
+        List<RemoteTaskBo> remoteTaskBoList = remoteTaskDao.getUserRemoteTaskList(remoteTaskSearchEntity,startRow,COUNT_ONE_PAGE);
+        return JsonUtil.objectToJson(remoteTaskBoList);
+    }
+
     /**
      * 判断用户是否拥有管理权限
      */

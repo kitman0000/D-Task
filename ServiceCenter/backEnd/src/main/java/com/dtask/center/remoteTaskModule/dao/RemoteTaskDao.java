@@ -26,6 +26,10 @@ public interface RemoteTaskDao {
 
     List<RemoteTaskBo> getRemoteTaskList(@Param("remoteTaskSearchEntity") RemoteTaskSearchEntity remoteTaskSearchEntity, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
 
+    int getUserTaskNumber(@Param("remoteTaskSearchEntity") RemoteTaskSearchEntity remoteTaskSearchEntity);
+
+    List<RemoteTaskBo> getUserRemoteTaskList(@Param("remoteTaskSearchEntity") RemoteTaskSearchEntity remoteTaskSearchEntity, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
+
     int checkTaskMemberExist(@Param("taskID") int taskID,@Param("nodeID")int nodeID, @Param("userID") int userID);
 
     void addTaskMember(@Param("taskID") int taskID,@Param("nodeID") int nodeID, @Param("userID") int userID);

@@ -85,11 +85,31 @@ public class RemoteTaskCl {
     }
 
     @RabbitListener(queues = "dtask.remoteTask.getRemoteTaskMember")
-    public String getLocalRemoteMember(String msg){
+    public String getRemoteMember(String msg){
         try {
             GetRemoteTaskMemberEntity getRemoteTaskMemberEntity = (GetRemoteTaskMemberEntity) JsonUtil.jsonToObject(msg,GetRemoteTaskMemberEntity.class);
             return remoteTask.getRemoteTaskMember(getRemoteTaskMemberEntity);
         }catch (Exception ex) {
+            return "SYS_FAILED";
+        }
+    }
+
+    @RabbitListener(queues = "dtask.remoteTask.getUserRemoteTaskNumber")
+    public String getUserTaskNumber(String msg){
+        try {
+            RemoteTaskSearchEntity remoteTaskSearchEntity = (RemoteTaskSearchEntity) JsonUtil.jsonToObject(msg,RemoteTaskSearchEntity.class);
+            return remoteTask.getUserTaskNumber(remoteTaskSearchEntity);
+        } catch (Exception ex){
+            return "SYS_FAILED";
+        }
+    }
+
+    @RabbitListener(queues = "dtask.remoteTask.getUserTaskList")
+    public String getUserTaskList(String msg){
+        try {
+            GetRemoteTaskListEntity getRemoteTaskListEntity = (GetRemoteTaskListEntity) JsonUtil.jsonToObject(msg,GetRemoteTaskListEntity.class);
+            return remoteTask.getUserTaskList(getRemoteTaskListEntity.getRemoteTaskSearchEntity(),getRemoteTaskListEntity.getPage());
+        }catch (Exception ex){
             return "SYS_FAILED";
         }
     }

@@ -8,4 +8,8 @@ import lombok.Data;
 @Data
 public class RemoteTaskSearchEntity {
     String taskName;
+
+    // 获得用户的任务使用
+    int userID;
+    int nodeID;
 }

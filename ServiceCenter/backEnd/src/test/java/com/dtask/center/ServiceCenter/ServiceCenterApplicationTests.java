@@ -20,6 +20,20 @@ public class ServiceCenterApplicationTests {
 
 	Logger logger = LoggerFactory.getLogger(ServiceCenterApplicationTests.class);
 
+	@Test
+	public void addNode(){
+		String sendJsonMsg = "{\"nodeName\":"+"\"北京节点\""+"}";
+		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		sendJsonMsg = "{\"nodeName\":"+"\"深圳节点\""+"}";
+		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		sendJsonMsg = "{\"nodeName\":"+"\"广东节点\""+"}";
+		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		sendJsonMsg = "{\"nodeName\":"+"\"杭州节点\""+"}";
+		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		sendJsonMsg = "{\"nodeName\":"+"\"薿峬哕椟节点\""+"}";
+		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+	}
+
 	// 16
 	@Test
 	public void getNodeID() {
@@ -36,14 +50,27 @@ public class ServiceCenterApplicationTests {
 	//BIND_SUCCESS BIND_FAILED_1 BIND_FAILED_2
 	@Test
 	public void askBinding(){
-		String res = rabbitSender.send("dtask.binding.ask","{\"nodeID\":18,\"requestBindID\":15}");
+		String res = rabbitSender.send("dtask.binding.ask","{\"nodeID\":130,\"requestBindID\":1}");
 		logger.info(res);
+
 	}
 
 	//HANDLE_SUCCESS
 	@Test
 	public void handleRequest(){
-		String res = rabbitSender.send("dtask.binding.handle","{\"requestID\":9,\"accept\":true,\"nodeID\":15}");
+		String res = rabbitSender.send("dtask.binding.handle","{\"requestID\":11,\"accept\":true,\"nodeID\":1}");
+		logger.info(res);
+
+		res = rabbitSender.send("dtask.binding.handle","{\"requestID\":12,\"accept\":true,\"nodeID\":1}");
+		logger.info(res);
+
+		res = rabbitSender.send("dtask.binding.handle","{\"requestID\":13,\"accept\":true,\"nodeID\":1}");
+		logger.info(res);
+
+		res = rabbitSender.send("dtask.binding.handle","{\"requestID\":14,\"accept\":true,\"nodeID\":131}");
+		logger.info(res);
+
+		res = rabbitSender.send("dtask.binding.handle","{\"requestID\":15,\"accept\":true,\"nodeID\":131}");
 		logger.info(res);
 	}
 
@@ -63,7 +90,7 @@ public class ServiceCenterApplicationTests {
 	//ROOT_EXIST SET_SUCCESS
 	@Test
 	public void setRoot(){
-		String res = rabbitSender.send("dtask.binding.setRoot","{\"nodeID\":15}");
+		String res = rabbitSender.send("dtask.binding.setRoot","{\"nodeID\":1}");
 		logger.info(res);
 	}
 

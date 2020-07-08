@@ -24,7 +24,6 @@ public class RemoteSubTaskImpl implements IRemoteSubTask{
 
     @Override
     public String addRemoteSubTask(RemoteSubTaskEntity remoteSubTaskEntity) {
-
         remoteSubTaskDao.addRemoteSubTask(remoteSubTaskEntity);
         return "ADD_REMOTE_SUBTASK_SUCCESS";
     }
