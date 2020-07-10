@@ -28,11 +28,12 @@
 			<el-form-item label="文件上传">
 				<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange"
 				 :file-list="fileList3">
-					<el-button type="primary" icon="el-icon-plus" style="background: #24375E;border: 0px ;">添加文件</el-button>
+					<el-button type="primary" icon="el-icon-plus" style="background: #24375E;border: 0px ;">添加文件</el-button>	
 				</el-upload>
+				<el-button type="primary" @click="sendFile()" icon="el-icon-check" style="background: #24375E;border: 0px ;">确认上传的文件</el-button>
 			</el-form-item>
 		</el-form>
-		<el-button type="primary" @click="sendMail" icon="el-icon-check" style="background: #24375E;border: 0px ;">确认上传</el-button>
+		<el-button type="primary" @click="sendMail()" icon="el-icon-check" style="background: #24375E;border: 0px ;">确认上传</el-button>
 	</div>
 </template>
 
@@ -127,15 +128,7 @@
 				parmas.append("title",this.title);
 				parmas.append("content",this.content);
 				parmas.append("isImportant",this.IsImportantValue);
-				this.fileData = [];
-				console.log(this.value5);
-				console.log(this.fileData);
-				for(var i = 0;i<this.fileList3.length;i++){
-					this.fileData.push(this.fileList3[i].raw);
-				}
-				console.log(this.fileList3[0].raw);
-				console.log(this.fileData[0]);
-				parmas.append("file",this.fileData);
+				parmas.append("filename",this.fileData);
 				axios.post('/api/mail/mail', parmas, {
 					paramsSerializer: parmas => {
 					      return qs.stringify(parmas, { indices: false })
@@ -152,6 +145,25 @@
 							alert("上传失败");
 						}
 					});
+				
+				
+			},
+			sendFile(){
+				console.log(this.fileList3);
+				for(var i = 0;i<this.fileList3.length;i++){
+					var fileParmas = new FormData();
+					fileParmas.append('file',this.fileList3[i].raw);
+					axios.post('/api/mail/attachment', fileParmas, {
+							headers: {
+								"token": localStorage.getItem("token"),
+							}
+						})
+						.then(res=> {
+							var response = res.data.data;
+							this.fileData.push(response);
+						});
+						
+				}
 			}
 		},
 		beforeMount: function() {

@@ -7,7 +7,7 @@
 		<p>发件时间: {{sendTime}}</p>
 		<p>是否紧急: {{isImportant}}</p>
 		<label>附件：</label>
-		<p v-for="item1 in attachment">{{item1}}</p>
+		<p v-for="item1 in attachment"><a href="item1">{{item1}}</a></p>
 	</div>
 </template>
 
@@ -34,6 +34,7 @@
 				}
 				  })
 				  .then(res=>{
+					  
 						var response=res.data.data;
 						this.sender = response.sender;
 						this.receiver = response.receiver;
@@ -48,9 +49,9 @@
 						{
 							this.isImportant = "否";
 						}
-						var a = JSON.parse(response.attachment);
-						for(var i =0 ;i<a.filenameList.length;i++){
-							this.attachment[i]=  window.location.protocol+"//"+window.location.host +"//"+a.filenameList[i];
+						var a = response.attachment.split(',');
+						for(var i =0 ;i<a.length;i++){
+							this.attachment[i]=  window.location.protocol+"//"+window.location.host +"//"+a[i];
 						}
 					})
 				  .catch(err=> {
