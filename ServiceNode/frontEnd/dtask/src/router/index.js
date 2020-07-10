@@ -15,13 +15,10 @@ import adduser from "../components/adduser.vue"
 import checkuser from "../components/checkuser.vue"
 import changeuser from "../components/changeuser.vue"
 import DepartmentManagement from '../components/departmentManagement.vue'
-<<<<<<< HEAD
 import Node from '../components/node.vue'
-=======
 import websiteSetting from "../components/websiteSetting.vue"
 import userSetting from "../components/userSetting.vue"
 
->>>>>>> 6365015c941bd1fdcdf071a9ff2734bed0fb24a7
 Vue.use(VueRouter)
 
 const routes = [{
@@ -29,6 +26,11 @@ const routes = [{
 		name: 'Home',
 		component: Home
 	},
+	{
+			path: '/test',
+			name: 'test',
+			component: test
+		},
 	{
 		path: '/Menu',
 		name: 'Menu',
@@ -74,14 +76,9 @@ const routes = [{
 			component: SendedMailDetail
 		},
 		{
-<<<<<<< HEAD
 			path: '/Node',
 			name: 'Node',
 			component: Node
-=======
-			path: '/test',
-			name: 'test',
-			component: test
 		},
 		{
 			path:'/user',
@@ -112,7 +109,6 @@ const routes = [{
 			path:'/userSetting',
 			name:'userSetting',
 			component:userSetting
->>>>>>> 6365015c941bd1fdcdf071a9ff2734bed0fb24a7
 		},
 		]
 	}

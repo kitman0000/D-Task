@@ -1,158 +1,232 @@
 <template>
 	<div>
-	<el-table border :data="tableData" style="width: 100%">
-		<el-table-column prop="date" label="日期" width="300">
-			<template slot-scope="scope">
-				<div @click="treeClick(scope.row,scope.$index)" style="cursor: pointer;">
-					<template v-if="scope.row.children && scope.row.children.length > 0">
-						<i class="el-icon-arrow-down" :style="'margin-left:'+(scope.row.level-1)*2+'em;'" v-if="scope.row.open"></i>
-						<i class="el-icon-arrow-right" :style="'margin-left:'+(scope.row.level-1)*2+'em;'" v-else></i>
-						<span >{{ scope.row.date }}</span>
-					</template>
-					<span v-else :style="'margin-left:'+(scope.row.level-1)*2+'em;'">{{ scope.row.date }}</span>
-				</div>
-			</template>
-		</el-table-column>
-		<el-table-column prop="name" label="姓名" width="180">
-		</el-table-column>
-		<el-table-column prop="address" label="地址">
-		</el-table-column>
-	</el-table>
-</div>
+		<el-button type="primary" @click="changit()"  style="background: #24375E;border: 0px ;margin-left: 10px;">展现形式变化</el-button>
+		<el-table :data="datatest" tooltip-effect="dark" style="width: 100%" v-if="!change">
+			<el-table-column prop="id" label="id" width="120">
+			</el-table-column>
+			<el-table-column prop="nodeName" label="节点名">
+			</el-table-column>
+			<el-table-column prop="inheritRp" label="继承关系">
+			</el-table-column>
+			<el-table-column prop="parentNode" label="父节点">
+			</el-table-column>
+			<el-table-column label="操作">
+				<template slot-scope="scope">
+					<el-button type="text" size="small" v-if="scope.row.id = nowNode" @click="askBinding(scope.row)">申请绑定</el-button>
+					<el-button type="text" size="small" @click="setRoot(scope.row)">将自身设为根节点</el-button>
+					<el-button type="text" size="small" @click="unbind(scope.row)">解绑自身</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		<el-tree :data="data4" :props="defaultProps" v-if="change"></el-tree>
+	</div>
 </template>
 
 <script>
-	var util = {};
-		util.treeTableXcode = function(data,xcode){
-			xcode = xcode || "";
-			for(var i=0;i<data.length;i++){
-				var item = data[i];
-				item.xcode = xcode + i;
-				if(item.children && item.children.length > 0){
-					util.treeTableXcode(item.children,item.xcode+"-");
-				}
+	import axios from 'axios';
+	export default {
+		data() {
+			return {
+				datatest: [],
+				nowNode: 0,
+				change:true,
+				data4:[],
 			}
-		};
-	 
-		new Vue({
-			el: "#app",
-			data: function(){
-				var tableData = [{
-					id:"1",
-					date: '2016-05-02',
-					name: '王小虎',
-					level:1,
-					address: '上海市普陀区金沙江路 1518 弄',
-					children:[{
-						id:"11",
-						date: '2016-05-02',
-						name: '王小虎',
-						level:2,
-						address: '上海市普陀区金沙江路 1518 弄',
-						children:[{
-							id:"111",
-							date: '2016-05-02',
-							name: '王小虎',
-							level:3,
-							address: '上海市普陀区金沙江路 1518 弄'
-						},{
-							id:"112",
-							level:3,
-							date: '2016-05-02',
-							name: '王小虎',
-							address: '上海市普陀区金沙江路 1518 弄'
-						},{
-							id:"113",
-							level:3,
-							date: '2016-05-02',
-							name: '王小虎',
-							address: '上海市普陀区金沙江路 1518 弄'
-						}]
-					},{
-						id:"12",
-						level:2,
-						date: '2016-05-02',
-						name: '王小虎',
-						address: '上海市普陀区金沙江路 1518 弄'
-					},{
-						id:"13",
-						level:2,
-						date: '2016-05-02',
-						name: '王小虎',
-						address: '上海市普陀区金沙江路 1518 弄'
-					}]
-				}, {
-					id:"2",
-					level:1,
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					id:"3",
-					level:1,
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					id:"4",
-					level:1,
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}];
-				util.treeTableXcode(tableData);
-				
-				var data = {
-					tableData: tableData
-				}
-				return data;
-			} ,
-			methods: {
-				menuAdd: function() {
-	 
-				},
-				treeClick:function(item,index){
-					if(item.open){
-						this.collapse(item,index);
-					}else{
-						this.expand(item,index);
-					}
-				},
-				expand:function(item,index){
-					if(!item.children){
-						return index;
-					}
-					//展开
-					for(var i=0;item.children && i<item.children.length;i++){
-						var child = item.children[i];
-						this.tableData.splice(++index,0,child);
-						if(child.children && child.children.length > 0 && child.open){
-							index = this.expand(child,index);
+		},
+		methods: {
+			getAllNode() {
+				axios.get('/api/bindingCl/allNodes', {
+						headers: {
+							"token": localStorage.getItem("token"),
 						}
-					}
-					item.open = true;
-					return index;
-				},
-				collapse:function(item,index){
-					if(!item.children){
-						return index;
-					}
-					//收缩
-					item.open = false;
-					var len = 0;
-					for(var i=index+1;i<this.tableData.length-1;i++){
-						var xcode = this.tableData[i].xcode;
-						if(xcode.startsWith(item.xcode+"-")){
-							len ++;
-						}else{
-							break;
+					})
+					.then(res => {
+						var response = res.data.data;
+						this.datatest = eval(response);
+						for (var i = 0; i < this.datatest.length; i++) {
+							var newNode;
+							if (this.datatest[i].inheritRp.split(':').length == 1) {
+								newNode = {
+									id: this.datatest[i].id,
+									label: this.datatest[i].nodeName,
+									children: []
+								};
+								this.data4.push(newNode)
+							} else if (this.datatest[i].inheritRp.split(':').length == 2) {
+								newNode = {
+									id: this.datatest[i].id,
+									label: this.datatest[i].nodeName,
+									children: []
+								};
+								this.data4[0].children.push(newNode);
+							} else if (this.datatest[i].inheritRp.split(':').length == 3) {
+								newNode = {
+									id: this.datatest[i].id,
+									label: this.datatest[i].nodeName,
+									children: []
+								};
+								for (var k = 0; k < this.data4[0].children.length + 1; k++) {
+									if (this.data4[0].children[k].id == this.datatest[i].inheritRp.split(':')[1]) {
+										this.data4[0].children[k].children.push(newNode);
+									}
+									if (k == this.data4[0].children.length) {
+										eNode.push(this.datatest[i]);
+									}
+								}
+							} else if (this.datatest[i].inheritRp.split(':').length == 4) {
+								newNode = {
+									id: this.datatest[i].id,
+									label: this.datatest[i].nodeName,
+									children: []
+								};
+								for (var k = 0; k < this.data4[0].children.length + 1; k++) {
+									for (var m = 0; m < this.data4[0].children[k].length + 1; m++) {
+										if (this.data4[0].children[k].id == this.datatest[i].inheritRp.split(':')[1] && this.data4[0].children[k].children[
+												m].id == this.datatest[i].inheritRp.split(':')[2]) {
+											this.data4[0].children[k].children[m].children.push(newNode);
+										}
+										if (m == this.data4[0].children[k].length) {
+											this.eNode.push(this.datatest[i]);
+										}
+									}
+									if (k == this.data4[0].children.length) {
+										this.eNode.push(this.datatest[i]);
+									}
+								}
+							}
 						}
-					}
-					this.tableData.splice(index+1,len);
-				}
-			}
-		});
+						for (var i = 0; i < this.eNode.length; i++) {
+							if (this.eNode[i].inheritRp.split(':').length == 3) {
+								var newNode = {
+									id: this.eNode[i].id,
+									label: this.eNode[i].nodeName,
+									children: []
+								};
+								for (var k = 0; k < this.data4[0].children.length + 1; k++) {
+									if (this.data4[0].children[k].id == this.eNode[i].inheritRp.split(':')[1]) {
+										this.data4[0].children[k].children.push(newNode);
+									}
+								}
+							} else if (this.eNode[i].inheritRp.split(':').length == 4) {
+								newNode = {
+									id: this.eNode[i].id,
+									label: this.eNode[i].nodeName,
+									children: []
+								};
+								for (var k = 0; k < this.data4[0].children.length + 1; k++) {
+									for (var m = 0; m < this.data4[0].children[k].length + 1; m++) {
+										if (this.data4[0].children[k].id == this.eNode[i].inheritRp.split(':')[1] && this.data4[0].children[k].children[
+												m].id == this.datatest[i].inheritRp.split(':')[2]) {
+											this.data4[0].children[k].children[m].children.push(newNode);
+										}
+										if (m == this.data4[0].children[k].length) {
+											this.eNode.push(this.eNode[i]);
+										}
+									}
+									if (k == this.data4[0].children.length) {
+										this.eNode.push(this.eNode[i]);
+									}
+								}
+							}
+						}
+					})
+					.catch(err => {
 
+					});
+			},
+			askBinding() {
+				var newID;
+				this.$prompt('请输入ID', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({
+					value
+				}) => {
+					newID = value;
+					this.$message({
+						type: 'success',
+						message: 'ID: ' + value
+					});
+					var title = new URLSearchParams();
+					title.append("requestBindID", newID);
+					axios.post('/api/bindingCl/askBinding', title, {
+							headers: {
+								"token": localStorage.getItem("token"),
+							}
+						})
+						.then(res => {
+							alert("成功");
+						})
+				});
+			},
+			setRoot(index) {
+				axios.post('/api/bindingCl/setRoot', {
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {
+						alert("成功");
+					});
+
+
+			},
+			unbind(index) {
+				this.$confirm('解绑自身会同时解绑本节点下的所有子节点, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$confirm('解绑自身会同时解绑本节点下的所有子节点, 是否继续?', '提示', {
+					          confirmButtonText: '确定',
+					          cancelButtonText: '取消',
+					          type: 'warning'
+					        }).then(() => {
+					          axios.post('/api/bindingCl/unbind', {
+					          		headers: {
+					          			"token": localStorage.getItem("token"),
+					          		}
+					          	})
+					          	.then(res => {
+					          		alert("成功");
+					          	});
+					        }).catch(() => {
+					          this.$message({
+					            type: 'info',
+					            message: '已取消删除'
+					          });          
+					        });
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
+			},
+			getNode(){
+				axios.get('/api/bindingCl/nodeID', {
+						params: {},
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {
+						var response = res.data.data;
+						this.nowNode = response;
+					})
+					.catch(function(error) {
+						console.log(error);
+					});
+			},
+			changit(){
+				this.change = !this.change;
+			}
+		},
+		beforeMount: function() {
+			this.getAllNode();
+			this.getNode();
+		},
+	}
 </script>
 
 <style>

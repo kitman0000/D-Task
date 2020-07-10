@@ -18,7 +18,7 @@
 			<el-date-picker v-model="dateValue" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
 			</el-date-picker>
 		
-			<el-button type="primary" icon="el-icon-search" @click="searchMail_searchButton()" style="margin-left: 10px;">搜索</el-button>
+			<el-button type="primary" @click="searchMail_searchButton()" icon="el-icon-search" style="background: #24375E;border: 0px ;margin-left: 10px;">搜索</el-button>
 		</div>
 		<el-table :data="tableData2" style="width: 100%"  @row-click="MailDetail">
 			<el-table-column prop="id" label="邮件id" width="200">
@@ -31,9 +31,14 @@
 			</el-table-column>
 		</el-table>
 		<div style="text-align: center;">
-			<el-pagination background layout="prev, pager, next" :total="pageNumber" :current-page.sync="currentpage" ref="currentPage" @current-change="searchMail" >
-			</el-pagination>
-		</div>
+		    <el-pagination
+		      @current-change="searchMail"
+		      :current-page="currentPage"
+		      :page-size="10"
+		      layout="prev, pager, next, jumper"
+		      :total="pageNumber">
+		    </el-pagination>
+			</div>
 	</div>
 </template>
 
@@ -93,7 +98,8 @@
 					})
 					.then(res => {
 						var response = res.data;
-						this.pageNumber = response.data;
+						this.pageNumber = response.data * 10;
+						console.log(this.pageNumber);
 					})
 					.catch(function(error) {
 						console.log(error);
@@ -121,7 +127,6 @@
 					.then(res => {
 						var response = res.data.data;
 						this.tableData2 = eval(response);
-						this.pageNumber = response.data;
 					})
 					.catch(function(error) {
 						console.log(error);
@@ -171,7 +176,7 @@
 					})
 					.then(res => {
 						var response = res.data;
-						this.pageNumber = response.data;
+						this.pageNumber = response.data * 10;
 					})
 					.catch(function(error) {
 						console.log(error);
@@ -190,7 +195,7 @@
 				}
 				  })
 				  .then(res=>{
-						var response=res.data;
+						var response=res.data.data;
 						this.tableData2=[];
 						this.tableData2=eval(response);
 						this.currentpage= currentpage;
@@ -243,7 +248,7 @@
 					})
 					.then(res => {
 						var response = res.data;
-						this.pageNumber = response.data;
+						this.pageNumber = response.data *10;
 					})
 					.catch(function(error) {
 						console.log(error);
