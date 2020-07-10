@@ -21,22 +21,42 @@ public class LocalSubTaskImpl implements ILocalSubTask{
     private final int COUNT_ONE_PAGE = 10;
 
     @Autowired
-    LocalSubTaskDao localSubTaskDao;
+    private LocalSubTaskDao localSubTaskDao;
 
     @Override
     public ResponseData addLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
+        if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
+            return new ResponseData(2,"权限不足",null);
+        }
+
         localSubTaskDao.addLocalSubTask(localSubTaskEntity);
         return new ResponseData(1,"添加成功",null);
     }
 
     @Override
     public ResponseData editLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
+
+        // 检查所申请操作的subTaskID是否属于taskID
+        int[] subTaskID = {localSubTaskEntity.getId()};
+        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskID)){
+            return new ResponseData(2,"权限不足",null);
+        }
+
+        if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
+            return new ResponseData(2,"权限不足",null);
+        }
+
         localSubTaskDao.updateLocalSubTask(localSubTaskEntity);
         return new ResponseData(1,"修改成功",null);
     }
 
     @Override
-    public ResponseData deleteLocalSubTask(int[] id) {
+    public ResponseData deleteLocalSubTask(int taskID, int[] id) {
+        // 检查所申请操作的subTaskID是否属于taskID
+        if(!checkSubTask(taskID,id)){
+            return new ResponseData(2,"权限不足",null);
+        }
+
         localSubTaskDao.deleteLocalSubTask(id);
         return new ResponseData(1,"删除成功",null);
     }
@@ -45,7 +65,7 @@ public class LocalSubTaskImpl implements ILocalSubTask{
     public ResponseData getLocalSubTaskNumber(LocalSubTaskEntity localSubTaskEntity) {
         int count = localSubTaskDao.getLocalSubTaskNumber(localSubTaskEntity.getTaskID());
         int page = PageDivideUtil.getCountOfPages(count,COUNT_ONE_PAGE);
-        return new ResponseData(page,"查询成功",null);
+        return new ResponseData(1,"查询成功",page);
     }
 
     @Override
@@ -58,12 +78,17 @@ public class LocalSubTaskImpl implements ILocalSubTask{
 
     @Override
     public ResponseData editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity) {
+        // 检查所申请操作的subTaskID是否属于taskID
+        int[] subTaskIDArray = {localSubTaskEntity.getId()};
+        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskIDArray)){
+            return new ResponseData(2,"权限不足",null);
+        }
 
         int userID = UserCommon.getUserBo().getUserID();
         int subTaskID = localSubTaskEntity.getId();
 
         // 判断是否是管理员
-        if(!localSubTaskDao.isUserAdmin(userID) || !localSubTaskDao.isAllowUserChangeState(subTaskID)){
+        if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeState(subTaskID)){
             return new ResponseData(2,"权限不足",null);
         }
 
@@ -71,6 +96,40 @@ public class LocalSubTaskImpl implements ILocalSubTask{
 
         return new ResponseData(1,"修改成功",null);
 
+    }
+
+    private boolean checkIsAdmin(int taskID){
+        int opUser = UserCommon.getUserBo().getUserID();
+        try {
+            return localSubTaskDao.isUserAdmin(opUser,taskID);
+        }
+        catch (Exception ex) {
+            return false;
+        }
+    }
+
+    /**
+     * 检查子任务是否归属于某个任务
+     * @param taskID 任务ID
+     * @param subTaskID 子任务ID（数组）
+     * @return 是否有权限
+     */
+    private boolean checkSubTask(int taskID,int[] subTaskID){
+
+        try {
+            List<Integer> taskIDArray = localSubTaskDao.getTaskIDsBySubTask(subTaskID);
+
+            // 遍历所有的taskID,如果所选择的id存在与taskID（即请求操作的ID）不同，则没有权限
+            for (int id : taskIDArray) {
+                if (id != taskID)
+                    return false;
+            }
+
+            // 完成所有遍历，所有子任务的任务ID都等于taskID，有权限
+            return true;
+        }catch (Exception ex){
+            return false;
+        }
     }
 
 

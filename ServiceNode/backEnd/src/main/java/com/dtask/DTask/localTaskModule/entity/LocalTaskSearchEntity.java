@@ -8,5 +8,5 @@ import lombok.Data;
 @Data
 public class LocalTaskSearchEntity {
     String taskName;
-    String taskCreatorName;
+    int taskCreatorID;
 }

@@ -11,7 +11,7 @@ public interface ILocalSubTask {
 
     ResponseData editLocalSubTask(LocalSubTaskEntity localSubTaskEntity);
 
-    ResponseData deleteLocalSubTask(int[] id);
+    ResponseData deleteLocalSubTask(int taskID, int[] id);
 
     ResponseData getLocalSubTaskNumber(LocalSubTaskEntity localSubTaskEntity);
 

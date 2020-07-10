@@ -1,4 +1,4 @@
-package com.dtask.center.remoteTaskModule.entity;
+package com.dtask.DTask.remoteTaskModule.entity;
 
 import lombok.Data;
 
@@ -28,9 +28,4 @@ public class RemoteSubTaskEntity {
     private String tag;
 
     private int star;
-
-    // 操作用户信息
-    private int userID;
-
-    private int nodeID;
 }

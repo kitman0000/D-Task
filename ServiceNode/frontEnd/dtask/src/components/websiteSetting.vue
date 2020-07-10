@@ -1,13 +1,14 @@
 <template>
   <div id="app">
     <el-container>
+      <el-header style="font-size: 60px; color:#E6A23C; position: relative;"><b>站长设置</b></el-header>
       <el-main>
-        <el-tabs v-model="activeName" tabPosition="top">
+        <el-tabs  tabPosition="top">
           <el-tab-pane label="网站管理" name="first" style="height: 400px;">
             <span>
               网站名称 :
               <el-input
-                v-model="webName"
+                v-model="websiteName"
                 placeholder="请输入内容"
                 style="width: 220px; padding: 20px; position: relative; left: 7px;"></el-input>
             </span>
@@ -15,7 +16,7 @@
             <span style="color: #303133;">
               缓存使用设置:
               <el-select
-                v-model="cacheChose"
+                v-model="cache"
                 placeholder="请选择"
                 @change="caChange()"
                 style="position: relative; top: -5px; width: 220px;">
@@ -46,7 +47,7 @@
             <span>
               任务日志开关:
               <el-switch
-                v-model="taJudge"
+                v-model="taskLog"
                 @change="taChange()"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
@@ -57,10 +58,10 @@
             </span>
             <br>
             <span style="position: relative; top: 15px;">
-              管理员日志开关:
+              用户操作日志日志开关:
               <el-switch
-                v-model="adJudge"
-                @change="adChange()"
+                v-model="userLog"
+                @change="userChange()"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
                 active-text="开"
@@ -114,53 +115,105 @@
 </template>
 
 <script>
-
-export default {
-  name: 'App',
-  components: {
-  },
-  data() {
-
-    return {
-      activeName: 'first',
-      webName: '请输入网站名称',
-      maxLogin: 1,
-      cacheChose: 'ehcache',
-      options: [{
-        value: 1,
-        label: 'ehcache'
-      }, {
-        value: 2,
-        label: 'redis'
-      }],
-      taJudge: false, //任务日志开关
-      adJudge: false, //管理员日志开关
-      swJudge: this.onClick  //网站开关
-    }
-  },
-  methods: {
-    caChange: function() {
-      console.log('缓存使用:' + this.cacheChose + 'k')
+  import axios from 'axios';
+  export default {
+    name: 'App',
+    components: {
     },
-    taChange: function() {
-      console.log('任务日志发生改变')
-    },//任务日志开关
-    adChange: function() {
-      console.log('管理员日志发生改变')
-    },//管理员日志开关
-    swChange: function() {
-      console.log('网站发生改变')
-    },//网站开关
-    onConfirm: function() {
-      console.log('网站重启')
+    data() {
+
+      return {
+        websiteName: '',
+        maxLogin: null ,
+        cache: '',
+        options: [{
+          value: 1,
+          label: '1k'
+        }, {
+          value: 2,
+          label: '2k'
+        }, {
+          value: 4,
+          label: '4k'
+        }, {
+          value: 8,
+          label: '8k'
+        }, {
+          value: 16,
+          label: '16k'
+        }],
+        taskLog: false, //任务日志开关
+        userLog: false, //用户日志开关
+        swJudge: this.onClick  //网站开关
+      }
+    },
+    methods: {
+      caChange: function() {
+        console.log('缓存使用:' + this.cacheChose + 'k')
+      },
+      taChange: function() {
+        console.log('任务日志发生改变')
+      },//任务日志开关
+      userChange: function() {
+        console.log('用户操作日志发生改变')
+      },//管理员日志开关
+      swChange: function() {
+        console.log('网站发生改变')
+      },//网站开关
+      onConfirm: function() {
+        console.log('网站重启')
+      },
+      // changeWebInfo(){
+      //   var params = new URLSearchParams();
+      //   params.append("websiteName",this.webName);
+      //   params.append("maxLogin",this.maxLogin);
+      //   params.append("cache",this.cacheChose);
+      //   params.append("taJudge",this.taJudge);
+      //   params.append("userJudge",this.userJudge);
+      //   axios.put("api/webSiteSettings/setting",
+      //     params,
+      //     {
+      //       headers:{
+      //         token:"eyJ1c2VySUQiOjEwMDEsInVzZXJuYW1lIjoiYWRtaW4yIiwiY3JlYXRlVGltZSI6MTU5MzcwMDkzNzUxM30=",
+      //       }
+      //     })
+      //     .then(res => {
+      //       var response = res.data;
+      //       var retObj = eval(response.data);
+      //       console.log(retObj);
+      //     })
+      //   // this.$router.push({
+      //   //   path:'/user',
+      //   // })
+      // },
+      getWebInfo(){
+        axios.get("/api/webSiteSettings/setting",{
+          headers:{
+            token:"eyJ1c2VySUQiOjEwMDEsInVzZXJuYW1lIjoiYWRtaW4yIiwiY3JlYXRlVGltZSI6MTU5NDA0MDYyODM1N30=",
+          }
+        })
+        .then(res =>{
+          console.log(res);
+        }).catch(err =>{
+          console.log("timeout");
+          console.log(err);
+        })
+      }
+
+    },
+    beforeMount:function() {
+      this.getWebInfo();
     }
   }
-}
 </script>
 
 <style>
-  .sw {;
-    position: relative;
-    top: -2px;
-  }
+
 </style>
+// var response = res.data;
+// var webObj = eval(response.data);
+// this.websiteName = webObj.websiteName;
+// this.maxLogin= webObj.maxLogin;
+// this.cacheChose = webObj.cache;
+// this.taskLog = webObj.taskLog;
+// this.userLog = webObj.userLog;

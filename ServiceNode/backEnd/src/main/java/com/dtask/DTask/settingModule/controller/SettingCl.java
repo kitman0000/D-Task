@@ -16,13 +16,19 @@ public class SettingCl{
     @Autowired
     ISetting setting;
 
-    @RequestMapping(value = "api/webSiteSettings/setting",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/webSiteSettings/setting",method = RequestMethod.GET)
     public ResponseData getSetting() {
         return setting.getSetting();
     }
 
-    @RequestMapping(value = "api/webSiteSettings/setting",method = RequestMethod.POST)
+    @RequestMapping(value = "/api/webSiteSettings/setting",method = RequestMethod.POST)
     public ResponseData updateSetting(SettingEntity settingEntity) {
         return setting.updateSetting(settingEntity);
     }
+
+    @RequestMapping(value = "/api/webSiteSettings/shutDown",method = RequestMethod.POST)
+    public ResponseData shutDown(){
+        return setting.shutDown();
+    }
+
 }

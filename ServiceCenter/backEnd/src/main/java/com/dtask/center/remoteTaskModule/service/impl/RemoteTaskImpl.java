@@ -31,6 +31,8 @@ public class RemoteTaskImpl implements IRemoteTask {
 
         int taskID = remoteTaskDao.getCurrentTaskID();
         remoteTaskDao.addTaskMember(taskID, addRemoteTaskEntity.getNodeID(),addRemoteTaskEntity.getUserID());
+        // 将拥有者设为管理员
+        remoteTaskDao.setRemoteTaskAdmin(taskID,addRemoteTaskEntity.getNodeID(),addRemoteTaskEntity.getUserID(),true);
         return "ADD_SUCCESS";
     }
 
@@ -140,11 +142,30 @@ public class RemoteTaskImpl implements IRemoteTask {
         return "EDIT_SUCCESS";
     }
 
+    @Override
+    public String getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity) {
+        int numbers = remoteTaskDao.getUserTaskNumber(remoteTaskSearchEntity);
+        int page = PageDivideUtil.getCountOfPages(numbers,COUNT_ONE_PAGE);
+
+        return String.valueOf(page);
+    }
+
+    @Override
+    public String getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
+        int startRow = (page -1) * COUNT_ONE_PAGE;
+        List<RemoteTaskBo> remoteTaskBoList = remoteTaskDao.getUserRemoteTaskList(remoteTaskSearchEntity,startRow,COUNT_ONE_PAGE);
+        return JsonUtil.objectToJson(remoteTaskBoList);
+    }
+
     /**
      * 判断用户是否拥有管理权限
      */
     private boolean checkUserHasPermission(int taskID,int nodeID,int userID){
         // 一般情况下任务所有者和管理员都拥有管理权限，但防止后期变化，特此列出
-        return remoteTaskDao.checkIsAdmin(taskID,nodeID,userID);
+        try {
+            return remoteTaskDao.checkIsAdmin(taskID, nodeID, userID);
+        }catch (Exception ex){
+            return false;
+        }
     }
 }

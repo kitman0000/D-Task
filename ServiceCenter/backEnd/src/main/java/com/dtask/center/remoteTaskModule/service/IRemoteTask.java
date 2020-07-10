@@ -25,4 +25,7 @@ public interface IRemoteTask {
 
     String toggleTaskAdmin(ToggleTaskAdminEntity toggleTaskAdminEntity);
 
+    String getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity);
+
+    String getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page);
 }

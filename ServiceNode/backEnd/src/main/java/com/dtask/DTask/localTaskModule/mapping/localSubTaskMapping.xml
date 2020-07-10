@@ -63,21 +63,27 @@
 
     <!-- 判断用户是否为管理员 -->
     <select id="isUserAdmin" resultType="java.lang.Boolean">
-        SELECT isAdmin FROM tb_local_sub_task
-        LEFT JOIN tb_local_task_user
-        ON tb_local_sub_task.taskID = tb_local_task_user.taskID
-
-         <where>
-             userID = #{userID}
-         </where>
+        SELECT isAdmin FROM tb_local_task_user
+        <where>
+            taskID = #{taskID}
+            and userID = #{userID}
+        </where>
     </select>
 
     <!-- 判断任务是否允许用户修改状态 -->
     <select id="isAllowUserChangeState" resultType="java.lang.Boolean">
-        SELECT allowedMemberChangeStatus FROM tb_local_sub_task LEFT JOIN tb_local_task ON tb_local_sub_task.taskID = tb_local_task.id
+        SELECT allowedMemberChangeStatus FROM tb_local_task
         <where>
             tb_local_task.id = #{taskID}
         </where>
+    </select>
+
+    <!-- 通过子任务ID来获取任务ID -->
+    <select id="getTaskIDsBySubTask" resultType="java.lang.Integer">
+        SELECT distinct(taskID) FROM tb_local_sub_task WHERE id IN
+        <foreach collection="subTaskID" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 
     <sql id="set_tb_local_sub_task">

@@ -8,6 +8,9 @@ import com.dtask.DTask.settingModule.service.ISetting;
 import com.dtask.common.ResponseData;
 import com.dtask.common.config.WebsiteConfig;
 import com.dtask.common.util.CacheUtil;
+import org.apache.catalina.core.ApplicationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -27,6 +30,8 @@ public class SettingImpl implements ISetting ,ApplicationRunner{
 
     @Autowired
     private CacheUtil cacheUtil;
+
+    Logger logger = LoggerFactory.getLogger(SettingImpl.class);
 
     @Override
     public ResponseData getSetting() {
@@ -56,6 +61,16 @@ public class SettingImpl implements ISetting ,ApplicationRunner{
     }
 
     /**
+     * 关闭系统后台
+     * 关闭系统后只能通过登录服务器重新启动
+     */
+    @Override
+    public ResponseData shutDown() {
+        System.exit(0);
+        return null;
+    }
+
+    /**
      *  由于无法使用@Order修改类加载顺序，在这里调用所有初始化操作
      *  包括缓存设置，节点操作
      */
@@ -71,4 +86,6 @@ public class SettingImpl implements ISetting ,ApplicationRunner{
         Thread.sleep(3000);
         binding.getNodeID();
     }
+
+
 }

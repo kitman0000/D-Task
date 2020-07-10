@@ -10,4 +10,7 @@ public interface ISetting {
     ResponseData getSetting();
 
     ResponseData updateSetting(SettingEntity settingEntity);
+
+    ResponseData shutDown();
+
 }

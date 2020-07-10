@@ -6,6 +6,7 @@ import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.config.RabbitSender;
+import com.dtask.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,6 @@ public class RemoteTaskImpl implements IRemoteTask{
     }
 
 
-    // todo 可能需要多项删除
     @Override
     public ResponseData deleteRemoteTask(int id) {
         String res = rabbitSender.send("dtask.remoteTask.deleteRemoteTask","{\"id\":"+id+"}");
@@ -62,7 +62,7 @@ public class RemoteTaskImpl implements IRemoteTask{
     @Override
     public ResponseData getRemoteTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
         String res = rabbitSender.send("dtask.remoteTask.getRemoteTaskNumber",
-                "{\"taskName\":\"demoData\",\"page\":+"+page+"}");
+                "{\"page\":+"+page+",\"RemoteTaskSearchEntity\":\"" + JsonUtil.objectToJson(remoteTaskSearchEntity) + "\"}");
 
         return new ResponseData(1,"查询成功",res); // 返回任务列表
     }
@@ -120,14 +120,19 @@ public class RemoteTaskImpl implements IRemoteTask{
 
     }
 
-    //todo 获取用户的任务
     @Override
     public ResponseData getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity) {
-        return null;
+        String res = rabbitSender.send("dtask.remoteTask.getUserTaskList",
+                "{\"taskName\":\""+remoteTaskSearchEntity.getTaskName()+"\",\"userID\":"+remoteTaskSearchEntity.getUserID()+",\"nodeID\":"+remoteTaskSearchEntity.getNodeID()+"}");
+
+        return new ResponseData(1,"查询成功",res);
     }
 
     @Override
     public ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
-        return null;
+        String res = rabbitSender.send("dtask.remoteTask.getRemoteTaskNumber",
+                "{\"page\":+"+page+",\"RemoteTaskSearchEntity\":\"" + JsonUtil.objectToJson(remoteTaskSearchEntity) + "\"}");
+
+        return new ResponseData(1,"查询成功",res);
     }
 }
