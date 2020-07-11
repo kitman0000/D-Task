@@ -72,24 +72,19 @@
 				hasReadValue: -1,
 				dateValue:'',
 				pageNumber:1,
-				currentpage:0,
+				currentpage:1,
 				keyword:'',
 			}
 		},
 		methods:{
 			getDefaultMailPage(){
-				var date = new Date();
-				var nowMonth = date.getMonth() + 1;
-				var strDate = date.getDate()+1;
-				var seperator = "-";
-				var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
 				axios.get('/api/mail/mailPage', {
 						params: {
 							keyword:'',
 							hasRead:'',
 							isImportant:'',
-							sendTimeStart:'2020-1-1',
-							sendTimeEnd:nowDate,
+							sendTimeStart:'',
+							sendTimeEnd:'',
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -104,18 +99,13 @@
 					});
 			},
 			getDefaultMailList(){
-				var date = new Date();
-				var nowMonth = date.getMonth() + 1;
-				var strDate = date.getDate();
-				var seperator = "-";
-				var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
 				axios.get('/api/mail/mailList', {
 						params: {
 							keyword:'',
 							hasRead:'',
 							isImportant:'',
-							sendTimeStart:'2020-1-1',
-							sendTimeEnd:nowDate,
+							sendTimeStart:'',
+							sendTimeEnd:'',
 							page:1,
 						},
 						headers: {
@@ -247,7 +237,7 @@
 					})
 					.then(res => {
 						var response = res.data;
-						this.pageNumber = response.data;
+						this.pageNumber = response.data *10;
 					})
 					.catch(function(error) {
 						console.log(error);

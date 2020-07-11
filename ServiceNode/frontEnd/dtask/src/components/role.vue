@@ -1,7 +1,7 @@
 <template>
 	<div>
-			<el-button style="float: right;margin-top: 15px;" @click="deleteRoles()">删除所选角色</el-button>
-			<el-button style="float: right;margin-top: 15px;margin-right: 10px;" @click="addRole()">添加角色</el-button>
+			<el-button type="primary" style="float: right;margin-top: 15px;background: #24375E;border: 0px ;" icon="el-icon-delete" @click="deleteRoles()">删除所选角色</el-button>
+			<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;" icon="el-icon-plus" @click="addRole()">添加角色</el-button>
 		<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="roleID" label="角色ID" width="120">
@@ -11,7 +11,6 @@
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button type="text" size="small" @click="deleteRole(scope.row)">删除角色</el-button>
-					<el-button type="text" size="small" @click="editRoleID(scope.row)">编辑角色ID</el-button>
 					<el-button type="text" size="small" @click="editRoleName(scope.row)">编辑角色名</el-button>
 					<el-button type="text" size="small" @click="editPermission(scope.row)">查看权限</el-button>
 				</template>
@@ -132,35 +131,7 @@
 						message: '失败'
 					});
 				});
-			},
-			
-			editRoleID(index){
-				var newID;
-				this.$prompt('请输入新ID', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-				}).then(({
-					value
-				}) => {
-					newID = value;
-					this.$message({
-						type: 'success',
-						message: 'ID: ' + value
-					});
-					var title = new URLSearchParams();
-					title.append("roleName", index.roleName);
-					title.append("roleID", newID);
-					axios.put('/api/role/role', title, {
-							headers: {
-								"token": localStorage.getItem("token"),
-							}
-						})
-						.then(res=> {
-							alert("成功");
-						})
-				});
-			},
-			
+			},			
 			editRoleName(index){
 				var newName;
 				this.$prompt('请输入新名称', {
@@ -184,6 +155,7 @@
 						})
 						.then(res=> {
 							alert("成功");
+							window.location.reload();
 						})
 				});
 			},

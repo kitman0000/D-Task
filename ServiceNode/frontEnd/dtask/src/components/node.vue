@@ -1,8 +1,10 @@
 <template>
 	<div>
 		<el-button type="primary" @click="changit()"  style="background: #24375E;border: 0px ;margin-left: 10px;">展现形式变化</el-button>
+		<el-button type="primary"  @click="setRoot()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">将自身设为根节点</el-button>
+		<el-button type="primary"  @click="unbind()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">解绑自身</el-button>
 		<el-table :data="datatest" tooltip-effect="dark" style="width: 100%" v-if="!change">
-			<el-table-column prop="id" label="id" width="120">
+			<el-table-column prop="id" label="id" width="120px">
 			</el-table-column>
 			<el-table-column prop="nodeName" label="节点名">
 			</el-table-column>
@@ -12,13 +14,13 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" v-if="scope.row.id = nowNode" @click="askBinding(scope.row)">申请绑定</el-button>
-					<el-button type="text" size="small" @click="setRoot(scope.row)">将自身设为根节点</el-button>
-					<el-button type="text" size="small" @click="unbind(scope.row)">解绑自身</el-button>
+					<el-button type="text" size="small" v-if="scope.row.id != nowNode" @click="askBinding(scope.row)">申请绑定</el-button>
+					
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-tree :data="data4" :props="defaultProps" v-if="change"></el-tree>
+		<el-tree :data="data4" :props="defaultProps" v-if="change" style="margin-top: 15px;" :render-content="renderContent" default-expand-all
+  :expand-on-click-node="false">></el-tree>
 	</div>
 </template>
 
@@ -43,6 +45,7 @@
 					.then(res => {
 						var response = res.data.data;
 						this.datatest = eval(response);
+						console.log(this.datatest);
 						for (var i = 0; i < this.datatest.length; i++) {
 							var newNode;
 							if (this.datatest[i].inheritRp.split(':').length == 1) {
@@ -134,61 +137,72 @@
 
 					});
 			},
-			askBinding() {
-				var newID;
-				this.$prompt('请输入ID', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-				}).then(({
-					value
-				}) => {
-					newID = value;
-					this.$message({
-						type: 'success',
-						message: 'ID: ' + value
-					});
-					var title = new URLSearchParams();
-					title.append("requestBindID", newID);
-					axios.post('/api/bindingCl/askBinding', title, {
+			askBinding(index) {
+				var id = new URLSearchParams();
+					id.append("requestBindID", index.id);
+					axios.post('/api/bindingCl/askBinding', id, {
 							headers: {
 								"token": localStorage.getItem("token"),
 							}
 						})
 						.then(res => {
-							alert("成功");
-						})
-				});
+							if(res.data.ret == 1){
+								alert('成功');
+							}
+							else if(res.data.ret == 1){
+								alert('系统错误');
+							}
+							else{
+								alert('申请绑定自身');
+							}
+						});
 			},
-			setRoot(index) {
-				axios.post('/api/bindingCl/setRoot', {
+			setRoot() {
+				axios.post('/api/bindingCl/setRoot', '',{
 						headers: {
 							"token": localStorage.getItem("token"),
 						}
 					})
 					.then(res => {
-						alert("成功");
+						if(res.data.ret == 1){
+							alert('成功');
+						}
+						else if(res.data.ret == 1){
+							alert('失败（根节点已存在）');
+						}
+						else{
+							alert('其他错误');
+						}
 					});
 
 
 			},
-			unbind(index) {
+			unbind() {
 				this.$confirm('解绑自身会同时解绑本节点下的所有子节点, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$confirm('解绑自身会同时解绑本节点下的所有子节点, 是否继续?', '提示', {
+					this.$confirm('最后一次提示：解绑自身会同时解绑本节点下的所有子节点, 是否继续?', '提示', {
 					          confirmButtonText: '确定',
 					          cancelButtonText: '取消',
 					          type: 'warning'
 					        }).then(() => {
-					          axios.post('/api/bindingCl/unbind', {
+					          axios.post('/api/bindingCl/unbind','',{
 					          		headers: {
 					          			"token": localStorage.getItem("token"),
 					          		}
 					          	})
 					          	.then(res => {
-					          		alert("成功");
+					          		if(res.data.ret == 1){
+					          			alert('成功');
+					          		}
+					          		else if(res.data.ret == 1){
+					          			alert('失败（自身未被绑定）');
+					          		}
+					          		else{
+					          			alert('其他错误');
+					          		}
 					          	});
 					        }).catch(() => {
 					          this.$message({
@@ -220,7 +234,18 @@
 			},
 			changit(){
 				this.change = !this.change;
-			}
+			},
+			renderContent(h, { node, data, store }) {
+			        return (
+			          <span style=" flex:1;align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+			            <span>
+			              <span>{node.label}</span>
+			            </span>
+			            <span>
+			              <el-button style="font-size: 12px;margin-left:25px" type="text" on-click={ () => this.askBinding(data) }>申请绑定</el-button>
+			            </span>
+			          </span>);
+			      }
 		},
 		beforeMount: function() {
 			this.getAllNode();

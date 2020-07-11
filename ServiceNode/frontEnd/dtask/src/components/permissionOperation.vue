@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h3>该角色拥有的权限</h3>
-		<el-button plain style="float: right;" @click="notOwnedPermission()">查看未拥有的权限</el-button>
+		<el-button type="primary" style="float: right;background: #24375E;border: 0px ;"  @click="notOwnedPermission()">查看未拥有的权限</el-button>
 		<el-table :data="ownedPermission" tooltip-effect="dark" style="width: 100%">
 			<el-table-column prop="id" label="权限ID" width="120">
 			</el-table-column>
@@ -94,6 +94,10 @@
 			},
 			notOwnedPermission(){
 				var i=0,j=0,k=0;
+				if(this.ownedPermission.length == 0){
+					this.notOwnedPermissions = this.wholePermission;
+				}
+				else{
 				for(i=0;i<this.permissionNumber;i++){
 					if(this.wholePermission[i].id == this.ownedPermission[j].id){
 							if(j<this.ownedPermission.length-1)
@@ -103,6 +107,7 @@
 						this.notOwnedPermissions[k]=this.wholePermission[i];
 						k++;
 					}
+				}
 				}
 				this.notOwnedStates = true;
 			},

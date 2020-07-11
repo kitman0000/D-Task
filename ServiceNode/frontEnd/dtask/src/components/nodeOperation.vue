@@ -1,12 +1,6 @@
 <template>
 	<div>
 		<el-table :data="tableData" tooltip-effect="dark" style="width: 100%" >
-			<el-table-column prop="id" label="请求任务id" width="120">
-			</el-table-column>
-			<el-table-column prop="requestNodeID" label="请求节点的id">
-			</el-table-column>
-			<el-table-column prop="requestNodeName" label="请求节点的名称">
-			</el-table-column>
 			<el-table-column prop="requestBindID" label="请求所要绑定节点的名称">
 			</el-table-column>
 			<el-table-column label="操作">
@@ -36,12 +30,12 @@
 					}
 				})
 				.then(res => {
-					var response = res.data;
-					this.tableData = evel(response.data);
+					var response = res.data.data;
+					this.tableData = eval(response);
 					console.log(response);
 				})
 				.catch(err => {
-					alert("请求异常");
+					alert(err);
 				});
 			},
 			handleBinding(index,accept){
