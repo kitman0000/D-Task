@@ -1,5 +1,6 @@
 package com.dtask.DTask.accountModule.service;
 
+import com.dtask.DTask.accountModule.entity.RemoteLoginEntity;
 import com.dtask.common.ResponseData;
 
 /**
@@ -19,4 +20,11 @@ public interface IAccount {
     void updatePwd(int id,String pwd);
 
     ResponseData deleteUser(int[] id);
+
+    ResponseData getParentNodes();
+
+    ResponseData remoteLogin(RemoteLoginEntity remoteLoginEntity);
+
+    String mqRemoteLogin(String username,String pwd);
+
 }

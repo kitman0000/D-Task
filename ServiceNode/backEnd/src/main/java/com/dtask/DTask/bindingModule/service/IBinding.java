@@ -23,4 +23,6 @@ public interface IBinding {
     void addNode();
 
     void getNodeID();
+
+    ResponseData apiGetNodeID();
 }

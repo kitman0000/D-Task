@@ -41,4 +41,8 @@ public interface BindingDao {
     int checkRoot();
 
     void setRoot(int nodeID);
+
+    String getNodeName(int nodeID);
+
+    NodeBo getRoot();
 }

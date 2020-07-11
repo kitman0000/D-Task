@@ -54,9 +54,13 @@
                 receiverID = #{userID}
                 <include refid="emailSearchCondition"/>
             </where>
-            Limit #{startRow})as t) Limit #{rowsOnePage}
+            ORDER BY tb_email.sendTime DESC
+            Limit #{startRow})as t)
+            ORDER BY tb_email.sendTime DESC
+            Limit #{rowsOnePage}
             <!-- 分页的条件结束-->
         </where>
+
     </select>
 
     <!-- 获取用户的收件邮件详情 -->
@@ -98,7 +102,10 @@
                 senderID = #{userID}
                 <include refid="emailSearchCondition"/>
             </where>
-            Limit #{startRow})as t) Limit #{rowsOnePage}
+            ORDER BY tb_email.sendTime DESC
+            Limit #{startRow})as t)
+            ORDER BY tb_email.sendTime DESC
+            Limit #{rowsOnePage}
             <!-- 分页的条件结束-->
         </where>
     </select>

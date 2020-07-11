@@ -40,7 +40,7 @@ public class RemoteTaskCl {
         return remoteTask.getRemoteTaskList(remoteTaskSearchEntity,page);
     }
 
-    @RequestMapping(value = "/api/remoteTask/UserremoteTaskPage",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/remoteTask/remoteTaskMember",method = RequestMethod.POST)
     public ResponseData addRemoteTaskMember(int taskID, int newUserID,int newUserNodeID) {
         return remoteTask.addRemoteTaskMember(taskID,newUserID, newUserNodeID);
     }
@@ -60,12 +60,12 @@ public class RemoteTaskCl {
         return remoteTask.toggleTaskAdmin(taskID,toggleUserID, toggleUserNodeID, isAdmin);
     }
 
-    @RequestMapping(value = "/api/remoteTask/UserremoteTaskPage",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/remoteTask/userRemoteTaskPage",method = RequestMethod.GET)
     public ResponseData getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity) {
         return remoteTask.getUserTaskNumber(remoteTaskSearchEntity);
     }
 
-    @RequestMapping(value = "/api/remoteTask/UserremoteTaskList",method = RequestMethod.GET)
+    @RequestMapping(value = "/api/remoteTask/userRemoteTaskList",method = RequestMethod.GET)
     public ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
         return remoteTask.getUserTaskList(remoteTaskSearchEntity,page);
     }

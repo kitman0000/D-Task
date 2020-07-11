@@ -47,4 +47,9 @@ public class BindingCl {
     public ResponseData unbind() {
         return binding.unbind();
     }
+
+    @RequestMapping(value = "/api/bindingCl/nodeID",method = RequestMethod.GET)
+    public ResponseData apiGetNodeID(){
+        return binding.apiGetNodeID();
+    }
 }

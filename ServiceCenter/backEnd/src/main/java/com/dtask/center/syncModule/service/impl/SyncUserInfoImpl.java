@@ -20,12 +20,19 @@ public class SyncUserInfoImpl implements ISyncUserInfo {
 
     @Override
     public String syncUserInfo(SyncUserInfoEntity syncUserInfoEntity) {
-        List<UserListEntity> userListEntityList = syncUserInfoEntity.getUserListEntity();
+        try {
 
-        // 通过循环将数据存入数据库，后期有时间再优化
-        for (UserListEntity userListEntity : userListEntityList) {
-            syncUserDao.insertUserInfo(userListEntity,syncUserInfoEntity.getNodeID());
+
+            List<UserListEntity> userListEntityList = syncUserInfoEntity.getUserListEntity();
+
+            // 通过循环将数据存入数据库，后期有时间再优化
+            for (UserListEntity userListEntity : userListEntityList) {
+                syncUserDao.insertUserInfo(userListEntity, syncUserInfoEntity.getNodeID());
+            }
+            return "sync_success";
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return "SYS_FAILED";
         }
-        return "sync_success";
     }
 }

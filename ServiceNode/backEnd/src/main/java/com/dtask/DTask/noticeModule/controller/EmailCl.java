@@ -26,8 +26,8 @@ public class EmailCl {
 
     @RequiresPermissions("notice:mail:use")
     @RequestMapping(value = "/api/mail/mail",method = RequestMethod.POST)
-    public ResponseData sendMail(int[] receiverID, String title, String content, boolean isImportant, MultipartFile[] file){
-        return email.sendMail(receiverID, title, content, isImportant, file);
+    public ResponseData sendMail(int[] receiverID, String title, String content, boolean isImportant, String filename){
+        return email.sendMail(receiverID, title, content, isImportant, filename);
     }
 
     @RequiresPermissions("notice:mail:use")
@@ -65,5 +65,11 @@ public class EmailCl {
     @RequestMapping(value = "/api/mail/mailSentDetail",method = RequestMethod.GET)
     public ResponseData getEmailSentDetail(int mailID){
         return email.getSentEmailDetail(mailID);
+    }
+
+    @RequiresPermissions("notice:mail:use")
+    @RequestMapping(value = "/api/mail/attachment",method = RequestMethod.POST)
+    public ResponseData uploadMailAttachment(MultipartFile file){
+        return email.uploadMailAttachment(file);
     }
 }
