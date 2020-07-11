@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-table :data="tableData" tooltip-effect="dark" style="width: 100%" >
-			<el-table-column prop="requestBindID" label="请求所要绑定节点的名称">
+			<el-table-column prop="requestNodeName" label="请求所要绑定节点的名称">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
@@ -45,7 +45,7 @@
 					parmas.append("accept",true);
 				}
 				else{
-					parmas.append("accept",flase);
+					parmas.append("accept",false);
 				}
 				axios.post('/api/bindingCl/handleBinding', parmas, {
 						headers: {
