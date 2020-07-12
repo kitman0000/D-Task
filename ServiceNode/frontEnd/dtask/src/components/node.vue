@@ -149,7 +149,7 @@
 							if(res.data.ret == 1){
 								alert('成功');
 							}
-							else if(res.data.ret == 1){
+							else if(res.data.ret == 2){
 								alert('系统错误');
 							}
 							else{
