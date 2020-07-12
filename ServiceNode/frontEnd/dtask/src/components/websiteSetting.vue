@@ -163,43 +163,47 @@
       onConfirm: function() {
         console.log('网站重启')
       },
-      // changeWebInfo(){
-      //   var params = new URLSearchParams();
-      //   params.append("websiteName",this.webName);
-      //   params.append("maxLogin",this.maxLogin);
-      //   params.append("cache",this.cacheChose);
-      //   params.append("taJudge",this.taJudge);
-      //   params.append("userJudge",this.userJudge);
-      //   axios.put("api/webSiteSettings/setting",
-      //     params,
-      //     {
-      //       headers:{
-      //         token:"eyJ1c2VySUQiOjEwMDEsInVzZXJuYW1lIjoiYWRtaW4yIiwiY3JlYXRlVGltZSI6MTU5MzcwMDkzNzUxM30=",
-      //       }
-      //     })
-      //     .then(res => {
-      //       var response = res.data;
-      //       var retObj = eval(response.data);
-      //       console.log(retObj);
-      //     })
-      //   // this.$router.push({
-      //   //   path:'/user',
-      //   // })
-      // },
+      changeWebInfo(){
+        var params = new URLSearchParams();
+        params.append("websiteName",this.webName);
+        params.append("maxLogin",this.maxLogin);
+        params.append("cache",this.cacheChose);
+        params.append("taJudge",this.taJudge);
+        params.append("userJudge",this.userJudge);
+        axios.post("api/webSiteSettings/setting",{
+            headers:{
+              token:localStorage.getItem("token"),
+            }
+          })
+          .then(res => {
+            var response = res.data;
+            var retObj = eval(response.data);
+            console.log(retObj);
+          })
+        // this.$router.push({
+        //   path:'/user',
+        // })
+      },
       getWebInfo(){
         axios.get("/api/webSiteSettings/setting",{
           headers:{
-            token:"eyJ1c2VySUQiOjEwMDEsInVzZXJuYW1lIjoiYWRtaW4yIiwiY3JlYXRlVGltZSI6MTU5NDA0MDYyODM1N30=",
+            token:localStorage.getItem("token"),
           }
         })
         .then(res =>{
           console.log(res);
+          var response = res.data;
+          var webObj = eval(response.data);
+          this.websiteName = webObj.websiteName;
+          this.maxLogin= webObj.maxLogin;
+          this.cacheChose = webObj.cache;
+          this.taskLog = webObj.taskLog;
+          this.userLog = webObj.userLog;
         }).catch(err =>{
           console.log("timeout");
           console.log(err);
         })
       }
-
     },
     beforeMount:function() {
       this.getWebInfo();
@@ -210,10 +214,4 @@
 <style>
 
 </style>
-// var response = res.data;
-// var webObj = eval(response.data);
-// this.websiteName = webObj.websiteName;
-// this.maxLogin= webObj.maxLogin;
-// this.cacheChose = webObj.cache;
-// this.taskLog = webObj.taskLog;
-// this.userLog = webObj.userLog;
+

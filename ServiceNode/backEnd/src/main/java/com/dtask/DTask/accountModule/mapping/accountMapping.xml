@@ -28,6 +28,18 @@
         </where>
     </select>
 
+    <!-- 获取远程登录的用户的密码 该用户需要拥有远程登录权限 -->
+    <select id="getRemoteUserPwd" resultType="java.lang.String">
+        SELECT pwd FROM tb_user
+        <where>
+            status = 1
+            AND
+            allowRemote = TRUE
+            AND
+            username = #{username}
+        </where>
+    </select>
+
     <!-- 更新用户密码-->
     <update id="updateUserPwd">
         UPDATE tb_user

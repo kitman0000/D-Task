@@ -19,7 +19,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-tree :data="data4" :props="defaultProps" v-if="change" style="margin-top: 15px;" :render-content="renderContent" default-expand-all
+		<el-tree :data="data4" :props="defaultProps" v-if="change" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" :render-content="renderContent" default-expand-all
   :expand-on-click-node="false">></el-tree>
 	</div>
 </template>

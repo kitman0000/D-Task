@@ -25,25 +25,18 @@ public class FileUtil {
 
     /**
      * 保存前端上传过来的文件
-     * @param multipartFiles 文件对象
+     * @param multipartFile 文件对象
      * @return 文件名
      * @throws IOException IO异常
      */
-    public static String saveFile(MultipartFile multipartFiles[]) throws IOException{
+    public static String saveFile(MultipartFile multipartFile) throws IOException{
         SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd-hh-mm-ss-sss");
         String timeStamp = df.format(new Date());
 
-        DTaskFile dTaskFile = new DTaskFile();
+        String filename = timeStamp + multipartFile.getOriginalFilename();
+        File file = new File(fileSavePath + filename);
+        multipartFile.transferTo(file);
 
-        for(MultipartFile multipartFile:multipartFiles){
-            String filename = timeStamp + multipartFile.getOriginalFilename();
-            File file = new File(fileSavePath + filename);
-            multipartFile.transferTo(file);
-
-            dTaskFile.setFilenameList(new LinkedList<>());
-            dTaskFile.addFilename(filename);
-        }
-
-        return JsonUtil.objectToJson(dTaskFile);
+        return filename;
     }
 }

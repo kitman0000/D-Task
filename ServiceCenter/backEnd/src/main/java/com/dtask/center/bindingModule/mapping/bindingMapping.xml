@@ -53,8 +53,13 @@
         </where>
     </select>
 
+    <!-- 获取所有在网络内的节点，并根据层数返回 -->
     <select id="getAllNodes" resultType="com.dtask.center.bindingModule.bo.NodeBo">
-        SELECT * FROM tb_node;
+        SELECT * FROM tb_node
+        <where>
+            inheritRp != '' || inheritRp IS NOT NULL
+        </where>
+        ORDER BY (LENGTH (inheritRp) - LENGTH (replace(inheritRp,':',''))) ;
     </select>
 
     <!-- 通过节点名称获取继承关系 -->
@@ -98,6 +103,22 @@
     <!-- 获取根节点 -->
     <select id="checkRoot" resultType="java.lang.Integer">
         SELECT COUNT(id) FROM tb_node
+        <where>
+            inheritRp = 'root'
+        </where>
+    </select>
+
+    <!-- 通过节点ID获取节点名称 -->
+    <select id="getNodeName" resultType="java.lang.String">
+        SELECT nodeName FROM tb_node
+        <where>
+            id = #{nodeID}
+        </where>
+    </select>
+
+    <!-- 获取根节点 -->
+    <select id="getRoot" resultType="com.dtask.center.bindingModule.bo.NodeBo">
+        SELECT id,nodeName FROM tb_node
         <where>
             inheritRp = 'root'
         </where>

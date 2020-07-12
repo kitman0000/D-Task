@@ -16,7 +16,7 @@ import checkuser from "../components/checkuser.vue"
 import changeuser from "../components/changeuser.vue"
 import DepartmentManagement from '../components/departmentManagement.vue'
 import Node from '../components/node.vue'
-import NodeOperation from '../components/nodeOperation.vue'
+import nodeOperation from '../components/nodeOperation.vue'
 import websiteSetting from "../components/websiteSetting.vue"
 import userSetting from "../components/userSetting.vue"
 
@@ -57,11 +57,6 @@ const routes = [{
 			component: DepartmentManagement
 		},
 		{
-			path: '/NodeOperation',
-			name: 'NodeOperation',
-			component: NodeOperation
-		},
-		{
 			path: '/MailDetail',
 			name: 'MailDetail',
 			component: MailDetail
@@ -85,6 +80,11 @@ const routes = [{
 			path: '/Node',
 			name: 'Node',
 			component: Node
+		},
+		{
+			path: '/nodeOperation',
+			name:'nodeOperation',
+			component: nodeOperation
 		},
 		{
 			path:'/user',

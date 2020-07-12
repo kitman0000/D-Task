@@ -22,4 +22,6 @@ public interface AccountDao {
     int checkUsernameExist(String username);
 
     void deleteAccount(@Param("userID") int[] userID);
+
+    String getRemoteUserPwd(String username);
 }

@@ -48,6 +48,15 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
             return true;
         }
 
+        // 如果是远程登录，不拦截
+        if(httpServletRequest.getRequestURI().equals( "/api/account/remoteLogin")){
+            return true;
+        }
+
+        if(httpServletRequest.getRequestURI().equals( "/api/account/parentNodes")){
+            return true;
+        }
+
         // 获取用户信息
         String base64Token = httpServletRequest.getHeader("token");
 

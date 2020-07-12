@@ -5,14 +5,9 @@ import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.config.RabbitSender;
 import com.dtask.common.util.CacheUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 /**
@@ -113,6 +108,13 @@ public class BindingImpl implements IBinding{
             // 未知错误
             return new ResponseData(3,res,null);
         }
+    }
+
+    // 通过api调用此方法，获取本地缓存的NodeID
+    @Override
+    public ResponseData apiGetNodeID(){
+        int nodeID = nodeCommon.getNodeID();
+        return new ResponseData(1,"查询成功",nodeID);
     }
 
     /** 以下为自动操作 **/
