@@ -167,7 +167,7 @@
 						if(res.data.ret == 1){
 							alert('成功');
 						}
-						else if(res.data.ret == 1){
+						else if(res.data.ret == 2){
 							alert('失败（根节点已存在）');
 						}
 						else{
@@ -197,7 +197,7 @@
 					          		if(res.data.ret == 1){
 					          			alert('成功');
 					          		}
-					          		else if(res.data.ret == 1){
+					          		else if(res.data.ret == 2){
 					          			alert('失败（自身未被绑定）');
 					          		}
 					          		else{

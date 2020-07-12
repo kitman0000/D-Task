@@ -45,7 +45,7 @@
 					parmas.append("accept",true);
 				}
 				else{
-					parmas.append("accept",flase);
+					parmas.append("accept",false);
 				}
 				axios.post('/api/bindingCl/handleBinding', parmas, {
 						headers: {
