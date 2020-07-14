@@ -31,4 +31,6 @@ public interface ILocalTask {
     ResponseData getUserTaskList(LocalTaskSearchEntity localTaskSearchEntity,int page);
 
     ResponseData getTaskUserRole(int taskID);
+
+    ResponseData getAllowUserChangeStatus(int taskID);
 }

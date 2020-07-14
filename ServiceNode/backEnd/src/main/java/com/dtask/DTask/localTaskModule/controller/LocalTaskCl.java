@@ -77,5 +77,10 @@ public class LocalTaskCl {
         return localTask.getTaskUserRole(taskID);
     }
 
+    @RequestMapping(value = "/api/localTask/allowUserChangeStatus",method = RequestMethod.GET)
+    public ResponseData getAllowUserChangeStatus(int taskID){
+        return localTask.getAllowUserChangeStatus(taskID);
+    }
+
 
 }

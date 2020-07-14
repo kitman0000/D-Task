@@ -46,5 +46,5 @@ public interface RemoteTaskDao {
 
     void setRemoteTaskAdmin(@Param("taskID") int taskID, @Param("nodeID") int nodeID, @Param("userID") int userID, @Param("isAdmin") boolean isAdmin);
 
-
+    boolean getAllowUserChangeStatus(int taskID);
 }

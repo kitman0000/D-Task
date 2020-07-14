@@ -2,6 +2,7 @@ package com.dtask.center.remoteTaskModule.controller;
 
 import com.dtask.center.remoteTaskModule.entity.*;
 import com.dtask.center.remoteTaskModule.service.IRemoteTask;
+import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -169,6 +170,20 @@ public class RemoteTaskCl {
             ToggleTaskAdminEntity toggleTaskAdminEntity = (ToggleTaskAdminEntity) JsonUtil.jsonToObject(msg,ToggleTaskAdminEntity.class);
             return remoteTask.toggleTaskAdmin(toggleTaskAdminEntity);
         }catch (Exception ex) {
+            return "SYS_FAILED";
+        }
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue("dtask.remoteTask.getAllowUserChangeStatus"),
+            exchange = @Exchange(value = "topicExchange",type = "topic"),
+            key = "dtask.remoteTask.getAllowUserChangeStatus"
+    ))
+    public String getAllowUserChangeStatus(String msg){
+        try {
+            int taskID = Integer.valueOf(msg);
+            return remoteTask.getAllowUserChangeStatus(taskID);
+        } catch (Exception ex){
             return "SYS_FAILED";
         }
     }

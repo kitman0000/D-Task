@@ -173,6 +173,15 @@ public class LocalTaskImpl implements ILocalTask {
     }
 
     /**
+     * 判断是否允许用户修改子任务状态
+     */
+    @Override
+    public ResponseData getAllowUserChangeStatus(int taskID) {
+        boolean isAllowUserChangeStatus = localTaskDao.getAllowUserChangeStatus(taskID);
+        return new ResponseData(1,"查询成功",isAllowUserChangeStatus);
+    }
+
+    /**
      * 判断用户是否拥有管理权限
      */
     private boolean checkUserHasPermission(int taskID,int userID){

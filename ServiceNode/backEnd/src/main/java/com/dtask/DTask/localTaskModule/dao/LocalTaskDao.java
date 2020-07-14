@@ -46,5 +46,5 @@ public interface LocalTaskDao {
 
     void setLocalTaskAdmin(@Param("taskID") int taskID, @Param("userID") int userID, @Param("isAdmin") boolean isAdmin);
 
-
+    boolean getAllowUserChangeStatus(int taskID);
 }

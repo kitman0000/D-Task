@@ -152,6 +152,14 @@
         SELECT @@IDENTITY
     </select>
 
+    <!-- 获取是否允许用户修改子任务状态 -->
+    <select id="getAllowUserChangeStatus" resultType="java.lang.Boolean">
+        SELECT allowedMemberChangeStatus FROM tb_local_task
+        <where>
+            id = #{taskID}
+        </where>
+    </select>
+
     <sql id="localTaskSearchCondition">
         <if test="localTaskSearchEntity.taskName != ''">
             name LIKE '%${localTaskSearchEntity.taskName}%'

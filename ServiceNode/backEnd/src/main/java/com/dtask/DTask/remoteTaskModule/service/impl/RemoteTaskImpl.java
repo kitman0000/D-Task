@@ -135,4 +135,10 @@ public class RemoteTaskImpl implements IRemoteTask{
 
         return new ResponseData(1,"查询成功",res);
     }
+
+    @Override
+    public ResponseData getAllowUserChangeStatus(int taskID) {
+        String res = rabbitSender.send("dtask.remoteTask.getAllowUserChangeStatus",String.valueOf(taskID));
+        return new ResponseData(1,"查询成功",res);
+    }
 }

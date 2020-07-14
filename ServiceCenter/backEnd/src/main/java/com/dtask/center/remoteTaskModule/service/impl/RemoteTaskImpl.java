@@ -157,6 +157,12 @@ public class RemoteTaskImpl implements IRemoteTask {
         return JsonUtil.objectToJson(remoteTaskBoList);
     }
 
+    @Override
+    public String getAllowUserChangeStatus(int taskID) {
+        boolean allowUserChangeStatus = remoteTaskDao.getAllowUserChangeStatus(taskID);
+        return String.valueOf(allowUserChangeStatus);
+    }
+
     /**
      * 判断用户是否拥有管理权限
      */

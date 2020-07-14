@@ -69,4 +69,9 @@ public class RemoteTaskCl {
     public ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
         return remoteTask.getUserTaskList(remoteTaskSearchEntity,page);
     }
+
+    @RequestMapping(value = "/api/remoteTask/allowUserChangeStatus",method = RequestMethod.GET)
+    public ResponseData getAllowUserChangeStatus(int taskID){
+        return remoteTask.getAllowUserChangeStatus(taskID);
+    }
 }

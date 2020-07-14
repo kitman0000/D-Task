@@ -28,4 +28,7 @@ public interface IRemoteTask {
     ResponseData getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity);
 
     ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity,int page);
+
+    ResponseData getAllowUserChangeStatus(int taskID);
+
 }
