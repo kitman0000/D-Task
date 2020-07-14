@@ -158,6 +158,26 @@ public class RemoteTaskImpl implements IRemoteTask {
     }
 
     @Override
+    public String getTaskUserRole(GetTaskUserRole getTaskUserRole) {
+
+        RemoteTaskMemberBo creator = remoteTaskDao.getTaskCreator(getTaskUserRole.getTaskID());
+        int creatorID = creator.getUserID();
+        int creatorNode = creator.getNodeID();
+
+        if(creatorID == getTaskUserRole.getUserID() && creatorNode == getTaskUserRole.getNodeID()){
+            // 任务拥有者
+            return "1";
+        }
+        if(checkUserHasPermission(getTaskUserRole.getTaskID(),getTaskUserRole.getNodeID(),getTaskUserRole.getUserID())){
+            // 任务管理员
+            return "2";
+        }
+
+        // 任务参与者
+        return "3";
+    }
+
+    @Override
     public String getAllowUserChangeStatus(int taskID) {
         boolean allowUserChangeStatus = remoteTaskDao.getAllowUserChangeStatus(taskID);
         return String.valueOf(allowUserChangeStatus);

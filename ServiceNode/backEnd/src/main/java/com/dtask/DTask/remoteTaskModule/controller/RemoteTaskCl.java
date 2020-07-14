@@ -70,6 +70,11 @@ public class RemoteTaskCl {
         return remoteTask.getUserTaskList(remoteTaskSearchEntity,page);
     }
 
+    @RequestMapping(value = "/api/remoteTask/userRole",method = RequestMethod.GET)
+    public ResponseData getTaskUserRole(int taskID){
+        return remoteTask.getTaskUserRole(taskID);
+    }
+
     @RequestMapping(value = "/api/remoteTask/allowUserChangeStatus",method = RequestMethod.GET)
     public ResponseData getAllowUserChangeStatus(int taskID){
         return remoteTask.getAllowUserChangeStatus(taskID);

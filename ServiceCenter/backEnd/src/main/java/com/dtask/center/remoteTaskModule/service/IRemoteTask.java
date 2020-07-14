@@ -29,5 +29,7 @@ public interface IRemoteTask {
 
     String getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page);
 
+    String getTaskUserRole(GetTaskUserRole getTaskUserRole);
+
     String getAllowUserChangeStatus(int taskID);
 }

@@ -175,6 +175,20 @@ public class RemoteTaskCl {
     }
 
     @RabbitListener(bindings = @QueueBinding(
+            value = @Queue("dtask.remoteTask.getTaskUserRole"),
+            exchange = @Exchange(value = "topicExchange",type = "topic"),
+            key = "dtask.remoteTask.getTaskUserRole"
+    ))
+    public String getTaskUserRole(String msg){
+        try {
+            GetTaskUserRole getTaskUserRole = (GetTaskUserRole) JsonUtil.jsonToObject(msg,GetTaskUserRole.class);
+            return remoteTask.getTaskUserRole(getTaskUserRole);
+        }catch (Exception ex){
+            return "SYS_FAILED";
+        }
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getAllowUserChangeStatus"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
             key = "dtask.remoteTask.getAllowUserChangeStatus"
@@ -187,4 +201,5 @@ public class RemoteTaskCl {
             return "SYS_FAILED";
         }
     }
+
 }

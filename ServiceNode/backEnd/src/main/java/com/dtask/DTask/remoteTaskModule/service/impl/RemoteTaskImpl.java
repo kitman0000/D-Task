@@ -137,6 +137,14 @@ public class RemoteTaskImpl implements IRemoteTask{
     }
 
     @Override
+    public ResponseData getTaskUserRole(int taskID) {
+        int userID = UserCommon.getUserBo().getUserID();
+        int nodeID = nodeCommon.getNodeID();
+        String res = rabbitSender.send("dtask.remoteTask.getTaskUserRole","{\"userID\":"+userID+",\"nodeID\":"+nodeID+",\"taskID\":"+taskID+"}");
+        return new ResponseData(1,"查询成功",res);
+    }
+
+    @Override
     public ResponseData getAllowUserChangeStatus(int taskID) {
         String res = rabbitSender.send("dtask.remoteTask.getAllowUserChangeStatus",String.valueOf(taskID));
         return new ResponseData(1,"查询成功",res);
