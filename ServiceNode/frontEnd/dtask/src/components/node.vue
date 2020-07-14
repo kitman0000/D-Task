@@ -237,12 +237,12 @@
 			},
 			renderContent(h, { node, data, store }) {
 			        return (
-			          <span style=" flex:1;align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+			          <span style=" flex:1;align-items: center;display:flex; justify-content: space-between; font-size: 14px; padding-right: 8px;">
 			            <span>
 			              <span>{node.label}</span>
 			            </span>
 			            <span>
-			              <el-button style="font-size: 12px;margin-left:25px" type="text" on-click={ () => this.askBinding(data) }>申请绑定</el-button>
+			              <el-button style="font-size: 12px;" type="text" on-click={ () => this.askBinding(data) }>申请绑定</el-button>
 			            </span>
 			          </span>);
 			      }

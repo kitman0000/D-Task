@@ -128,21 +128,48 @@ public class LocalTaskImpl implements ILocalTask {
         return new ResponseData(1,"查询成功",memberBoList);
     }
 
+    /**
+     * 切换是否是管理员
+     * 本操作只有任务所有者拥有权限
+     */
     @Override
     public ResponseData toggleTaskAdmin(int taskID, int userID, boolean isAdmin) {
         int opUserID = UserCommon.getUserBo().getUserID();
+        int creator = localTaskDao.getTaskCreator(taskID);
 
-        if(!checkUserHasPermission(taskID,opUserID)){
+        if(creator != opUserID){
             return new ResponseData(2,"权限不足",null);
         }
 
         if(localTaskDao.getTaskCreator(taskID) == userID){
-            return new ResponseData(1,"任务所有者不可切换管理员",null);
+            return new ResponseData(2,"任务所有者不可被切换",null);
         }
 
         localTaskDao.setLocalTaskAdmin(taskID,userID,isAdmin);
 
         return new ResponseData(1,"修改成功",null);
+    }
+
+    /**
+     * 获取用户在一个任务中的角色
+     * @param taskID 任务ID
+     * @return 1：拥有者 2：管理员 2：参与者
+     */
+    @Override
+    public ResponseData getTaskUserRole(int taskID) {
+        int userID = UserCommon.getUserBo().getUserID();
+
+        if(localTaskDao.getTaskCreator(taskID) == userID){
+            // 任务拥有者
+            return new ResponseData(1,"查询成功",1);
+        }
+        if(checkUserHasPermission(taskID,userID)){
+            // 任务管理员
+            return new ResponseData(1,"查询成功",2);
+        }
+
+        // 任务参与者
+        return new ResponseData(1,"查询成功",3);
     }
 
     /**

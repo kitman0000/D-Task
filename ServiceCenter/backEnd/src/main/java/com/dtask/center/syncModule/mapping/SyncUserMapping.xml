@@ -4,7 +4,9 @@
 
     <insert id="insertUserInfo">
         REPLACE INTO tb_user_info
-        <set>
+        (id,nodeID,nickname,email,onboardDate,birthday,lastUpdateTime,available)
+        VALUES
+        <foreach collection="userListEntityList" item="userListEntity" open="(" close=")" separator="),(">
             id = #{userListEntity.id},
             nodeID = #{nodeID},
             nickname = #{userListEntity.nickname},
@@ -13,6 +15,13 @@
             birthday = #{userListEntity.birthDay},
             lastUpdateTime = #{userListEntity.lastUpdateTime},
             available = #{userListEntity.available}
-        </set>
+        </foreach>
     </insert>
+
+    <select id="getRemoteUser" resultType="com.dtask.center.syncModule.bo.UserBo">
+        SELECT nickname,nodeID,id as userID FROM tb_user_info
+        <where>
+            nodeID = #{nodeID}
+        </where>
+    </select>
 </mapper>

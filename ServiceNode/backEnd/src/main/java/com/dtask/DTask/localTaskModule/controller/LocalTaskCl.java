@@ -72,5 +72,10 @@ public class LocalTaskCl {
         return localTask.toggleTaskAdmin(taskID,userID,isAdmin);
     }
 
+    @RequestMapping(value = "/api/localTask/userRole",method = RequestMethod.GET)
+    public ResponseData getTaskUserRole(int taskID){
+        return localTask.getTaskUserRole(taskID);
+    }
+
 
 }

@@ -92,6 +92,21 @@
         </foreach>
     </update>
 
+    <!-- 用户自行修改自己的账户信息 -->
+    <update id="changeUserDetail">
+        UPDATE tb_user_info
+        <set>
+            nickname = #{userAddEntity.nickname},
+            phone = #{userAddEntity.phone},
+            email = #{userAddEntity.email},
+            birthday = #{userAddEntity.birthday},
+            lastUpdateTime = NOW()
+        </set>
+        <where>
+            id = #{userAddEntity.id}
+        </where>
+    </update>
+
     <sql id="userSelectCondition">
         <!-- 查询条件 -->
         <if test="userSelectEntity.username != ''">

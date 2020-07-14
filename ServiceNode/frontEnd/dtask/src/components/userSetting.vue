@@ -6,7 +6,7 @@
       </el-header>
       <el-main>
 
-        <el-form :label-position="left" label-width="80px">
+        <el-form  label-width="80px">
           <el-form-item label="昵称">
             <el-input v-model="nickname"
                       placeholder="请输入内容"
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+  import axios from 'axios';
 export default {
   name: 'App',
   data(){
@@ -100,24 +101,77 @@ export default {
     }
   },methods: {
     btnConfirm: function(){
-      if(this.password1!=this.password2){
+      if(!this.password1){
+        console.log("密码不能为空");
+        return 0;
+      }
+      else if(this.password1.length<6){
+        console.log("密码不得小于6位");
+        return 0;
+      }
+      else if(this.password1!=this.password2) {
         console.log("错误！两次输入的密码不同");
+        return 0;
       }
-      else{
-        console.log("表单提交成功！");
-        console.log("用户名:",this.nickname);
-        console.log("电话:",this.telephoneNumber);
-        console.log("邮箱:",this.eMail);
-        console.log("生日:",this. birthday);
-        console.log("入职日期:",this.entryDate);
-        console.log("所属角色:",this.post);
-        console.log("所属部门:",this.department);
-      }
-
-    }
-
+    },
+    postSetting(){
+      var params = new URLSearchParams();
+      var onboardDate = new Date(this.onboardDate).toLocaleDateString().replace(/\//g, '-');
+      var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');
+      var userID =parseInt(localStorage.getItem("userID"));
+      params.append("id",userID);
+      params.append("pwd",this.password1);
+      params.append("nickname",this.nickname);
+      params.append("phone",this.telephoneNumber);
+      params.append("email",this.eMail);
+      params.append("roleID",this.post);
+      params.append("departmentID",this.department);
+      params.append("birthday",this.birthday);
+      params.append("onboardDate",this.entryDate);
+      axios.put("/api/user/user",
+        params,
+        {
+          headers:{
+            token:"eyJ1c2VySUQiOjEwMDEsInVzZXJuYW1lIjoiYWRtaW4yIiwiY3JlYXRlVGltZSI6MTU5MzcwMDkzNzUxM30=",
+          }
+        })
+        .then(res => {
+          var response = res.data;
+          var retObj = eval(response.data);
+          console.log(retObj);
+        })
+    },
+    getSetting(){
+      var params = new URLSearchParams();
+      var userID =parseInt(localStorage.getItem("userID"));
+      params.append("userID",userID);
+      axios.get("/api/user/userDetail",{
+        params:params,
+        headers:{
+          token:"eyJ1c2VySUQiOjEwMDEsInVzZXJuYW1lIjoiYWRtaW4yIiwiY3JlYXRlVGltZSI6MTU5MzcwMDkzNzUxM30=",
+        }
+      })
+        .then(res => {
+          var response = res.data;
+          var userObj = eval(response.data);
+          console.log(userObj);
+          this.password1 = userObj.pwd;
+          this.nickname = userObj.nickName;
+          this.eMail = userObj.email;
+          this.post = userObj.roleID;
+          this.telephoneNumber = userObj.phone;
+          this.birthday = userObj.birthday;
+          this.department = userObj.departmentID;
+          this.entryDate = userObj.onboardDate;
+        })
+      },
+    },
+  beforeMount:function() {
+    this.getSetting();
+    this.postSetting();
   }
 }
+
 </script>
 
 <style>
@@ -128,6 +182,6 @@ export default {
 
   }
   .inp{
-    width: 200px !important;
+    width: 200px;
   }
 </style>

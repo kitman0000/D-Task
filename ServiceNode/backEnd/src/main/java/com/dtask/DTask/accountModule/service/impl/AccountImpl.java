@@ -96,8 +96,15 @@ public class AccountImpl implements IAccount{
     }
 
     @Override
-    public void changePwd(String username, String password, String captcha) {
+    public boolean changePwd(String password, String oldPassword) {
+        int userID = UserCommon.getUserBo().getUserID();
 
+        if(!oldPassword.equals(accountDao.getUserPwd(userID))){
+            return false;
+        }
+
+        accountDao.updateUserPwd(userID,password);
+        return true;
     }
 
     @Override

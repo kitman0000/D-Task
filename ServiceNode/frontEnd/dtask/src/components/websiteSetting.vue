@@ -1,117 +1,98 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header style="font-size: 60px; color:#E6A23C; position: relative;"><b>站长设置</b></el-header>
+      <el-header>
+        <h1>网站管理</h1>
+      </el-header>
       <el-main>
-        <el-tabs  tabPosition="top">
-          <el-tab-pane label="网站管理" name="first" style="height: 400px;">
-            <span>
-              网站名称 :
-              <el-input
-                v-model="websiteName"
-                placeholder="请输入内容"
-                style="width: 220px; padding: 20px; position: relative; left: 7px;"></el-input>
-            </span>
-            <br>
-            <span style="color: #303133;">
-              缓存使用设置:
-              <el-select
-                v-model="cache"
-                placeholder="请选择"
-                @change="caChange()"
-                style="position: relative; top: -5px; width: 220px;">
+        <!--      网站管理部分      -->
+        <el-form label-width="100px">
+
+          <el-form-item label="网站名称:">
+            <el-input
+              v-model="websiteName"
+              placeholder="请输入内容"
+              class="tx">
+            </el-input>
+          </el-form-item>
+
+          <el-form-item label="缓存设置:">
+            <el-select
+              v-model="cache"
+              placeholder="请选择"
+              @change="caChange()"
+              class="tx">
               <el-option
                 v-for="item in options"
                 :key="item.key"
                 :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-              </el-select>
-            </span>
-            <br>
-            <span style=" position: relative; top: 10px;">
-              最大登陆次数:
-              <el-input-number
-                v-model="maxLogin"
-                @change="" :min="1" :max="10"
-                label="最大登陆次数"
-                style="width: 220px; position: relative; top: -5px;">
-              </el-input-number>
-            </span>
-          </el-tab-pane>
-          <el-tab-pane
-            label="日志管理"
-            name="second"
-            style="height: 100px; position: relative; top: 10px;">
-            <span>
-              任务日志开关:
-              <el-switch
-                v-model="taskLog"
-                @change="taChange()"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-                active-text="开"
-                inactive-text="关"
-                class=".sw">
-              </el-switch>
-            </span>
-            <br>
-            <span style="position: relative; top: 15px;">
-              用户操作日志日志开关:
-              <el-switch
-                v-model="userLog"
-                @change="userChange()"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-                active-text="开"
-                inactive-text="关"
-                class=".sw">
-              </el-switch>
-            </span>
-          </el-tab-pane>
-          <el-tab-pane
-            label="状态管理"
-            name="third"
-            style="height: 150px; position: relative; top: 10px;">
-            <span>
-              网站开关:
-              <el-switch
-                v-model="swJudge"
-                @change="swChange()"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-                active-text="开"
-                inactive-text="关"
-                class="sw">
-              </el-switch>
-            </span>
-            <br>
-            <span style="position: relative; top: 15px;">
-              网站重启:
-              <el-popconfirm
-                confirmButtonText='好的'
-                cancelButtonText='不用了'
-                @onConfirm="onConfirm()"
-                iconColor="red"
-                title="确定要重启网站吗？"
-              >
-              <el-button
-                type="success"
-                icon="el-icon-switch-button"
-                slot="reference"
-                round
-                style="position: relative; top: 1px;">
-                重启按钮
-              </el-button>
-              </el-popconfirm>
-            </span>
-          </el-tab-pane>
-        </el-tabs>
+                :value="item.value">
+              </el-option></el-select>
+          </el-form-item>
+
+          <el-form-item label="最大登录次数:">
+            <el-input-number
+              v-model="maxLogin"
+              @change="" :min="1" :max="10"
+              label="最大登陆次数"
+              class="tx">
+            </el-input-number>
+          </el-form-item>
+
+          <el-form-item label="任务日志开关:">
+            <el-switch
+              v-model="taskLog"
+              @change="taChange()"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="开"
+              inactive-text="关">
+            </el-switch>
+          </el-form-item>
+
+          <el-form-item label="用户操作日志:">
+            <el-switch
+              v-model="userLog"
+              @change="userChange()"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="开"
+              inactive-text="关">
+            </el-switch>
+          </el-form-item>
+
+          <el-button type="primary"
+                     @click="changeWebInfo()"
+                     icon="el-icon-check"
+                     style="background: #24375E;
+                     border: 0px;
+                     position: relative; left:100px">
+            确认提交</el-button>
+
+        </el-form>
+      </el-main>
+
+      <el-header>
+        <h1>状态管理</h1>
+      </el-header>
+      <el-main>
+        <!--      状态管理部分      -->
+        <el-form label-width="100px">
+
+          <el-form-item label="网站开关:">
+            <el-button
+              type="danger"
+              @click="webChange()"
+              icon="el-icon-switch-button">
+              关闭网站</el-button>
+          </el-form-item>
+
+        </el-form>
       </el-main>
 
     </el-container>
   </div>
+
 </template>
 
 <script>
@@ -125,31 +106,22 @@
       return {
         websiteName: '',
         maxLogin: null ,
-        cache: '',
+        cache: 0,
         options: [{
           value: 1,
-          label: '1k'
+          label: 'Redis'
         }, {
           value: 2,
-          label: '2k'
-        }, {
-          value: 4,
-          label: '4k'
-        }, {
-          value: 8,
-          label: '8k'
-        }, {
-          value: 16,
-          label: '16k'
+          label: 'Ehcache'
         }],
         taskLog: false, //任务日志开关
         userLog: false, //用户日志开关
-        swJudge: this.onClick  //网站开关
+        webClose: false  //网站开关
       }
     },
     methods: {
       caChange: function() {
-        console.log('缓存使用:' + this.cacheChose + 'k')
+        console.log('缓存使用:' + this.cache)
       },
       taChange: function() {
         console.log('任务日志发生改变')
@@ -157,20 +129,17 @@
       userChange: function() {
         console.log('用户操作日志发生改变')
       },//管理员日志开关
-      swChange: function() {
-        console.log('网站发生改变')
-      },//网站开关
       onConfirm: function() {
         console.log('网站重启')
       },
       changeWebInfo(){
         var params = new URLSearchParams();
-        params.append("websiteName",this.webName);
+        params.append("websiteName",this.websiteName);
         params.append("maxLogin",this.maxLogin);
-        params.append("cache",this.cacheChose);
-        params.append("taJudge",this.taJudge);
-        params.append("userJudge",this.userJudge);
-        axios.post("api/webSiteSettings/setting",{
+        params.append("cache",this.cache);
+        params.append("taJudge",this.taskLog);
+        params.append("userJudge",this.userLog);
+        axios.post("api/webSiteSettings/setting",params,{
             headers:{
               token:localStorage.getItem("token"),
             }
@@ -178,11 +147,13 @@
           .then(res => {
             var response = res.data;
             var retObj = eval(response.data);
-            console.log(retObj);
+            if(res.data.ret == 1){
+				 this.$alert('设置成功', '提示', {
+				  confirmButtonText: '确定',
+				});
+			}
           })
-        // this.$router.push({
-        //   path:'/user',
-        // })
+        console.log("提交成功");
       },
       getWebInfo(){
         axios.get("/api/webSiteSettings/setting",{
@@ -196,15 +167,31 @@
           var webObj = eval(response.data);
           this.websiteName = webObj.websiteName;
           this.maxLogin= webObj.maxLogin;
-          this.cacheChose = webObj.cache;
+          this.cache = webObj.cache;
           this.taskLog = webObj.taskLog;
           this.userLog = webObj.userLog;
         }).catch(err =>{
           console.log("timeout");
           console.log(err);
         })
+      },
+      webChange:function(){
+        this.webClose = !this.webClose;
+        var params = new URLSearchParams();
+        params.append("webClose",this.webClose);
+        axios.post("/api/webSiteSettings/shutDown",null,{
+          headers:{
+            token:localStorage.getItem("token"),
+          }
+        }).then(res => {
+          var response = res.data;
+          var retObj = eval(response.data);
+          console.log(retObj);
+        })
+        console.log("网站关闭");
       }
     },
+    //网站开关
     beforeMount:function() {
       this.getWebInfo();
     }
@@ -212,6 +199,10 @@
 </script>
 
 <style>
-
+  .tx{
+    width: 220px;
+    position: relative;
+    top: -5px;
+  }
 </style>
 

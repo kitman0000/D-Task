@@ -29,4 +29,6 @@ public interface ILocalTask {
     ResponseData getUserTaskNumber(LocalTaskSearchEntity localTaskSearchEntity);
 
     ResponseData getUserTaskList(LocalTaskSearchEntity localTaskSearchEntity,int page);
+
+    ResponseData getTaskUserRole(int taskID);
 }

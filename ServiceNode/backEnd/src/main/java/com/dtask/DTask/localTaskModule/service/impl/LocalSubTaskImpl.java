@@ -56,6 +56,9 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         if(!checkSubTask(taskID,id)){
             return new ResponseData(2,"权限不足",null);
         }
+        if(!checkIsAdmin(taskID)){
+            return new ResponseData(2,"权限不足",null);
+        }
 
         localSubTaskDao.deleteLocalSubTask(id);
         return new ResponseData(1,"删除成功",null);

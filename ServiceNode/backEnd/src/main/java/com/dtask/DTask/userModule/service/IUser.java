@@ -8,6 +8,8 @@ import com.dtask.common.ResponseData;
  * Created by zhong on 2020-3-24.
  */
 public interface IUser {
+    ResponseData changeUserDetail(UserAddEntity userAddEntity);
+
     ResponseData getUserNumber(UserSelectEntity userSelectEntity);
 
     ResponseData getUserList(UserSelectEntity userSelectEntity, int page);
@@ -21,4 +23,6 @@ public interface IUser {
     void deleteUser(int[] userID);
 
     void syncUserInfo();
+
+    ResponseData getRemoteUser(int nodeID);
 }

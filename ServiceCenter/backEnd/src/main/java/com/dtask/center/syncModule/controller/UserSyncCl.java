@@ -29,12 +29,29 @@ public class UserSyncCl {
             key = "dtask.syncUserInfo"
     ))
     public String syncUserInfo(String msg){
-
         try {
             SyncUserInfoEntity syncUserInfoEntity = (SyncUserInfoEntity) JsonUtil.jsonToObject(msg, SyncUserInfoEntity.class);
             return syncUserInfo.syncUserInfo(syncUserInfoEntity);
         }
         catch (Exception ex){
+            ex.printStackTrace();
+            return "SYS_FAILED";
+        }
+    }
+
+    /**
+     * 获取远程用户信息（时间紧迫，先不分页）
+     */
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue("dtask.user.remote"),
+            exchange = @Exchange(value = "topicExchange",type = "topic"),
+            key = "dtask.user.remote"
+    ))
+    public String getRemoteUser(String msg){
+        try {
+            int nodeID = Integer.valueOf(msg);
+            return syncUserInfo.getRemoteUser(nodeID);
+        }catch (Exception ex){
             ex.printStackTrace();
             return "SYS_FAILED";
         }

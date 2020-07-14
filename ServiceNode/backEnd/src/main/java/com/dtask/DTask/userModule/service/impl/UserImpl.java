@@ -38,6 +38,21 @@ public class UserImpl implements IUser {
     @Autowired
     private NodeCommon nodeCommon;
 
+    /**
+     * 用户自行修改个人账户数据
+     * @param userAddEntity
+     * @return
+     */
+    @Override
+    public ResponseData changeUserDetail(UserAddEntity userAddEntity) {
+        int userID = UserCommon.getUserBo().getUserID();
+        userAddEntity.setId(userID);
+
+        userDao.changeUserDetail(userAddEntity);
+
+        return new ResponseData(1,"查询成功",null);
+    }
+
     @Override
     public ResponseData getUserNumber(UserSelectEntity userSelectEntity) {
         int userNumber = userDao.getUserNumber(userSelectEntity);
@@ -106,5 +121,11 @@ public class UserImpl implements IUser {
 
         lastUpdateTimeStr = DateUtil.getTimestamp();
         cacheUtil.write("userInfo.lastUpdateTime",lastUpdateTimeStr);
+    }
+
+    @Override
+    public ResponseData getRemoteUser(int nodeID) {
+        String res = rabbitSender.send("dtask.user.remote",String.valueOf(nodeID));
+        return new ResponseData(1,"查询成功",res);
     }
 }

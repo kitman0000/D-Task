@@ -3,6 +3,7 @@ package com.dtask.DTask.settingModule.dao;
 import com.dtask.DTask.settingModule.bo.SettingBo;
 import com.dtask.DTask.settingModule.entity.SettingEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,5 +14,5 @@ import org.springframework.stereotype.Repository;
 public interface SettingDao {
     SettingBo getSettings();
 
-    void updateSettings(SettingEntity settingEntity);
+    void updateSettings(@Param("settingEntity") SettingEntity settingEntity);
 }

@@ -8,4 +8,6 @@ import com.dtask.center.syncModule.entity.SyncUserInfoEntity;
 
 public interface ISyncUserInfo {
     String syncUserInfo(SyncUserInfoEntity syncUserInfoEntity);
+
+    String getRemoteUser(int nodeID);
 }

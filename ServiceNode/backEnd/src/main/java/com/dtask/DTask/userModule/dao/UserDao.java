@@ -18,6 +18,9 @@ import java.util.List;
 @Repository
 public interface UserDao {
 
+    // 用户自行修改自己的账户信息
+    void changeUserDetail(@Param("userAddEntity") UserAddEntity userAddEntity);
+
     // 获取用户数量
     int getUserNumber(@Param("userSelectEntity") UserSelectEntity userSelectEntity);
 
