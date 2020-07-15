@@ -1,120 +1,63 @@
 <template>
 	<div>
-	<button @click="test()">1</button>
-	<el-tree :data="data4" :props="defaultProps"></el-tree>
+		<el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)">
+			{{tag}}
+		</el-tag>
+		<el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
+		 @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
+		</el-input>
+		<el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
 	</div>
 </template>
+<style>
+	.el-tag+.el-tag {
+		margin-left: 10px;
+	}
+
+	.button-new-tag {
+		margin-left: 10px;
+		height: 32px;
+		line-height: 30px;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	.input-new-tag {
+		width: 90px;
+		margin-left: 10px;
+		vertical-align: bottom;
+	}
+</style>
 
 <script>
 	export default {
-		methods: {
-			handleClick(row) {
-				console.log(row);
-			}
-		},
-
 		data() {
 			return {
-				datatest: eval(localStorage.getItem("testData")),
-				keyV:{},
-				data4: [],
-				eNode:[],
-				RootNode:{},
-				floorKV:[],
-			}
+				dynamicTags: ['标签一', '标签二', '标签三'],
+				inputVisible: false,
+				inputValue: ''
+			};
 		},
-		methods:{
-			test(){
-				for(var i= 0;i<this.datatest.length;i++){
-					var newNode;
-					if(this.datatest[i].inheritRp.split(':').length == 1){
-						newNode = {
-							id:this.datatest[i].id,
-							label:this.datatest[i].nodeName,
-							children:[]
-						};
-						this.data4.push(newNode)
-					}
-					else if(this.datatest[i].inheritRp.split(':').length == 2){
-						newNode = {
-							id:this.datatest[i].id,
-							label:this.datatest[i].nodeName,
-							children:[]
-						};
-						this.data4[0].children.push(newNode);
-					}
-					else if(this.datatest[i].inheritRp.split(':').length == 3){
-						newNode = {
-							id:this.datatest[i].id,
-							label:this.datatest[i].nodeName,
-							children:[]
-						};
-						for(var k =0;k<this.data4[0].children.length+1;k++){
-							if(this.data4[0].children[k].id == this.datatest[i].inheritRp.split(':')[1]){
-								this.data4[0].children[k].children.push(newNode);
-							}
-							if(k == this.data4[0].children.length){
-								eNode.push(this.datatest[i]);
-							}
-						}
-					}
-					else if(this.datatest[i].inheritRp.split(':').length == 4){
-						newNode = {
-							id:this.datatest[i].id,
-							label:this.datatest[i].nodeName,
-							children:[]
-						};
-						for(var k =0;k<this.data4[0].children.length+1;k++){
-							for(var m=0;m<this.data4[0].children[k].length+1;m++){
-								if(this.data4[0].children[k].id == this.datatest[i].inheritRp.split(':')[1] &&this.data4[0].children[k].children[m].id == this.datatest[i].inheritRp.split(':')[2] ){
-									this.data4[0].children[k].children[m].children.push(newNode);
-								}
-								if(m==this.data4[0].children[k].length){
-									this.eNode.push(this.datatest[i]);
-								}
-							}
-							if(k==this.data4[0].children.length){
-								this.eNode.push(this.datatest[i]);
-							}
-							}
-						}
-					}
-					for(var i =0;i<this.eNode.length;i++){
-						if(this.eNode[i].inheritRp.split(':').length == 3){
-							var newNode = {
-								id:this.eNode[i].id,
-								label:this.eNode[i].nodeName,
-								children:[]
-							};
-							for(var k =0;k<this.data4[0].children.length+1;k++){
-								if(this.data4[0].children[k].id == this.eNode[i].inheritRp.split(':')[1]){
-									this.data4[0].children[k].children.push(newNode);
-								}
-							}
-						}
-						else if(this.eNode[i].inheritRp.split(':').length == 4){
-							newNode = {
-								id:this.eNode[i].id,
-								label:this.eNode[i].nodeName,
-								children:[]
-							};
-							for(var k =0;k<this.data4[0].children.length+1;k++){
-								for(var m=0;m<this.data4[0].children[k].length+1;m++){
-									if(this.data4[0].children[k].id == this.eNode[i].inheritRp.split(':')[1] &&this.data4[0].children[k].children[m].id == this.datatest[i].inheritRp.split(':')[2] ){
-										this.data4[0].children[k].children[m].children.push(newNode);
-									}
-									if(m==this.data4[0].children[k].length){
-										this.eNode.push(this.eNode[i]);
-									}
-								}
-								if(k==this.data4[0].children.length){
-									this.eNode.push(this.eNode[i]);
-								}
-								}
-						}
-					}
+		methods: {
+			handleClose(tag) {
+				this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+			},
+
+			showInput() {
+				this.inputVisible = true;
+				this.$nextTick(_ => {
+					this.$refs.saveTagInput.$refs.input.focus();
+				});
+			},
+
+			handleInputConfirm() {
+				let inputValue = this.inputValue;
+				if (inputValue) {
+					this.dynamicTags.push(inputValue);
 				}
+				this.inputVisible = false;
+				this.inputValue = '';
 			}
 		}
-	
+	}
 </script>

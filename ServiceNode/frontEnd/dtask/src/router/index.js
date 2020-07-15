@@ -19,6 +19,8 @@ import Node from '../components/node.vue'
 import nodeOperation from '../components/nodeOperation.vue'
 import websiteSetting from "../components/websiteSetting.vue"
 import userSetting from "../components/userSetting.vue"
+import SubTask from '../components/subTask.vue'
+import EditTask from '../components/editTask.vue'
 
 Vue.use(VueRouter)
 
@@ -60,6 +62,16 @@ const routes = [{
 			path: '/MailDetail',
 			name: 'MailDetail',
 			component: MailDetail
+		},
+		{
+			path: '/EditTask',
+			name: 'EditTask',
+			component: EditTask
+		},
+		{
+			path: '/SubTask',
+			name: 'SubTask',
+			component: SubTask
 		},
 		{
 			path: '/SendMail',
