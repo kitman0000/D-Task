@@ -19,9 +19,16 @@ import Node from '../components/node.vue'
 import nodeOperation from '../components/nodeOperation.vue'
 import websiteSetting from "../components/websiteSetting.vue"
 import userSetting from "../components/userSetting.vue"
+<<<<<<< HEAD
 import SubTask from '../components/subTask.vue'
 import EditTask from '../components/editTask.vue'
 import editParticipator from '../components/editParticipator.vue'
+=======
+import localTask from "../components/localTask.vue"
+import userTask from "../components/userTask.vue"
+import addUserTask from "../components/addUserTask.vue"
+import changeUserTask from "../components/changeUserTask.vue"
+>>>>>>> 任务界面以及用户界面分页的修复
 
 Vue.use(VueRouter)
 
@@ -130,9 +137,30 @@ const routes = [{
 			component:userSetting
 		},
 		{
+<<<<<<< HEAD
 			path:'/editParticipator',
 			name:'editParticipator',
 			component:editParticipator
+=======
+			path:'/localTask',
+			name:'localTask',
+			component:localTask
+		},
+		{
+			path:'/userTask',
+			name:'userTask',
+			component:userTask
+		},
+		{
+			path:'/addUserTask',
+			name:'addUserTask',
+			component:addUserTask
+		},
+		{
+			path:'/changeUserTask',
+			name:'changeUserTask',
+			component:changeUserTask
+>>>>>>> 任务界面以及用户界面分页的修复
 		},
 		]
 	}

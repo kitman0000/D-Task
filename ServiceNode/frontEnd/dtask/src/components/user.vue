@@ -51,7 +51,7 @@
 				      </el-option>
 				    </el-select>
 				<el-button type="primary" @click="getUserNumber(),handleUserList()" icon="el-icon-search" style="margin-left: 10px;background: #24375E;border: 0px ;">搜索</el-button>
-				<el-table style="width: 100%;" :data="userList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
+				<el-table style="width: 100%;" :data="userList">
 					<el-table-column prop="id" label="用户id" width="180">
 					</el-table-column>
 					<el-table-column label="用户名" prop="username" width="180">
@@ -115,6 +115,66 @@
 			handleCurrentChange(currentPage){
 				this.currentPage = currentPage;
 				console.log(this.currentPage);
+				var params = new URLSearchParams();
+				var onboardDateStart = new Date(this.onboardDate[0]).toLocaleDateString().replace(/\//g, '-');
+				var onboardDateEnd = new Date(this.onboardDate[1]).toLocaleDateString().replace(/\//g, '-');
+				var birthdayStart = new Date(this.birthday[0]).toLocaleDateString().replace(/\//g, '-');
+				var birthdayEnd = new Date(this.birthday[1]).toLocaleDateString().replace(/\//g, '-');
+				var roleID;
+				var departmentID;
+				if(onboardDateStart == "Invalid Date"){
+					onboardDateStart = "";
+				}
+				
+				if(onboardDateEnd == "Invalid Date"){
+					
+					onboardDateEnd = "";
+				}
+				
+				if(birthdayStart == "Invalid Date"){
+					birthdayStart = "";
+				}
+				
+				if(birthdayEnd == "Invalid Date"){
+					birthdayEnd = "";
+				}
+					
+				if(!this.role){
+					roleID = -1;
+				}
+				else{
+					roleID = this.role;
+				}
+				if(!this.department){
+					departmentID = -1;
+				}
+				else{
+					departmentID = this.department;
+				}
+				params.append("username",this.username);
+				params.append("nickname",this.nickname);
+				params.append("phone",this.phone);
+				params.append("email",this.email);
+				params.append("onboardDateStart",onboardDateStart);
+				params.append("onboardDateEnd",onboardDateEnd);
+				params.append("roleID",roleID);
+				params.append("departmentID",departmentID);
+				params.append("birthdayStart",birthdayStart);
+				params.append("birthdayEnd",birthdayEnd);
+				params.append("page",this.currentPage);
+				axios.get("/api/user/userList",{
+					params:params,
+					headers:{
+						token:localStorage.getItem("token"),
+					}
+				})
+				.then(res => {
+					var response = res.data.data;
+					this.userList = eval(response);
+				})
+				.catch(err => {
+					alert("请求异常");
+				});
 			},
 			test(){
 				var nowdate = new Date(this.value1[0]).toLocaleDateString().replace(/\//g, '-');
@@ -133,6 +193,7 @@
 				}
 				
 				if(onboardDateEnd == "Invalid Date"){
+					
 					onboardDateEnd = "";
 				}
 				
@@ -191,6 +252,23 @@
 				var birthdayEnd = new Date(this.birthday[1]).toLocaleDateString().replace(/\//g, '-');
 				var roleID;
 				var departmentID;
+				if(onboardDateStart == "Invalid Date"){
+					onboardDateStart = "";
+				}
+				
+				if(onboardDateEnd == "Invalid Date"){
+					
+					onboardDateEnd = "";
+				}
+				
+				if(birthdayStart == "Invalid Date"){
+					birthdayStart = "";
+				}
+				
+				if(birthdayEnd == "Invalid Date"){
+					birthdayEnd = "";
+				}
+					
 				if(!this.role){
 					roleID = -1;
 				}
