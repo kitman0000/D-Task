@@ -187,6 +187,7 @@
 					.then(res => {
 						var response = res.data.data;
 						var a = eval(response);
+						this.options = [];
 						a.forEach((res)=>{
 							this.options.push({
 								value: res.id,
@@ -246,7 +247,7 @@
 							     confirmButtonText: '确定',
 							       });		  
 						}
-						window.location.reload();
+						//window.location.reload();
 					});
 			}
 		},
