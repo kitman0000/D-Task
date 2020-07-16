@@ -49,7 +49,7 @@
 
     <!-- 获取任务列表 -->
     <select id="getLocalTaskList" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskBo">
-        SELECT name,creator,username as creatorName FROM tb_local_task
+        SELECT tb_local_task.id,name,creator,username as creatorName FROM tb_local_task
         LEFT JOIN tb_user ON creator = tb_user.id
         <where>
             <include refid="localTaskSearchCondition"/>
@@ -71,23 +71,24 @@
         <where>
             <include refid="localTaskSearchCondition"/>
             AND
-            id in (SELECT id FROM tb_local_task_user WHERE userID = #{userID})
+            id in (SELECT taskID FROM tb_local_task_user WHERE userID = #{userID})
         </where>
     </select>
 
     <!-- 获取用户的任务列表 -->
     <select id="getUserLocalTaskList" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskBo">
-        SELECT name,creator FROM tb_local_task
+        SELECT tb_local_task.id,name,creator,username as creatorName FROM tb_local_task
+        LEFT JOIN tb_user ON creator = tb_user.id
         <where>
             <include refid="localTaskSearchCondition"/>
             AND
-            id in (SELECT id FROM tb_local_task_user WHERE userID = #{userID})
+            tb_local_task.id in (SELECT tb_local_task_user.taskID FROM tb_local_task_user WHERE userID = #{userID})
             <!-- 分页的条件 -->
-            AND id Not In (Select * from (Select id From tb_local_task
+            AND tb_local_task.id Not In (Select * from (Select tb_local_task.id From tb_local_task
             <where>
                 <include refid="localTaskSearchCondition"/>
                 AND
-                id in (SELECT id FROM tb_local_task_user WHERE userID = #{userID})
+                tb_local_task.id in (SELECT tb_local_task_user.taskID FROM tb_local_task_user WHERE userID = #{userID})
             </where>
             Limit #{startRow})as t) Limit #{rowsOnePage}
             <!-- 分页的条件结束-->
@@ -107,10 +108,9 @@
     <!-- 向任务添加成员 -->
     <insert id="addTaskMember">
         INSERT INTO tb_local_task_user
-        <set>
-            taskID = #{taskID},
-            userID = #{userID}
-        </set>
+        (taskID,userID)
+        VALUES
+        (#{taskID},#{userID})
     </insert>
 
     <!-- 删除任务中的用户 -->
@@ -158,6 +158,12 @@
         <where>
             id = #{taskID}
         </where>
+    </select>
+
+    <!-- 获取任务详情 -->
+    <select id="getLocalTaskDetail" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskBo">
+        SELECT tb_local_task_.id as id ,name,creator,tb_user.username as creatorName
+         FROM tb_local_task LEFT JOIN tb_user ON creator = tb_user.id
     </select>
 
     <sql id="localTaskSearchCondition">
