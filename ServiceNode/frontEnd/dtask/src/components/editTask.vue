@@ -5,15 +5,15 @@
 				<el-input v-model="name" style="width: 300px;"></el-input>
 			</el-form-item>
 			<el-form-item label="任务内容:">
-				<el-input v-model="name" type="textarea"></el-input>
+				<el-input v-model="content" type="textarea"></el-input>
 				</el-select>
 			</el-form-item>
 			<el-form-item label="开始时间选择:">
-				<el-date-picker v-model="startTime" type="date" placeholder="选择日期">
+				<el-date-picker v-model="startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
 				</el-date-picker>
 			</el-form-item>
 			<el-form-item label="截止时间选择:">
-				<el-date-picker v-model="deadline" type="date" placeholder="选择日期">
+				<el-date-picker v-model="deadline" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
 				</el-date-picker>
 			</el-form-item>
 			<el-form-item label="级别:">
@@ -128,24 +128,33 @@
 		methods: {
 			subTaskUpload() {
 				var a = new URLSearchParams();
+				a.append("id",this.id);
+				/* 测试用任务ID */
 				a.append("taskID", this.taskID);
 				a.append("name", this.name);
 				a.append("content", this.content);
 				a.append("deadline", this.deadline);
+				console.log(typeof(this.deadline));
 				a.append("status", this.status);
 				a.append("startTime", this.startTime);
 				a.append("level", this.level);
 				a.append("tag", this.tag);
 				a.append("star", this.star);
 				if(localStorage.getItem('add')){
+					console.log(a);
+					a.set('id',1);
+					a.set('taskID',1);
 					axios.post('/api/localTask/localSubTask', a, {
 							headers: {
 								"token": localStorage.getItem("token"),
 							}
 						})
 						.then(res => {
-								alert('添加成功');
+								this.$alert('添加成功', '提示', {
+								         confirmButtonText: '确定',
+								       });
 								localStorage.removeItem('add');
+								this.$router.push({path:'/SubTask'});
 						});
 				}
 				else{
@@ -155,8 +164,11 @@
 						}
 					})
 					.then(res => {
-							alert('修改成功');
+							this.$alert('修改成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
 							localStorage.removeItem('taskDetail');
+							this.$router.push({path:'/SubTask'});
 					});
 					}
 			},
@@ -179,18 +191,24 @@
 			},
 		},
 		beforeMount: function() {
-			var taskDetail = JSON.parse(localStorage.getItem('taskDetail'));
-			this.taskID = taskDetail.taskID;
-			this.id = taskDetail.id;
-			this.name = taskDetail.name;
-			this.content = taskDetail.content;
-			this.deadline = taskDetail.deadline;
-			this.status = taskDetail.status;
-			this.value = taskDetail.status;
-			this.startTime = taskDetail.startTime;
-			this.level = taskDetail.level;
-			this.tag = taskDetail.tag.replace('{', '').replace('}', '').split(',');
-			this.star = taskDetail.star;
+			
+			if(localStorage.getItem('add')){
+				localStorage.removeItem('taskDetail');
+			}
+			else{
+				var taskDetail = JSON.parse(localStorage.getItem('taskDetail'));
+				this.taskID = taskDetail.taskID;
+				this.id = taskDetail.id;
+				this.name = taskDetail.name;
+				this.content = taskDetail.content;
+				this.deadline = taskDetail.deadline;
+				this.status = taskDetail.status;
+				this.value = taskDetail.status;
+				this.startTime = taskDetail.startTime;
+				this.level = taskDetail.level;
+				this.tag = taskDetail.tag.replace('{', '').replace('}', '').split(',');
+				this.star = taskDetail.star;
+			}
 		}
 	}
 </script>

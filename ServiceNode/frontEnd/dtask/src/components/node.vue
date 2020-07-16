@@ -147,13 +147,19 @@
 						})
 						.then(res => {
 							if(res.data.ret == 1){
-								alert('成功');
+								this.$alert('请求成功', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							}
 							else if(res.data.ret == 2){
-								alert('系统错误');
+								this.$alert('系统错误', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							}
 							else{
-								alert('申请绑定自身');
+								this.$alert('不允许绑定自身', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							}
 						});
 			},
@@ -165,13 +171,19 @@
 					})
 					.then(res => {
 						if(res.data.ret == 1){
-							alert('成功');
+							this.$alert('请求成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						}
 						else if(res.data.ret == 2){
-							alert('失败（根节点已存在）');
+							this.$alert('请求失败（根节点存在）', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						}
 						else{
-							alert('其他错误');
+							this.$alert('其他错误', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						}
 					});
 
@@ -195,13 +207,19 @@
 					          	})
 					          	.then(res => {
 					          		if(res.data.ret == 1){
-					          			alert('成功');
+					          			this.$alert('解绑成功', '提示', {
+					          			         confirmButtonText: '确定',
+					          			       });
 					          		}
 					          		else if(res.data.ret == 2){
-					          			alert('失败（自身未被绑定）');
+					          			this.$alert('解绑失败（自身未绑定）', '提示', {
+					          			         confirmButtonText: '确定',
+					          			       });
 					          		}
 					          		else{
-					          			alert('其他错误');
+					          			this.$alert('其他错误', '提示', {
+					          			         confirmButtonText: '确定',
+					          			       });
 					          		}
 					          	});
 					        }).catch(() => {

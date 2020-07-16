@@ -95,7 +95,9 @@
 						this.pageNumber = response.data * 10;
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 			getDefaultMailList(){
@@ -115,10 +117,16 @@
 					.then(res => {
 						var response = res.data.data;
 						this.tableData2=[];
-						this.tableData2=eval(response);
+						var a = eval(response);
+						for(var i=0;i<a.length;i++){
+							a[i].sendTime = new Date(a[i].sendTime).toLocaleDateString().replace(/\//g, '-');
+						}
+						this.tableData2 =a ;
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 			searchMail(currentpage){
@@ -168,7 +176,9 @@
 						this.pageNumber = response.data * 10;
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 				
 				axios.get('/api/mail/mailList', {
@@ -186,11 +196,16 @@
 				  .then(res=>{
 						var response=res.data.data;
 						this.tableData2=[];
-						this.tableData2=eval(response);
-						this.currentpage= currentpage;
+						var a = eval(response);
+						for(var i=0;i<a.length;i++){
+							a[i].sendTime = new Date(a[i].sendTime).toLocaleDateString().replace(/\//g, '-');
+						}
+						this.tableData2 =a ;
 					})
 				  .catch(err=> {
-					  
+					  this.$alert('请求失败', '提示', {
+					           confirmButtonText: '确定',
+					         });
 				  });
 			},
 			searchMail_searchButton(){
@@ -240,7 +255,9 @@
 						this.pageNumber = response.data *10;
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 				
 				
@@ -259,11 +276,16 @@
 				  .then(res=>{
 						var response=res.data.data;
 						this.tableData2=[];
-						this.tableData2=eval(response);
-						this.currentpage= currentpage;
+						var a = eval(response);
+						for(var i=0;i<a.length;i++){
+							a[i].sendTime = new Date(a[i].sendTime).toLocaleDateString().replace(/\//g, '-');
+						}
+						this.tableData2 =a ;
 					})
 				  .catch(err=> {
-					  
+					  this.$alert('请求失败', '提示', {
+					           confirmButtonText: '确定',
+					         });
 				  });
 			},
 			MailDetail(row,event){

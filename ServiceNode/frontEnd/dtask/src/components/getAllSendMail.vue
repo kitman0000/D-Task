@@ -33,7 +33,7 @@
 		<div style="text-align: center;">
 		    <el-pagination
 		      @current-change="searchMail"
-		      :current-page="currentPage"
+		      :current-page="currentpage"
 		      :page-size="10"
 		      layout="prev, pager, next, jumper"
 		      :total="pageNumber">
@@ -73,7 +73,7 @@
 				hasReadValue: -1,
 				dateValue:'',
 				pageNumber:1,
-				currentpage:0,
+				currentpage:1,
 				keyword:'',
 			}
 		},
@@ -126,7 +126,11 @@
 					})
 					.then(res => {
 						var response = res.data.data;
-						this.tableData2 = eval(response);
+						var a = eval(response);
+						for(var i=0;i<a.length;i++){
+							a[i].sendTime = new Date(a[i].sendTime).toLocaleDateString().replace(/\//g, '-');
+						}
+						this.tableData2 =a ;
 					})
 					.catch(function(error) {
 						console.log(error);
@@ -197,8 +201,11 @@
 				  .then(res=>{
 						var response=res.data.data;
 						this.tableData2=[];
-						this.tableData2=eval(response);
-						this.currentpage= currentpage;
+						var a = eval(response);
+						for(var i=0;i<a.length;i++){
+							a[i].sendTime = new Date(a[i].sendTime).toLocaleDateString().replace(/\//g, '-');
+						}
+						this.tableData2 =a ;
 					})
 				  .catch(err=> {
 					  
@@ -270,8 +277,11 @@
 				  .then(res=>{
 						var response=res.data.data;
 						this.tableData2=[];
-						this.tableData2=eval(response);
-						this.currentpage= currentpage;
+						var a = eval(response);
+						for(var i=0;i<a.length;i++){
+							a[i].sendTime = new Date(a[i].sendTime).toLocaleDateString().replace(/\//g, '-');
+						}
+						this.tableData2 =a;
 					})
 				  .catch(err=> {
 					  

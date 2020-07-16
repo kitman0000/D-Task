@@ -21,6 +21,7 @@ import websiteSetting from "../components/websiteSetting.vue"
 import userSetting from "../components/userSetting.vue"
 import SubTask from '../components/subTask.vue'
 import EditTask from '../components/editTask.vue'
+import editParticipator from '../components/editParticipator.vue'
 
 Vue.use(VueRouter)
 
@@ -127,6 +128,11 @@ const routes = [{
 			path:'/userSetting',
 			name:'userSetting',
 			component:userSetting
+		},
+		{
+			path:'/editParticipator',
+			name:'editParticipator',
+			component:editParticipator
 		},
 		]
 	}

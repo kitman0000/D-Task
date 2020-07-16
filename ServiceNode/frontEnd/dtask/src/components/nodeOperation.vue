@@ -35,7 +35,9 @@
 					console.log(response);
 				})
 				.catch(err => {
-					alert(err);
+					this.$alert('请求失败', '提示', {
+					         confirmButtonText: '确定',
+					       });
 				});
 			},
 			handleBinding(index,accept){
@@ -53,10 +55,14 @@
 						}
 					})
 					.then(function(response) {
-						alert("成功");
+						this.$alert('请求成功', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					})
 					.catch(function(error) {
-						alert("请求失败！");
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 		},

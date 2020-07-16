@@ -27,7 +27,7 @@
 					<el-table-column prop="star" label="星级" width="150px">
 						<template slot-scope="scope">
 							<span class='el-icon-star-on' v-if="scope.row.star == 0" style="color: blue;">一般</span>
-							<span class='el-icon-star-on' v-if="scope.row.star == 1" style="color: yellow;">较重要</span>
+							<span class='el-icon-star-on' v-if="scope.row.star == 1" style="color: darkgreen;">较重要</span>
 							<span class='el-icon-star-on' v-if="scope.row.star == 2" style="color: orange;">重要</span>
 							<span class='el-icon-star-on' v-if="scope.row.star == 3" style="color: red;">特别重要</span>
 						</template>
@@ -61,13 +61,13 @@
 									{{tag}}
 								</el-tag>
 								<p>星级：<span class='el-icon-star-on' v-if="star == 0" style="color: blue;">一般</span>
-									<span class='el-icon-star-on' v-if="star == 1" style="color: yellow;">较重要</span>
+									<span class='el-icon-star-on' v-if="star == 1" style="color: darkgreen;">较重要</span>
 									<span class='el-icon-star-on' v-if="star == 2" style="color: orange;">重要</span>
 									<span class='el-icon-star-on' v-if="star == 3" style="color: red;">特别重要</span></p>
-								<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+								<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
 								v-if="role != 3" @click="editTask()">编辑任务详情</el-button>
 								<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-								v-if="stateOperation" icon="el-icon-check" @click="editTaskState()">确定改变任务状态</el-button>
+								v-if="stateOperation" icon="el-icon-check" @click="editTaskState()">确定修改</el-button>
 							</el-dialog>
 						</template>
 					</el-table-column>
@@ -83,6 +83,8 @@
 				<p v-for="manager in managers">{{manager}}</p>
 				<b>参与者：</b>
 				<p v-for="employee in employees">{{employee}}</p>
+				<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+				v-if="role != 3" icon="el-icon-edit" @click="editParticipator()">任务人员编辑</el-button>
 			</el-aside>
 		</el-container>
 	</div>
@@ -133,6 +135,8 @@
 				value:null,
 				managers:[],
 				employees:[],
+				urlManagers:[],
+				urlEmployees:[]
 			}
 		},
 		methods: {
@@ -148,6 +152,7 @@
 			handleCurrentChange() {
 				axios.get('/api/localTask/localSubTaskList', {
 						params: {
+							/* 测试用任务ID */
 							'taskID': 1,
 							'page': this.currentPage3
 						},
@@ -157,7 +162,12 @@
 					})
 					.then(res => {
 						var response = res.data.data;
-						this.tableData = eval(response);
+						var a = eval(response);
+						for(var i=0;i<a.length;i++){
+							a[i].deadline = new Date(a[i].deadline).toLocaleDateString().replace(/\//g, '-');
+							a[i].startTime = new Date(a[i].startTime).toLocaleDateString().replace(/\//g, '-');
+						}
+						this.tableData = a;
 					})
 					.catch(function(error) {
 						console.log(error);
@@ -166,6 +176,7 @@
 			getDefaultSubTask() {
 				axios.get('/api/localTask/localSubTaskNumber', {
 						params: {
+							/* 测试用任务ID */
 							'taskID': 1,
 						},
 						headers: {
@@ -182,6 +193,7 @@
 
 				axios.get('/api/localTask/localSubTaskList', {
 						params: {
+							/* 测试用任务ID */
 							'taskID': 1,
 							'page': 1
 						},
@@ -191,7 +203,15 @@
 					})
 					.then(res => {
 						var response = res.data.data;
-						this.tableData = eval(response);
+						var a = eval(response);
+						
+						
+						for(var i=0;i<a.length;i++){
+							a[i].deadline = new Date(a[i].deadline).toLocaleDateString().replace(/\//g, '-');
+							a[i].startTime = new Date(a[i].startTime).toLocaleDateString().replace(/\//g, '-');
+						}
+						console.log(a);
+						this.tableData =a ;
 					})
 					.catch(function(error) {
 						console.log(error);
@@ -200,6 +220,7 @@
 
 				axios.get('/api/localTask/userRole', {
 						params: {
+							/* 测试用任务ID */
 							'taskID': 1,
 						},
 						headers: {
@@ -216,6 +237,7 @@
 
 				axios.get('/api/localTask/allowUserChangeStatus', {
 						params: {
+							/* 测试用任务ID */
 							'taskID': 1,
 						},
 						headers: {
@@ -232,6 +254,7 @@
 					
 					axios.get('/api/localTask/LocalTaskMember', {
 							params: {
+								/* 测试用任务ID */
 								'taskID': 1,
 							},
 							headers: {
@@ -242,10 +265,12 @@
 							var response = res.data.data;
 							for(var i =0;i<response.length;i++){
 								if(response[i].admin){
-									this.managers.push(response[i].username)
+									this.managers.push(response[i].username);
+									this.urlManagers.push(response[i]);
 								}
 								else{
-									this.employees.push(response[i].username)
+									this.employees.push(response[i].username);
+									this.urlEmployees.push(response[i]);
 								}
 							}
 						})
@@ -287,8 +312,9 @@
 			deleteTasks() {
 				var selectedArray = new Array();
 				for (var i = 0; i < this.multipleSelection.length; i++) {
-					selectedArray.push(this.multipleSelection[i].roleID);
+					selectedArray.push(this.multipleSelection[i].id);
 				}
+				
 
 				this.$confirm('删除这些任务, 是否确定?', '提示', {
 					confirmButtonText: '确定',
@@ -297,7 +323,10 @@
 				}).then(() => {
 					axios.delete('/api/localTask/localSubTask', {
 							params: {
+								
 								'id': selectedArray,
+								/* 测试用任务ID */
+								'taskID':1
 							},
 							paramsSerializer: params => {
 								return qs.stringify(params, {
@@ -311,9 +340,13 @@
 						.then(function(response) {
 
 							if (response.data.ret == 1) {
-								alert("删除成功");
+								 this.$alert('删除成功', '提示', {
+								          confirmButtonText: '确定',
+								        });
 							} else {
-								alert("删除失败请重试");
+								this.$alert('删除失败', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							}
 						})
 						.catch(function(error) {
@@ -345,6 +378,7 @@
 			editTaskState(){
 				var a = new URLSearchParams();
 				a.append("status",this.value);
+				/* 测试用任务ID */
 				a.append("id", 1);
 				axios.put('/api/localTask/localSubTaskStatus', a, {
 							headers: {
@@ -353,9 +387,13 @@
 						})
 						.then(res=> {
 							if (res.data.ret == 1) {
-								alert('修改成功');
+								this.$alert('修改成功', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							} else{
-								alert('权限不足');
+								this.$alert('权限不足', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							}
 						});
 			},
@@ -365,6 +403,9 @@
 			addTask(){
 				localStorage.setItem('add',true);
 				this.$router.push({path:'/editTask'});
+			},
+			editParticipator(){
+				this.$router.push({path:'/EditParticipator'});
 			}
 		},
 		beforeMount: function() {

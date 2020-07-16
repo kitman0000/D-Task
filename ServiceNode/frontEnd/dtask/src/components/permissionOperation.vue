@@ -70,7 +70,9 @@
 						this.getRolePermission();
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 			
@@ -89,7 +91,9 @@
 						this.ownedPermission = eval(response);
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 			notOwnedPermission(){
@@ -124,15 +128,21 @@
 					.then(function(response) {
 				
 						if (response.data.ret == 1) {
-							alert("删除成功");
+							this.$alert('删除成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
 							location.reload();
 						}
 						else{
-							alert("删除失败请重试");
+							this.$alert('删除失败', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						}
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 			
@@ -148,10 +158,14 @@
 					.then(res => {
 						var response = res.data;
 						if (response.ret == 1) {
-							alert("添加成功");
+							this.$alert('添加成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
 							location.reload();
 						} else {
-							alert("添加失败");
+							this.$alert('添加失败', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						}
 				
 					});

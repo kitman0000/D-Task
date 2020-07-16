@@ -83,7 +83,9 @@
 						})
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求部门失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 			getUser(){
@@ -119,7 +121,9 @@
 						console.log(this.options);
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求用户失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 			sendMail(){
@@ -140,9 +144,14 @@
 					.then(res => {
 						var response = res.data;
 						if (response.ret == 1) {
-							alert("上传成功");
+							this.$alert('上传成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
+								   this.$router.push({path:'/GetSendedMail'});
 						} else {
-							alert("上传失败");
+							this.$alert('上传失败', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						}
 					});
 				
@@ -161,6 +170,9 @@
 						.then(res=> {
 							var response = res.data.data;
 							this.fileData.push(response);
+							this.$alert('文件上传成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						});
 						
 				}

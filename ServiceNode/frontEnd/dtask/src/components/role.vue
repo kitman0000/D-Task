@@ -81,14 +81,20 @@
 				          	.then(function(response) {
 				          
 				          		if (response.data.ret == 1) {
-				          			alert("删除成功");
+				          			this.$alert('删除成功', '提示', {
+				          			         confirmButtonText: '确定',
+				          			       });
 				          		}
 				          		else{
-				          			alert("删除失败请重试");
+				          			this.$alert('删除失败', '提示', {
+				          			         confirmButtonText: '确定',
+				          			       });
 				          		}
 				          	})
 				          	.catch(function(error) {
-				          		console.log(error);
+				          		this.$alert('请求失败', '提示', {
+				          		         confirmButtonText: '确定',
+				          		       });
 				          	});
 				        }).catch(() => {
 				          this.$message({
@@ -120,10 +126,14 @@
 							}
 						})
 						.then(function(response) {
-							alert("成功");
+							this.$alert('添加成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						})
 						.catch(function(error) {
-							alert("请求失败！");
+							this.$alert('请求失败', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						});
 				}).catch(() => {
 					this.$message({
@@ -154,7 +164,9 @@
 							}
 						})
 						.then(res=> {
-							alert("成功");
+							this.$alert('编辑成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
 							window.location.reload();
 						})
 				});
@@ -171,7 +183,9 @@
 						this.tableData = eval(response);
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('请求失败', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			},
 			//删除多个角色
@@ -200,14 +214,20 @@
 				  	.then(function(response) {
 				  
 				  		if (response.data.ret == 1) {
-				  			alert("删除成功");
+				  			this.$alert('删除成功', '提示', {
+				  			         confirmButtonText: '确定',
+				  			       });
 				  		}
 				  		else{
-				  			alert("删除失败请重试");
+				  			this.$alert('删除失败', '提示', {
+				  			         confirmButtonText: '确定',
+				  			       });
 				  		}
 				  	})
 				  	.catch(function(error) {
-				  		console.log(error);
+				  		this.$alert('请求失败', '提示', {
+				  		         confirmButtonText: '确定',
+				  		       });
 				  	});
 				}).catch(() => {
 				  this.$message({
