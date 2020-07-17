@@ -109,6 +109,7 @@
 						}
 					})
 					.then(res => {
+						this.options = [];
 						var response = res.data.data;
 						var a = eval(response);
 						a.forEach((res)=>{
