@@ -17,6 +17,8 @@ import java.util.List;
 public interface LocalTaskDao {
     void insertLocalTask(@Param("creatorID") int creatorID, @Param("name") String name);
 
+    List<LocalTaskBo> getLocalTaskDetail(int taskID);
+
     void updateLocalTask(@Param("id") int id, @Param("name") String name,
                          @Param("creator") int creator, @Param("allowedMemberChangeStatus") boolean allowedMemberChangeStatus);
 
@@ -28,7 +30,7 @@ public interface LocalTaskDao {
 
     int getUserLocalTaskNumber(@Param("localTaskSearchEntity") LocalTaskSearchEntity localTaskSearchEntity, @Param("userID") int userID);
 
-    List<LocalTaskBo> getUserLocalTaskList(@Param("localTaskSearchEntity") LocalTaskSearchEntity localTaskSearchEntity,int userID, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
+    List<LocalTaskBo> getUserLocalTaskList(@Param("localTaskSearchEntity") LocalTaskSearchEntity localTaskSearchEntity, @Param("userID") int userID, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
 
     int checkTaskMemberExist(@Param("taskID") int taskID, @Param("userID") int userID);
 

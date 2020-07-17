@@ -10,6 +10,8 @@ import com.sun.org.apache.regexp.internal.RE;
 public interface ILocalTask {
     ResponseData addLocalTask(String name);
 
+    ResponseData getTaskDetail(int taskID);
+
     ResponseData editLocalTask(int id, String name, int creator, boolean allowedMemberChangeStatus);
 
     ResponseData deleteLocalTask(int id);

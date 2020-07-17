@@ -22,6 +22,11 @@ public class LocalTaskCl {
         return localTask.addLocalTask(name);
     }
 
+    @RequestMapping(value = "/api/localTask/localTaskDetail",method = RequestMethod.GET)
+    public ResponseData getTaskDetail(int taskID){
+        return localTask.getTaskDetail(taskID);
+    }
+
     @RequestMapping(value = "/api/localTask/localTask",method = RequestMethod.PUT)
     public ResponseData editLocalTask(int id,String name,int creator,boolean allowedMemberChangeStatus){
         return localTask.editLocalTask(id, name, creator, allowedMemberChangeStatus);
