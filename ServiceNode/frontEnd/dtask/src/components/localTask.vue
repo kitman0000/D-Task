@@ -17,7 +17,7 @@
 					</el-table-column>
 					<el-table-column label="任务创建者名" prop="creatorName" width="180">
 					</el-table-column>
-					<!-- <el-table-column label="删除" align="center" min-width="100">
+					<el-table-column label="删除" align="center" min-width="100">
 						<template slot-scope="scope">
 							<el-button type="text" @click="deleteTask(scope.row.id)">删除</el-button>
 						</template>
@@ -26,12 +26,12 @@
 						<template slot-scope="scope">
 							<el-button type="text" @click="changeTask(scope.row.id)">修改</el-button>
 						</template>
-					</el-table-column>-->
+					</el-table-column>
 				</el-table>
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
 				layout=" prev, pager, next, jumper" :total="taskNumber">
 				</el-pagination>
-				<!-- <el-button type="primary" @click="addTask()" icon="el-icon-plus" style="margin-left: 10px;background: #24375E;border: 0px ;">增加</el-button> -->
+				<el-button type="primary" @click="addTask()" icon="el-icon-plus" style="margin-left: 10px;background: #24375E;border: 0px ;">增加</el-button>
 			</el-main>
 		</el-container>
 	</div>
@@ -128,30 +128,30 @@
 					alert("请求异常");
 				});
 			},
-			// addTask(){
-			// 	this.$router.push({
-			// 		path:'/addLocalTask',
-			// 	})
-			// },
-			// deleteTask(taskID){
-			// 	var params = new URLSearchParams();
-			// 	params.append("id",this.taskID);
-			// 	axios.get("/api/localTask/localTask",{
-			// 		params:params,
-			// 		headers:{
-			// 			token:localStorage.getItem("token"),
-			// 		}
-			// 	})
-			// 	.catch(err => {
-			// 		alert("请求异常");
-			// 	});
-			// },
-			// changeTask(taskID){
-			// 	localStorage.setItem("taskID", taskID);
-			// 	this.$router.push({
-			// 		path:'/changeLocalTask',
-			// 	})
-			// },
+			addTask(){
+				this.$router.push({
+					path:'/addLocalTask',
+				})
+			},
+			deleteTask(taskID){
+				var params = new URLSearchParams();
+				params.append("id",this.taskID);
+				axios.get("/api/localTask/localTask",{
+					params:params,
+					headers:{
+						token:localStorage.getItem("token"),
+					}
+				})
+				.catch(err => {
+					alert("请求异常");
+				});
+			},
+			changeTask(taskID){
+				localStorage.setItem("taskID", taskID);
+				this.$router.push({
+					path:'/changeLocalTask',
+				})
+			},
 			showList() {
 				this.isShow = !this.isShow;
 			},

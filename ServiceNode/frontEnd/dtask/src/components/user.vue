@@ -335,19 +335,19 @@
 			},
 			addUser(){
 				this.$router.push({
-					path:'/user/adduser',
+					path:'/adduser',
 				})
 			},
 			checkUser(userID){
 				localStorage.setItem("userID", userID);
 				this.$router.push({
-					path:'/user/checkuser',
+					path:'/checkuser',
 				})
 			},
 			changeUser(userID){
 				localStorage.setItem("userID", userID);
 				this.$router.push({
-					path:'/user/changeuser',
+					path:'/changeuser',
 				})
 			},
 			showList() {
