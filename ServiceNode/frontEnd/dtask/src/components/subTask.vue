@@ -110,6 +110,8 @@
 				status: null,
 				startTime: null,
 				level: null,
+				creator:null,
+				creatorID:null,
 				tag: [],
 				star: null,
 				currentPage3: 1,
@@ -176,7 +178,7 @@
 			getDefaultSubTask() {
 				var url = window.location.href.split('?')[1].split('&');
 				var taskID = url[0].split('=')[1];
-				this.creator = url[1].split('=')[1];
+				this.creatorID = url[1].split('=')[1];
 				localStorage.setItem('taskID',taskID);
 				console.log(url);
 				
@@ -269,6 +271,9 @@
 						.then(res => {
 							var response = res.data.data;
 							for(var i =0;i<response.length;i++){
+								if(response[i].userID == this.creatorID){
+									this.creator = response[i].username;
+								}
 								if(response[i].admin){
 									this.managers.push(response[i].username);
 									this.urlManagers.push(response[i]);
