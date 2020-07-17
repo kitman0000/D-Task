@@ -74,8 +74,8 @@
 					axios.delete('/api/localTask/LocalTaskMember', {
 							params: {
 								'userID': person.userID,
-								/* 测试用任务ID */
-								'taskID': 1
+								/* 测试用子任务ID */
+								'taskID': localStorage.getItem('taskID')
 							},
 							headers: {
 								"token": localStorage.getItem("token"),
@@ -112,8 +112,8 @@
 				}).then(() => {
 					var a = new URLSearchParams();
 					a.append("userID",person.userID);
-					/* 测试用任务ID */
-					a.append("taskID", 1);
+					
+					a.append("taskID", localStorage.getItem('taskID'));
 					a.append('isAdmin',bool);
 					axios.put('/api/localTask/Admin', a, {
 								headers: {
@@ -142,8 +142,8 @@
 			getParticipator(){
 				axios.get('/api/localTask/LocalTaskMember', {
 						params: {
-							/* 测试用任务ID */
-							'taskID': 1,
+							
+							'taskID': localStorage.getItem('taskID'),
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -228,8 +228,8 @@
 			},
 			addParticipator(){
 				var a = new URLSearchParams();
-				/* 测试用主任务ID */
-				a.append('taskID',1);
+				
+				a.append('taskID',localStorage.getItem('taskID'));
 				a.append('userID',this.value5);
 				axios.post('/api/localTask/LocalTaskMember', a, {
 						headers: {

@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<el-form>
-			<el-form-item label="任务名称:">
+			<el-form-item label="子任务名称:">
 				<el-input v-model="name" style="width: 300px;"></el-input>
 			</el-form-item>
-			<el-form-item label="任务内容:">
+			<el-form-item label="子任务内容:">
 				<el-input v-model="content" type="textarea"></el-input>
 				</el-select>
 			</el-form-item>
@@ -129,19 +129,16 @@
 			subTaskUpload() {
 				var a = new URLSearchParams();
 				a.append("id",this.id);
-				/* 测试用任务ID */
 				a.append("taskID", this.taskID);
 				a.append("name", this.name);
 				a.append("content", this.content);
 				a.append("deadline", this.deadline);
-				console.log(typeof(this.deadline));
 				a.append("status", this.status);
 				a.append("startTime", this.startTime);
 				a.append("level", this.level);
 				a.append("tag", this.tag);
 				a.append("star", this.star);
 				if(localStorage.getItem('add')){
-					console.log(a);
 					a.set('id',1);
 					a.set('taskID',1);
 					axios.post('/api/localTask/localSubTask', a, {

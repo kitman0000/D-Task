@@ -3,12 +3,12 @@
 		<el-container>
 			<el-main>
 				<el-button type="primary" style="float: right;margin-top: 15px;background: #24375E;border: 0px ;" icon="el-icon-delete"
-				 v-if="role != 3" @click="deleteTasks()">删除所选任务</el-button>
+				 v-if="role != 3" @click="deleteTasks()">删除所选子任务</el-button>
 				<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-				 icon="el-icon-plus" v-if="role != 3" @click="addTask()">添加任务</el-button>
+				 icon="el-icon-plus" v-if="role != 3" @click="addTask()">添加子任务</el-button>
 				<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="name" label="任务名称" width="150px">
+					<el-table-column prop="name" label="子子任务名称" width="150px">
 					</el-table-column>
 					<el-table-column prop="startTime" label="开始时间">
 					</el-table-column>
@@ -34,11 +34,11 @@
 					</el-table-column>
 					<el-table-column label="操作">
 						<template slot-scope="scope">
-							<el-button type="text" size="small" v-if="role != 3" @click="deleteTask(scope.row)">删除任务</el-button>
-							<el-button type="text" size="small" @click="TaskDetail(scope.row)">查看任务详情</el-button>
-							<el-dialog title="任务详情" :visible.sync="dialogVisible" width="30%">
-								<p>任务名：{{name}}</p>
-								<p>任务内容：{{content}}</p>
+							<el-button type="text" size="small" v-if="role != 3" @click="deleteTask(scope.row)">删除子任务</el-button>
+							<el-button type="text" size="small" @click="TaskDetail(scope.row)">查看子任务详情</el-button>
+							<el-dialog title="子任务详情" :visible.sync="dialogVisible" width="30%">
+								<p>子任务名：{{name}}</p>
+								<p>子任务内容：{{content}}</p>
 								<p>开始时间：{{startTime}}</p>
 								<p>截止时间：{{deadline}}</p>
 								<p>等级：{{level}}</p>
@@ -65,7 +65,7 @@
 									<span class='el-icon-star-on' v-if="star == 2" style="color: orange;">重要</span>
 									<span class='el-icon-star-on' v-if="star == 3" style="color: red;">特别重要</span></p>
 								<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-								v-if="role != 3" @click="editTask()">编辑任务详情</el-button>
+								v-if="role != 3" @click="editTask()">编辑子任务详情</el-button>
 								<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
 								v-if="stateOperation" icon="el-icon-check" @click="editTaskState()">确定修改</el-button>
 							</el-dialog>
@@ -78,7 +78,7 @@
 			</el-main>
 			<el-aside width="200px">
 				<b>拥有者：</b>
-				<p>测试用admin</p>
+				<p>{{creator}}</p>
 				<b>管理者：</b>
 				<p v-for="manager in managers">{{manager}}</p>
 				<b>参与者：</b>
@@ -152,8 +152,8 @@
 			handleCurrentChange() {
 				axios.get('/api/localTask/localSubTaskList', {
 						params: {
-							/* 测试用任务ID */
-							'taskID': 1,
+							/* 测试用子任务ID */
+							'taskID': localStorage.getItem('taskID'),
 							'page': this.currentPage3
 						},
 						headers: {
@@ -174,10 +174,16 @@
 					});
 			},
 			getDefaultSubTask() {
+				var url = window.location.href.split('?')[1].split('&');
+				var taskID = url[0].split('=')[1];
+				this.creator = url[1].split('=')[1];
+				localStorage.setItem('taskID',taskID);
+				console.log(url);
+				
 				axios.get('/api/localTask/localSubTaskNumber', {
 						params: {
-							/* 测试用任务ID */
-							'taskID': 1,
+							/* 测试用子任务ID */
+							'taskID': localStorage.getItem('taskID'),
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -193,8 +199,8 @@
 
 				axios.get('/api/localTask/localSubTaskList', {
 						params: {
-							/* 测试用任务ID */
-							'taskID': 1,
+							/* 测试用子任务ID */
+							'taskID': localStorage.getItem('taskID'),
 							'page': 1
 						},
 						headers: {
@@ -210,7 +216,6 @@
 							a[i].deadline = new Date(a[i].deadline).toLocaleDateString().replace(/\//g, '-');
 							a[i].startTime = new Date(a[i].startTime).toLocaleDateString().replace(/\//g, '-');
 						}
-						console.log(a);
 						this.tableData =a ;
 					})
 					.catch(function(error) {
@@ -220,8 +225,8 @@
 
 				axios.get('/api/localTask/userRole', {
 						params: {
-							/* 测试用任务ID */
-							'taskID': 1,
+							/* 测试用子任务ID */
+							'taskID': localStorage.getItem('taskID'),
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -237,8 +242,8 @@
 
 				axios.get('/api/localTask/allowUserChangeStatus', {
 						params: {
-							/* 测试用任务ID */
-							'taskID': 1,
+							/* 测试用子任务ID */
+							'taskID': localStorage.getItem('taskID'),
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -254,8 +259,8 @@
 					
 					axios.get('/api/localTask/LocalTaskMember', {
 							params: {
-								/* 测试用任务ID */
-								'taskID': 1,
+								/* 测试用子任务ID */
+								'taskID': localStorage.getItem('taskID'),
 							},
 							headers: {
 								"token": localStorage.getItem("token"),
@@ -279,7 +284,7 @@
 						});
 			},
 			deleteTask(index) {
-				this.$confirm('删除该任务, 是否确定?', '提示', {
+				this.$confirm('删除该子任务, 是否确定?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
@@ -316,7 +321,7 @@
 				}
 				
 
-				this.$confirm('删除这些任务, 是否确定?', '提示', {
+				this.$confirm('删除这些子任务, 是否确定?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
@@ -325,8 +330,8 @@
 							params: {
 								
 								'id': selectedArray,
-								/* 测试用任务ID */
-								'taskID':1
+								/* 测试用子任务ID */
+								'taskID':localStorage.getItem('taskID')
 							},
 							paramsSerializer: params => {
 								return qs.stringify(params, {
@@ -361,7 +366,6 @@
 			},
 			TaskDetail(detail) {
 				localStorage.setItem('taskDetail',JSON.stringify(detail));
-				console.log(localStorage.getItem('taskDetail'));
 				this.taskID = detail.taskID;
 				this.id = detail.id;
 				this.name = detail.name;
@@ -378,8 +382,9 @@
 			editTaskState(){
 				var a = new URLSearchParams();
 				a.append("status",this.value);
-				/* 测试用任务ID */
-				a.append("id", 1);
+				/* 测试用子任务ID */
+				a.append("taskID", localStorage.getItem('taskID'));
+				a.append("id",this.id);
 				axios.put('/api/localTask/localSubTaskStatus', a, {
 							headers: {
 								"token": localStorage.getItem("token"),
@@ -394,6 +399,7 @@
 								this.$alert('权限不足', '提示', {
 								         confirmButtonText: '确定',
 								       });
+									   window.location.reload();
 							}
 						});
 			},
@@ -406,7 +412,7 @@
 			},
 			editParticipator(){
 				this.$router.push({path:'/EditParticipator'});
-			}
+			},
 		},
 		beforeMount: function() {
 			this.getDefaultSubTask();
