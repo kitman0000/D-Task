@@ -152,7 +152,8 @@
 				});
 			},
 			handleCurrentChange() {
-				axios.get('/api/localTask/localSubTaskList', {
+				
+				axios.get('/api/remoteTask/remoteSubTaskList', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -182,7 +183,7 @@
 				localStorage.setItem('taskID',taskID);
 				console.log(url);
 				
-				axios.get('/api/localTask/localSubTaskNumber', {
+				axios.get('/api/remoteTask/remoteSubTaskNumber', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -199,7 +200,7 @@
 						alert(error);
 					});
 
-				axios.get('/api/localTask/localSubTaskList', {
+				axios.get('/api/remoteTask/remoteSubTaskList', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -225,7 +226,7 @@
 					});
 
 
-				axios.get('/api/localTask/userRole', {
+				axios.get('/api/remoteTask/userRole', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -242,7 +243,7 @@
 						console.log(error);
 					});
 
-				axios.get('/api/localTask/allowUserChangeStatus', {
+				axios.get('/api/remoteTask/allowUserChangeStatus', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -259,7 +260,7 @@
 						console.log(error);
 					});
 					
-					axios.get('/api/localTask/LocalTaskMember', {
+					axios.get('/api/remoteTask/remoteTaskMember', {
 							params: {
 								/* 测试用子任务ID */
 								'taskID': localStorage.getItem('taskID'),
@@ -294,7 +295,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					axios.delete('/api/localTask/localSubTask', {
+					axios.delete('/api/remoteTask/remoteSubTask', {
 							params: {
 								'id': index.id,
 							},
@@ -331,7 +332,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					axios.delete('/api/localTask/localSubTask', {
+					axios.delete('/api/remoteTask/remoteSubTask', {
 							params: {
 								
 								'id': selectedArray,
@@ -387,10 +388,9 @@
 			editTaskState(){
 				var a = new URLSearchParams();
 				a.append("status",this.value);
-				/* 测试用子任务ID */
 				a.append("taskID", localStorage.getItem('taskID'));
 				a.append("id",this.id);
-				axios.put('/api/localTask/localSubTaskStatus', a, {
+				axios.put('/api/remoteTask/remoteSubTaskStatus', a, {
 							headers: {
 								"token": localStorage.getItem("token"),
 							}
@@ -399,9 +399,6 @@
 							if (res.data.ret == 1) {
 								this.$alert('修改成功', '提示', {
 								         confirmButtonText: '确定',
-										 callback: action => {
-										             window.location.reload();
-										           }
 								       });
 							} else{
 								this.$alert('权限不足', '提示', {
@@ -412,14 +409,14 @@
 						});
 			},
 			editTask(){
-				 this.$router.push({path:'/editTask'});
+				 this.$router.push({path:'/editJointSubTask'});
 			},
 			addTask(){
 				localStorage.setItem('add',true);
-				this.$router.push({path:'/editTask'});
+				this.$router.push({path:'/editJointSubTask'});
 			},
 			editParticipator(){
-				this.$router.push({path:'/EditParticipator'});
+				this.$router.push({path:'/editJointParticiptor'});
 			},
 		},
 		beforeMount: function() {
