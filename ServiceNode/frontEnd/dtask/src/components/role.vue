@@ -1,7 +1,9 @@
 <template>
 	<div>
-			<el-button type="primary" style="float: right;margin-top: 15px;background: #24375E;border: 0px ;" icon="el-icon-delete" @click="deleteRoles()">删除所选角色</el-button>
-			<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;" icon="el-icon-plus" @click="addRole()">添加角色</el-button>
+		<el-button type="primary" style="float: right;margin-top: 15px;background: #24375E;border: 0px ;" icon="el-icon-delete"
+		 @click="deleteRoles()">删除所选角色</el-button>
+		<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+		 icon="el-icon-plus" @click="addRole()">添加角色</el-button>
 		<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 			<el-table-column type="selection" width="55"></el-table-column>
 			<el-table-column prop="roleID" label="角色ID" width="120">
@@ -62,48 +64,47 @@
 				}
 			},
 			//删除单个角色
-			deleteRole(index){
-				
-				        this.$confirm('删除该角色, 是否确定?', '提示', {
-				          confirmButtonText: '确定',
-				          cancelButtonText: '取消',
-				          type: 'warning'
-				        }).then(() => {
-				          axios.delete('/api/role/role', {
-				          		params: {
-				          			roleID: index.roleID,
-				          		},
-				          
-				          		headers: {
-				          			"token": localStorage.getItem("token"),
-				          		}
-				          	})
-				          	.then(function(response) {
-				          
-				          		if (response.data.ret == 1) {
-				          			this.$alert('删除成功', '提示', {
-				          			         confirmButtonText: '确定',
-				          			       });
-				          		}
-				          		else{
-				          			this.$alert('删除失败', '提示', {
-				          			         confirmButtonText: '确定',
-				          			       });
-				          		}
-				          	})
-				          	.catch(function(error) {
-				          		this.$alert('请求失败', '提示', {
-				          		         confirmButtonText: '确定',
-				          		       });
-				          	});
-				        }).catch(() => {
-				          this.$message({
-				            type: 'info',
-				            message: '已取消删除'
-				          });          
-				        });
-				
-				
+			deleteRole(index) {
+
+				this.$confirm('删除该角色, 是否确定?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					axios.delete('/api/role/role', {
+							params: {
+								roleID: index.roleID,
+							},
+
+							headers: {
+								"token": localStorage.getItem("token"),
+							}
+						})
+						.then(function(response) {
+
+							if (response.data.ret == 1) {
+								this.$alert('删除成功', '提示', {
+									confirmButtonText: '确定',
+								});
+							} else {
+								this.$alert('删除失败', '提示', {
+									confirmButtonText: '确定',
+								});
+							}
+						})
+						.catch(function(error) {
+							this.$alert('请求失败', '提示', {
+								confirmButtonText: '确定',
+							});
+						});
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
+
+
 			},
 			addRole() {
 				var addroleName;
@@ -127,13 +128,16 @@
 						})
 						.then(function(response) {
 							this.$alert('添加成功', '提示', {
-							         confirmButtonText: '确定',
-							       });
+								confirmButtonText: '确定',
+								callback: action => {
+									window.location.reload();
+								}
+							});
 						})
 						.catch(function(error) {
 							this.$alert('请求失败', '提示', {
-							         confirmButtonText: '确定',
-							       });
+								confirmButtonText: '确定',
+							});
 						});
 				}).catch(() => {
 					this.$message({
@@ -141,8 +145,8 @@
 						message: '失败'
 					});
 				});
-			},			
-			editRoleName(index){
+			},
+			editRoleName(index) {
 				var newName;
 				this.$prompt('请输入新名称', {
 					confirmButtonText: '确定',
@@ -163,15 +167,15 @@
 								"token": localStorage.getItem("token"),
 							}
 						})
-						.then(res=> {
+						.then(res => {
 							this.$alert('编辑成功', '提示', {
-							         confirmButtonText: '确定',
-							       });
+								confirmButtonText: '确定',
+							});
 							window.location.reload();
 						})
 				});
 			},
-			getRole(){
+			getRole() {
 				axios.get('/api/role/role', {
 						params: {},
 						headers: {
@@ -184,69 +188,72 @@
 					})
 					.catch(function(error) {
 						this.$alert('请求失败', '提示', {
-						         confirmButtonText: '确定',
-						       });
+							confirmButtonText: '确定',
+						});
 					});
 			},
 			//删除多个角色
-			deleteRoles(){
+			deleteRoles() {
 				var selectedArray = new Array();
-				for(var i=0;i<this.multipleSelection.length;i++){
+				for (var i = 0; i < this.multipleSelection.length; i++) {
 					selectedArray.push(this.multipleSelection[i].roleID);
 				}
-				
+
 				this.$confirm('删除这些角色, 是否确定?', '提示', {
-				  confirmButtonText: '确定',
-				  cancelButtonText: '取消',
-				  type: 'warning'
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
 				}).then(() => {
-				  axios.delete('/api/role/role', {
-				  		params: {
-				  			roleID: selectedArray,
-				  		},
-				  		paramsSerializer: params => {
-				  		      return qs.stringify(params, { indices: false })
-				  		    },
-				  		headers: {
-				  			"token": localStorage.getItem("token"),
-				  		}
-				  	})
-				  	.then(function(response) {
-				  
-				  		if (response.data.ret == 1) {
-				  			this.$alert('删除成功', '提示', {
-				  			         confirmButtonText: '确定',
-				  			       });
-				  		}
-				  		else{
-				  			this.$alert('删除失败', '提示', {
-				  			         confirmButtonText: '确定',
-				  			       });
-				  		}
-				  	})
-				  	.catch(function(error) {
-				  		this.$alert('请求失败', '提示', {
-				  		         confirmButtonText: '确定',
-				  		       });
-				  	});
+					axios.delete('/api/role/role', {
+							params: {
+								roleID: selectedArray,
+							},
+							paramsSerializer: params => {
+								return qs.stringify(params, {
+									indices: false
+								})
+							},
+							headers: {
+								"token": localStorage.getItem("token"),
+							}
+						})
+						.then(function(response) {
+
+							if (response.data.ret == 1) {
+								this.$alert('删除成功', '提示', {
+									confirmButtonText: '确定',
+								});
+							} else {
+								this.$alert('删除失败', '提示', {
+									confirmButtonText: '确定',
+								});
+							}
+						})
+						.catch(function(error) {
+							this.$alert('请求失败', '提示', {
+								confirmButtonText: '确定',
+							});
+						});
 				}).catch(() => {
-				  this.$message({
-				    type: 'info',
-				    message: '已取消删除'
-				  });          
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
 				});
-				
-				
-				
+
+
+
 			},
-			
-			editPermission(index){
-				localStorage.setItem("roleID",index.roleID);
-				this.$router.push({path:"/PermissionOperation"});
+
+			editPermission(index) {
+				localStorage.setItem("roleID", index.roleID);
+				this.$router.push({
+					path: "/PermissionOperation"
+				});
 			}
-			
+
 		},
-		
+
 		beforeMount: function() {
 			this.getRole();
 		}

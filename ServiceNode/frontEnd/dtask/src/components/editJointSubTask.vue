@@ -128,7 +128,7 @@
 		methods: {
 			subTaskUpload() {
 				var a = new URLSearchParams();
-				a.append("id", this.id);
+				a.append("id",this.id);
 				a.append("taskID", this.taskID);
 				a.append("name", this.name);
 				a.append("content", this.content);
@@ -138,49 +138,46 @@
 				a.append("level", this.level);
 				a.append("tag", this.tag);
 				a.append("star", this.star);
-				if (localStorage.getItem('add')) {
-					if (this.name == null || this.content == null || this.deadline == null || this.startTime == null || this.level ==
-						null || this.star == null) {
+				if(localStorage.getItem('add')){
+					if(this.name == null || this.content == null || this.deadline ==null || this.startTime ==null || this.level == null || this.star == null ){
 						this.$alert('添加子任务时，除标签外均不能为空', '提示', {
-							confirmButtonText: '确定',
-						});
-					} else {
-						a.set('id', 1);
-						a.set('taskID', localStorage.getItem('taskID'));
-						axios.post('/api/localTask/localSubTask', a, {
+						         confirmButtonText: '确定',
+						       });
+					}else{
+						a.set('id',1);
+						a.set('taskID',localStorage.getItem('taskID'));
+						axios.post('/api/remoteTask/remoteSubTask', a, {
 								headers: {
 									"token": localStorage.getItem("token"),
 								}
 							})
 							.then(res => {
-								this.$alert('添加成功', '提示', {
-									confirmButtonText: '确定',
-									callback: action => {
-										localStorage.removeItem('add');
-										this.$router.push({
-											path: '/SubTask'
-										});
-									}
-								});
-
+									this.$alert('添加成功', '提示', {
+									         confirmButtonText: '确定',
+											 callback: action => {
+											 	localStorage.removeItem('add');
+											 	this.$router.push({
+											 		path: '/jointSubTask'
+											 	});
+											 }
+									       });
 							});
-					}
-				} else {
-					axios.put('/api/localTask/localSubTask', a, {
-							headers: {
-								"token": localStorage.getItem("token"),
-							}
-						})
-						.then(res => {
-							this.$alert('修改成功', '提示', {
-								confirmButtonText: '确定',
-							});
-							localStorage.removeItem('taskDetail');
-							this.$router.push({
-								path: '/SubTask'
-							});
-						});
+					}				
 				}
+				else{
+				axios.put('/api/remoteTask/remoteSubTask', a, {
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {
+							this.$alert('修改成功', '提示', {
+							         confirmButtonText: '确定',
+							       });
+							localStorage.removeItem('taskDetail');
+							this.$router.push({path:'/jointSubTask'});
+					});
+					}
 			},
 			handleClose(tag) {
 				this.tag.splice(this.tag.indexOf(tag), 1);
@@ -201,10 +198,11 @@
 			},
 		},
 		beforeMount: function() {
-
-			if (localStorage.getItem('add')) {
+			
+			if(localStorage.getItem('add')){
 				localStorage.removeItem('taskDetail');
-			} else {
+			}
+			else{
 				var taskDetail = JSON.parse(localStorage.getItem('taskDetail'));
 				this.taskID = taskDetail.taskID;
 				this.id = taskDetail.id;
@@ -223,21 +221,19 @@
 </script>
 
 <style>
-	.el-tag+.el-tag {
-		margin-left: 10px;
-	}
-
-	.button-new-tag {
-		margin-left: 10px;
-		height: 32px;
-		line-height: 30px;
-		padding-top: 0;
-		padding-bottom: 0;
-	}
-
-	.input-new-tag {
-		width: 90px;
-		margin-left: 10px;
-		vertical-align: bottom;
-	}
+.el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
 </style>
