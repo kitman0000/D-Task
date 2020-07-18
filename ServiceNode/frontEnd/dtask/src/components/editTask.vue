@@ -140,7 +140,6 @@
 				a.append("star", this.star);
 				if(localStorage.getItem('add')){
 					a.set('id',1);
-					a.set('taskID',1);
 					axios.post('/api/localTask/localSubTask', a, {
 							headers: {
 								"token": localStorage.getItem("token"),
