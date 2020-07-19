@@ -62,7 +62,7 @@
 			    </el-select>
 				</div>
 			<span style="color: red; font-size: 10px;">{{message}}</span>
-			<el-button type="primary" @click="changeUser()" icon="el-icon-change" style="position: relative; left: 90px; margin-left: 10px;">修改</el-button>
+			<el-button type="primary" @click="changeUser()" icon="el-icon-change" style="position: relative; left: 90px; margin-left: 10px;background: #24375E;border: 0px ;">修改</el-button>
 		</el-main>
 	</el-container>
 </template>
@@ -115,35 +115,39 @@
 					this.message = '部门不能为空';
 				}
 				else{
+					var pwd
 					// 如果密码为空，则不修改密码
-					if (!this.pwd) {
-						this.pwd = '';
+					if (this.pwd) {
+						pwd = this.$md5(this.pwd);
+					}
+					else{
+						pwd = "";
+						var params = new URLSearchParams();
+						var onboardDate = new Date(this.onboardDate).toLocaleDateString().replace(/\//g, '-');
+						var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');
+						var userID =parseInt(localStorage.getItem("userID"));
+						params.append("id",userID);
+						params.append("pwd",pwd);
+						params.append("nickname",this.nickname);
+						params.append("phone",this.phone);
+						params.append("email",this.email);
+						axios.put("/api/user/user",
+						params,
+						{
+							headers:{
+								token:localStorage.getItem("token"),
+							}
+						})
+						.then(res => {
+							var response = res.data;
+							var retObj = eval(response.data);
+							console.log(retObj);
+						})
+						this.$router.push({
+							path:'/user',
+						})
 					}
 					
-					var params = new URLSearchParams();
-					var onboardDate = new Date(this.onboardDate).toLocaleDateString().replace(/\//g, '-');
-					var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');
-					var userID =parseInt(localStorage.getItem("userID"));
-					params.append("id",userID);
-					params.append("pwd",this.pwd);
-					params.append("nickname",this.nickname);
-					params.append("phone",this.phone);
-					params.append("email",this.email);
-					axios.put("/api/user/user",
-					params,
-					{
-						headers:{
-							token:localStorage.getItem("token"),
-						}
-					})
-					.then(res => {
-						var response = res.data;
-						var retObj = eval(response.data);
-						console.log(retObj);
-					})
-					this.$router.push({
-						path:'/user',
-					})
 				}
 			},
 			getUserDetail(){

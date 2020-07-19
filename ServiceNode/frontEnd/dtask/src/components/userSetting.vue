@@ -1,40 +1,38 @@
 <template>
-  <div id="app">
     <el-container>
       <el-header>
         <h1>用户设置</h1>
       </el-header>
       <el-main>
-
         <el-form  label-width="80px">
-          <el-form-item label="昵称">
-            <el-input v-model="nickname"
+          <el-form-item label="昵称:">
+            <el-input style="width: 300px;" v-model="nickname"
                       placeholder="请输入内容"
                       class="inp"></el-input>
           </el-form-item>
-          <el-form-item label="密码">
-            <el-input placeholder="请输入密码"
-                      v-model="password1"
+          <el-form-item label="旧密码:">
+            <el-input style="width: 300px;" placeholder="请输入旧密码"
+                      v-model="oldPassword"
                       class="inp"
                       show-password></el-input>
           </el-form-item>
-          <el-form-item label="再次确认">
-            <el-input placeholder="请输入密码"
-                      v-model="password2"
+          <el-form-item label="新密码:">
+            <el-input style="width: 300px;" placeholder="请输入新密码"
+                      v-model="pwd"
                       class="inp"
                       show-password></el-input>
           </el-form-item>
-          <el-form-item label="电话">
-            <el-input v-model="telephoneNumber"
+          <el-form-item label="手机:">
+            <el-input style="width: 300px;" v-model="phone"
                       placeholder="请输入内容"
                       class="inp"></el-input>
           </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input v-model="eMail"
+          <el-form-item label="邮箱:">
+            <el-input style="width: 300px;" v-model="email"
                       placeholder="请输入内容"
                       class="inp"></el-input>
           </el-form-item>
-          <el-form-item label="生日">
+          <el-form-item label="生日:">
             <div class="block">
               <span class="demonstration"></span>
               <el-date-picker
@@ -45,132 +43,160 @@
               </el-date-picker>
             </div>
           </el-form-item>
-          <el-form-item label="入职日期">
-            <el-input
+          <el-form-item label="入职日期:">
+            <el-input style="width: 300px;"
               placeholder="请输入内容"
-              v-model="entryDate"
-              :disabled="true"
+              v-model="onboardDate"
+			  :disabled="true"
               class="inp">
             </el-input>
           </el-form-item>
-          <el-form-item label="所属角色">
-            <el-input
+          <el-form-item label="所属角色:">
+            <el-input style="width: 300px;"
             placeholder="请输入内容"
-            v-model="post"
+            v-model="roleName"
             :disabled="true"
             class="inp">
           </el-input>
           </el-form-item>
-          <el-form-item label="所属部门">
-            <el-input
+          <el-form-item label="所属部门:">
+            <el-input style="width: 300px;"
               placeholder="请输入内容"
-              v-model="department"
+              v-model="departmentName"
               :disabled="true"
               class="inp">
             </el-input>
           </el-form-item>
         </el-form>
-
+		<span style="color: red; font-size: 10px;">{{message}}</span>
         <div class="dbd">
           <el-button type="primary"
-                     @click="btnConfirm"
+                     @click="postSetting"
                      icon="el-icon-check"
                      style="background: #24375E;
                      border: 0px;
                      position: relative; left:120px">确认提交</el-button></div>
       </el-main>
     </el-container>
-  </div>
 </template>
 
 <script>
   import axios from 'axios';
-export default {
-  name: 'App',
-  data(){
-    return{
-      nickname : "",
-      password1 : "",
-      password2 : "",
-      telephoneNumber: "",
-      eMail: "",
-      birthday: "",
-      entryDate: "",
-      post:"",
-      department:""
-    }
-  },methods: {
-    btnConfirm: function(){
-      if(!this.password1){
-        console.log("密码不能为空");
-        return 0;
-      }
-      else if(this.password1.length<6){
-        console.log("密码不得小于6位");
-        return 0;
-      }
-      else if(this.password1!=this.password2) {
-        console.log("错误！两次输入的密码不同");
-        return 0;
-      }
-    },
-    postSetting(){
-      var params = new URLSearchParams();
-      var onboardDate = new Date(this.onboardDate).toLocaleDateString().replace(/\//g, '-');
-      var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');
-      var userID =parseInt(localStorage.getItem("userID"));
-      params.append("id",userID);
-      params.append("pwd",this.password1);
-      params.append("nickname",this.nickname);
-      params.append("phone",this.telephoneNumber);
-      params.append("email",this.eMail);
-      params.append("roleID",this.post);
-      params.append("departmentID",this.department);
-      params.append("birthday",this.birthday);
-      params.append("onboardDate",this.entryDate);
-      axios.put("/api/user/user",
-        params,
-        {
-          headers:{
-            token:"eyJ1c2VySUQiOjEwMDEsInVzZXJuYW1lIjoiYWRtaW4yIiwiY3JlYXRlVGltZSI6MTU5MzcwMDkzNzUxM30=",
-          }
-        })
-        .then(res => {
-          var response = res.data;
-          var retObj = eval(response.data);
-          console.log(retObj);
-        })
-    },
-    getSetting(){
-      var params = new URLSearchParams();
-      var userID =parseInt(localStorage.getItem("userID"));
-      params.append("userID",userID);
-      axios.get("/api/user/userDetail",{
-        params:params,
-        headers:{
-          token:"eyJ1c2VySUQiOjEwMDEsInVzZXJuYW1lIjoiYWRtaW4yIiwiY3JlYXRlVGltZSI6MTU5MzcwMDkzNzUxM30=",
-        }
-      })
-        .then(res => {
-          var response = res.data;
-          var userObj = eval(response.data);
-          console.log(userObj);
-          this.password1 = userObj.pwd;
-          this.nickname = userObj.nickName;
-          this.eMail = userObj.email;
-          this.post = userObj.roleID;
-          this.telephoneNumber = userObj.phone;
-          this.birthday = userObj.birthday;
-          this.department = userObj.departmentID;
-          this.entryDate = userObj.onboardDate;
-        })
-      },
-    },
-  beforeMount:function() {
-    this.getSetting();
-    this.postSetting();
-  }
-}
+	export default {
+	  data(){
+		return{
+			nickname:"",
+			oldPassword:"",
+			pwd:"",
+			phone:"",
+			email:"",
+			birthday:"",
+			onboardDate:"",
+			roleName:"",
+			departmentName:"",
+			message:""
+		}
+	  },
+	  methods: {
+		postSetting(){
+			if (!this.nickname) {
+				this.message = '昵称不能为空';
+			}
+			else if (!this.phone) {
+				this.message = '手机号不可为空';
+			}
+			else if (!this.email) {
+				this.message = '邮箱不能为空';
+			}
+			else if (!this.birthday) {
+				this.message = '出生日期不可为空';
+			}
+			else{
+				var pwd;
+				var oldPassword;
+				// 如果密码为空，则不修改密码
+				if (this.pwd==""&&this.oldPassword=="") {
+					this.pwd = '';
+					this.oldPassword='';
+					pwd = "";
+					oldPassword = "";
+				}
+				else if(this.pwd!=""&&this.oldPassword!=""){
+					pwd = this.$md5(this.pwd);
+					oldPassword = this.$md5(this.oldPassword)
+				}
+				else{
+					this.message="旧密码和新密码不能为空";
+					return 0;
+				}
+				console.log(pwd);
+				console.log(oldPassword);
+				var params = new URLSearchParams();
+				var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');
+				params.append("nickname",this.nickname);
+				params.append("phone",this.phone);
+				params.append("email",this.email);
+				params.append("birthday",birthday);
+				params.append("pwd",pwd);
+				params.append("oldPassword",oldPassword);
+				axios.post("/api/user/changeUserDetail",
+					params,
+					{
+						headers:{
+							token:localStorage.getItem("token"),
+						}
+					})
+				.then(res=>{
+					var retObj = eval(res.data);
+					console.log(retObj);
+					if(retObj.ret==1){
+						if(pwd!=""&&oldPassword!=""){
+							this.$router.push({
+								path:'/',
+							})
+						}
+						else{
+							location.reload();
+						}
+					}
+					else if(retObj.ret==2){
+						this.message="旧密码错误"
+					}
+				})
+				.catch(err => {
+					alert("请求异常");
+				});
+			}
+			
+		},
+		getSetting(){
+			axios.get("/api/user/userOwnDetail",{
+				headers:{
+					token:localStorage.getItem("token"),
+				}
+			})
+			.then(res=>{
+				var response = res.data;
+				var userObj = eval(response.data);
+				console.log(userObj);
+				this.nickname = userObj.nickName;
+				this.email = userObj.email;
+				this.roleName = userObj.roleName;
+				this.phone = userObj.phone;
+				this.birthday = userObj.birthday;
+				this.departmentName = userObj.departmentName;
+				this.onboardDate = userObj.onboardDate;
+			})
+			.catch(err => {
+				alert("请求异常");
+			});
+		},
+	},
+	beforeMount:function() {
+		this.getSetting();
+	}
+	}
+
 
 </script>
 

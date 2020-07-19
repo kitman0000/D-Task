@@ -119,7 +119,7 @@
 					var onboardDate = new Date(this.onboardDate).toLocaleDateString().replace(/\//g, '-');
 					var birthday = new Date(this.birthday).toLocaleDateString().replace(/\//g, '-');
 					params.append("username",this.username);
-					params.append("pwd",this.pwd);
+					params.append("pwd",this.$md5(this.pwd));
 					params.append("nickname",this.nickname);
 					params.append("phone",this.phone);
 					params.append("email",this.email);

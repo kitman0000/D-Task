@@ -2,11 +2,10 @@
 	<el-container>
 		</el-aside>
 		<el-main>
-			<div class="demo-input-suffix" style="height: 60px;">
-				<div style="float: left; line-height: 35px; width: 100px;">任务名</div>
-			<el-input placeholder="任务名" v-model="name" style="width: 300px;"></el-input>
-			</div>
 			<el-form>
+				<el-form-item label="任务:">
+					<el-input placeholder="任务" v-model="name" style="width: 192px;"></el-input>
+					</el-form-item>
 				<el-form-item label="部门:">
 					<el-select v-model="department" placeholder="请选择" @change="getUser()">
 						<el-option v-for="item in departmentList" :key="item.value" :label="item.label" :value="item.value">
@@ -21,7 +20,7 @@
 				</el-form-item>
 						</el-form>
 			<span style="color: red; font-size: 10px;">{{message}}</span>
-			<el-button type="primary" @click="changeTask()" icon="el-icon-change" style="position: relative; left: 90px; margin-left: 10px;">修改</el-button>
+			<el-button type="primary" @click="changeTask()" icon="el-icon-change" style="position: relative; left: 90px; margin-left: 10px; background: #24375E;border: 0px ;">修改</el-button>
 		</el-main>
 	</el-container>
 </template>
@@ -120,6 +119,7 @@
 					.then(res => {
 						var response = res.data.data;
 						var a = eval(response);
+						this.creatorList=[];
 						a.forEach((res)=>{
 							this.creatorList.push({
 								value: res.id,

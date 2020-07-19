@@ -45,7 +45,7 @@
 						console.log(error);
 					});
 					this.$router.push({
-						path:'/userTask',
+						path:'/localTask',
 					})
 				}
 			},
