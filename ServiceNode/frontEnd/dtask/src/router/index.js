@@ -26,6 +26,10 @@ import localTask from "../components/localTask.vue"
 import userTask from "../components/userTask.vue"
 import addLocalTask from "../components/addLocalTask.vue"
 import changeLocalTask from "../components/changeLocalTask.vue"
+import editJoinParticipator from '../components/editJointParticiptor.vue'
+import editJointSubTask from '../components/editJointSubTask.vue'
+import jointSubTask from '../components/jointSubTask.vue'
+
 
 Vue.use(VueRouter)
 
@@ -157,6 +161,21 @@ const routes = [{
 			path:'/changeLocalTask',
 			name:'changeLocalTask',
 			component:changeLocalTask
+		},
+		{
+			path:'/editJoinParticipator',
+			name:'editJoinParticipator',
+			component:editJoinParticipator
+		},
+		{
+			path:'/editJointSubTask',
+			name:'editJointSubTask',
+			component:editJointSubTask
+		},
+		{
+			path:'/jointSubTask',
+			name:'jointSubTask',
+			component:jointSubTask
 		},
 		]}
 	]

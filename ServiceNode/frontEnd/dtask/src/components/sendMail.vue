@@ -30,7 +30,7 @@
 				 :file-list="fileList3">
 					<el-button type="primary" icon="el-icon-plus" style="background: #24375E;border: 0px ;">添加文件</el-button>	
 				</el-upload>
-				<el-button type="primary" @click="sendFile()" icon="el-icon-check" style="background: #24375E;border: 0px ;">确认上传的文件</el-button>
+				<el-button type="primary" @click="sendFile()" v-if="fileList3.length !=0" icon="el-icon-check" style="background: #24375E;border: 0px ;">确认上传的文件</el-button>
 			</el-form-item>
 		</el-form>
 		<el-button type="primary" @click="sendMail()" icon="el-icon-check" style="background: #24375E;border: 0px ;">确认上传</el-button>
@@ -109,6 +109,7 @@
 						}
 					})
 					.then(res => {
+						this.options = [];
 						var response = res.data.data;
 						var a = eval(response);
 						a.forEach((res)=>{
@@ -127,33 +128,41 @@
 					});
 			},
 			sendMail(){
-				var parmas = new FormData();
-				parmas.append("receiverID",this.value5);
-				parmas.append("title",this.title);
-				parmas.append("content",this.content);
-				parmas.append("isImportant",this.IsImportantValue);
-				parmas.append("filename",this.fileData);
-				axios.post('/api/mail/mail', parmas, {
-					paramsSerializer: parmas => {
-					      return qs.stringify(parmas, { indices: false })
-					    },
-						headers: {
-							"token": localStorage.getItem("token"),
-						}
-					})
-					.then(res => {
-						var response = res.data;
-						if (response.ret == 1) {
-							this.$alert('上传成功', '提示', {
-							         confirmButtonText: '确定',
-							       });
-								   this.$router.push({path:'/GetSendedMail'});
-						} else {
-							this.$alert('上传失败', '提示', {
-							         confirmButtonText: '确定',
-							       });
-						}
-					});
+				if(this.value5.length == 0 || this.title == "" || this.content == ""){
+					this.$alert('收件人，标题或内容不得为空！', '提示', {
+					         confirmButtonText: '确定',
+					       });
+				}
+				else{
+					var parmas = new FormData();
+					parmas.append("receiverID",this.value5);
+					parmas.append("title",this.title);
+					parmas.append("content",this.content);
+					parmas.append("isImportant",this.IsImportantValue);
+					parmas.append("filename",this.fileData);
+					axios.post('/api/mail/mail', parmas, {
+						paramsSerializer: parmas => {
+						      return qs.stringify(parmas, { indices: false })
+						    },
+							headers: {
+								"token": localStorage.getItem("token"),
+							}
+						})
+						.then(res => {
+							var response = res.data;
+							if (response.ret == 1) {
+								this.$alert('上传成功', '提示', {
+								         confirmButtonText: '确定',
+								       });
+									   this.$router.push({path:'/GetSendedMail'});
+							} else {
+								this.$alert('上传失败', '提示', {
+								         confirmButtonText: '确定',
+								       });
+							}
+						});
+				}
+				
 				
 				
 			},
@@ -168,11 +177,18 @@
 							}
 						})
 						.then(res=> {
-							var response = res.data.data;
-							this.fileData.push(response);
-							this.$alert('文件上传成功', '提示', {
-							         confirmButtonText: '确定',
-							       });
+							if(res.data.ret == 1){
+								var response = res.data.data;
+								this.fileData.push(response);
+								this.$alert('文件上传成功', '提示', {
+								         confirmButtonText: '确定',
+								       });
+							}
+							else{
+								this.$alert('文件上传失败，请重试', '提示', {
+								         confirmButtonText: '确定',
+								       });
+							}
 						});
 						
 				}
@@ -180,6 +196,7 @@
 		},
 		beforeMount: function() {
 				this.department();
+				console.log(this.fileList3);
 		}
 	}
 </script>
