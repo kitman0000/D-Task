@@ -184,7 +184,6 @@
 				
 				axios.get('/api/localTask/localSubTaskNumber', {
 						params: {
-							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
 						},
 						headers: {
@@ -270,6 +269,7 @@
 						})
 						.then(res => {
 							var response = res.data.data;
+							console.log(response);
 							for(var i =0;i<response.length;i++){
 								if(response[i].userID == this.creatorID){
 									this.creator = response[i].username;
