@@ -131,7 +131,7 @@
 				});
 			},
 			userTaskDetail(row,event){
-				this.$router.push({path:"/SubTask?taskID="+row.id+"&creator="+row.creatorID+"$nodeID="+row.creatorNode});
+				this.$router.push({path:"/jointSubTask?taskID="+row.id+"&creator="+row.creatorID+"&nodeID="+row.creatorNode});
 			},
 			// addTask(){
 			// 	this.$router.push({
@@ -159,8 +159,12 @@
 			// },
 			showList() {
 				this.isShow = !this.isShow;
-			},
+			}
 		},
+		beforeMount() {
+			this.getTaskNumber();
+			this.handleTaskList()
+		}
 	}
 	
 </script>

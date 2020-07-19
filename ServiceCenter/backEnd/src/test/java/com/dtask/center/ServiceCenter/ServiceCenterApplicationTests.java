@@ -1,6 +1,9 @@
 package com.dtask.center.ServiceCenter;
 
+import com.dtask.center.remoteTaskModule.entity.GetRemoteTaskListEntity;
+import com.dtask.center.remoteTaskModule.entity.RemoteTaskSearchEntity;
 import com.dtask.common.config.RabbitSender;
+import com.dtask.common.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -103,7 +106,16 @@ public class ServiceCenterApplicationTests {
 
 	@Test
 	public void test2(){
-		String res =rabbitSender.send("dtask.syncUserInfo","aaaa");
-		logger.info("2:"+res);
+		GetRemoteTaskListEntity getRemoteTaskListEntity = new GetRemoteTaskListEntity();
+
+		RemoteTaskSearchEntity remoteTaskSearchEntity = new RemoteTaskSearchEntity();
+		remoteTaskSearchEntity.setNodeID(0);
+		remoteTaskSearchEntity.setTaskName("");
+		remoteTaskSearchEntity.setUserID(0);
+
+		getRemoteTaskListEntity.setRemoteTaskSearchEntity(remoteTaskSearchEntity);
+
+		logger.info(JsonUtil.objectToJson(getRemoteTaskListEntity));
+
 	}
 }

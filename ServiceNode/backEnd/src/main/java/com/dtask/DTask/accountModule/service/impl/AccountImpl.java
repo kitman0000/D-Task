@@ -99,6 +99,9 @@ public class AccountImpl implements IAccount{
     public boolean changePwd(String password, String oldPassword) {
         int userID = UserCommon.getUserBo().getUserID();
 
+        oldPassword = UserCommon.encodePwd(oldPassword);
+        password = UserCommon.encodePwd(password);
+
         if(!oldPassword.equals(accountDao.getUserPwd(userID))){
             return false;
         }

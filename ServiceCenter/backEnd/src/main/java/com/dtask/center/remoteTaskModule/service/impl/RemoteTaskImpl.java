@@ -45,6 +45,12 @@ public class RemoteTaskImpl implements IRemoteTask {
     }
 
     @Override
+    public String getTaskDetail(int taskID) {
+        RemoteTaskBo remoteTaskBo = remoteTaskDao.getTaskDetail(taskID);
+        return JsonUtil.objectToJson(remoteTaskBo);
+    }
+
+    @Override
     public String deleteRemoteTask(DeleteRemoteTaskEntity deleteRemoteTaskEntity) {
         remoteTaskDao.deleteRemoteTask(deleteRemoteTaskEntity.getId());
         return "DELETE_SUCCESS";
@@ -78,7 +84,7 @@ public class RemoteTaskImpl implements IRemoteTask {
             return "PERMISSION_DENNY";
         }
 
-        if(remoteTaskDao.checkTaskMemberExist(taskID,nodeID,userID) >= 1){
+        if(remoteTaskDao.checkTaskMemberExist(taskID,newUserNodeID,newUserID) >= 1){
             return "USER_EXIST";
         }
 

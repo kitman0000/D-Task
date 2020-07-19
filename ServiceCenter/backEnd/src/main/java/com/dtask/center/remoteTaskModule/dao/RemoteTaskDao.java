@@ -20,6 +20,8 @@ public interface RemoteTaskDao {
     void updateRemoteTask(@Param("id") int id, @Param("name") String name, @Param("creatorNode") int creatorNode,
                           @Param("creator") int creator, @Param("allowedMemberChangeStatus") boolean allowedMemberChangeStatus);
 
+    RemoteTaskBo getTaskDetail(int taskID);
+
     void deleteRemoteTask(int id);
 
     int getRemoteTaskNumber(@Param("remoteTaskSearchEntity") RemoteTaskSearchEntity remoteTaskSearchEntity);

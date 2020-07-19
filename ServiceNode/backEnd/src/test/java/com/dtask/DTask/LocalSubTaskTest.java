@@ -3,6 +3,8 @@ package com.dtask.DTask;
 import com.dtask.DTask.localTaskModule.entity.LocalSubTaskEntity;
 import com.dtask.DTask.localTaskModule.service.ILocalSubTask;
 import com.dtask.DTask.localTaskModule.service.impl.LocalTaskImpl;
+import com.dtask.DTask.remoteTaskModule.entity.RemoteTaskSearchEntity;
+import com.dtask.common.config.RabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +24,9 @@ import java.util.Date;
 @Component
 @SpringBootTest
 public class LocalSubTaskTest {
+
+    @Autowired
+    private RabbitSender rabbitSender;
 
     @Autowired
     private ILocalSubTask localTask;
@@ -89,5 +94,22 @@ public class LocalSubTaskTest {
 
         Object o = localTask.editLocalSubTaskStatus(localSubTaskEntity);
         logger.info(JsonUtil.objectToJson(o));
+    }
+
+
+    @Test
+    public void getRemoteTask(){
+        int page = 1;
+        RemoteTaskSearchEntity remoteTaskSearchEntity = new RemoteTaskSearchEntity();
+        remoteTaskSearchEntity.setNodeID(0);
+        remoteTaskSearchEntity.setTaskName("");
+        remoteTaskSearchEntity.setUserID(0);
+
+        rabbitSender.send("dtask.remoteTask.getUserTaskList",
+                " {\"taskName\":\"\",\"userID\":0,\"nodeID\":1,\"page\":1}");
+
+        logger.info(JsonUtil.objectToJson(remoteTaskSearchEntity));
+
+
     }
 }

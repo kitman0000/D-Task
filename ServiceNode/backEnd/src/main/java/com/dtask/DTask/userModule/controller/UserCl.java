@@ -28,11 +28,22 @@ public class UserCl {
     @Autowired
     IAccount account;
 
+    /**
+     *  用户获得自身数据
+     */
+    @RequestMapping(value = "/api/user/userOwnDetail", method = RequestMethod.GET)
+    public ResponseData getUserOwnDetail(){
+        return user.getUserOwnDetail();
+    }
+
+    /**
+     *  用户修改自身数据
+     */
     @Transactional
     @RequestMapping(value = "/api/user/changeUserDetail", method = RequestMethod.POST)
     public ResponseData changeUserDetail(UserAddEntity userAddEntity, String oldPassword) {
         // 是否需要修改密码
-        if (oldPassword != null) {
+        if (!oldPassword.equals("")) {
             // 修改密码成功
             if (!account.changePwd(userAddEntity.getPwd(), oldPassword)) {
                 return new ResponseData(2, "密码错误", null);
@@ -94,8 +105,8 @@ public class UserCl {
         return user.getRemoteUser(nodeID);
     }
 
-    @Scheduled(cron = "0 0/30 * * * ? ")
-    //@Scheduled(cron = "0/30 * * * * ? ") // 开发期间，30秒一次
+    //@Scheduled(cron = "0 0/30 * * * ? ")
+    @Scheduled(cron = "0/30 * * * * ? ") // 开发期间，30秒一次
     public void syncUserInfo() {
         user.syncUserInfo();
     }

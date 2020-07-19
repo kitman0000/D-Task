@@ -159,6 +159,10 @@
 				this.isShow = !this.isShow;
 			},
 		},
+		beforeMount() {
+			this.getTaskNumber();
+			this.handleTaskList()
+		}
 	}
 	
 </script>

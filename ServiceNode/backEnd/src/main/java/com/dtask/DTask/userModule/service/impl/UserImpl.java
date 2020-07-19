@@ -38,6 +38,13 @@ public class UserImpl implements IUser {
     @Autowired
     private NodeCommon nodeCommon;
 
+    @Override
+    public ResponseData getUserOwnDetail() {
+        int userID =  UserCommon.getUserBo().getUserID();
+        UserDetailBo userDetailBo = userDao.getUserDetail(userID);
+        return new ResponseData(1,"查询成功",userDetailBo);
+    }
+
     /**
      * 用户自行修改个人账户数据
      * @param userAddEntity
@@ -114,7 +121,7 @@ public class UserImpl implements IUser {
         if(nodeID == -1){
             return;
         }
-        syncUserInfoBo.setNodeID(1);
+        syncUserInfoBo.setNodeID(nodeID);
         syncUserInfoBo.setUserListBo(userList);
         String msg = JsonUtil.objectToJson(syncUserInfoBo);
         rabbitSender.send("dtask.syncUserInfo",msg);

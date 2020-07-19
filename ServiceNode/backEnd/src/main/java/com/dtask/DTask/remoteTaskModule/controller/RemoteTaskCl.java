@@ -25,6 +25,11 @@ public class RemoteTaskCl {
         return remoteTask.editRemoteTask(id,name,creator,allowedMemberChangeStatus,creatorNodeID);
     }
 
+    @RequestMapping(value = "/api/remoteTask/remoteTaskDetail",method = RequestMethod.GET)
+    public ResponseData getTaskDetail(int taskID){
+        return remoteTask.getTaskDetail(taskID);
+    }
+
     @RequestMapping(value = "/api/remoteTask/remoteTask",method = RequestMethod.DELETE)
     public ResponseData deleteRemoteTask(int id) {
         return remoteTask.deleteRemoteTask(id);
@@ -36,8 +41,8 @@ public class RemoteTaskCl {
     }
 
     @RequestMapping(value = "/api/remoteTask/remoteTaskList",method = RequestMethod.GET)
-    public ResponseData getRemoteTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
-        return remoteTask.getRemoteTaskList(remoteTaskSearchEntity,page);
+    public ResponseData getRemoteTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity) {
+        return remoteTask.getRemoteTaskList(remoteTaskSearchEntity);
     }
 
     @RequestMapping(value = "/api/remoteTask/remoteTaskMember",method = RequestMethod.POST)
@@ -66,8 +71,8 @@ public class RemoteTaskCl {
     }
 
     @RequestMapping(value = "/api/remoteTask/userRemoteTaskList",method = RequestMethod.GET)
-    public ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
-        return remoteTask.getUserTaskList(remoteTaskSearchEntity,page);
+    public ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity) {
+        return remoteTask.getUserTaskList(remoteTaskSearchEntity);
     }
 
     @RequestMapping(value = "/api/remoteTask/userRole",method = RequestMethod.GET)
@@ -79,4 +84,5 @@ public class RemoteTaskCl {
     public ResponseData getAllowUserChangeStatus(int taskID){
         return remoteTask.getAllowUserChangeStatus(taskID);
     }
+
 }

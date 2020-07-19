@@ -51,6 +51,22 @@ public class RemoteTaskCl {
     }
 
     @RabbitListener(bindings = @QueueBinding(
+            value = @Queue("dtask.remoteTask.getTaskDetail"),
+            exchange = @Exchange(value = "topicExchange",type = "topic"),
+            key = "dtask.remoteTask.getTaskDetail"
+    ))
+    public String getTaskDetail(String msg){
+        try {
+            int taskID = Integer.valueOf(msg);
+            return remoteTask.getTaskDetail(taskID);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return "SYS_FAILED";
+        }
+
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.deleteRemoteTask"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
             key = "dtask.remoteTask.deleteRemoteTask"
@@ -87,8 +103,8 @@ public class RemoteTaskCl {
     ))
     public String getRemoteTaskList(String msg){
         try {
-            GetRemoteTaskListEntity getRemoteTaskListEntity = (GetRemoteTaskListEntity)JsonUtil.jsonToObject(msg,GetRemoteTaskListEntity.class);
-            return remoteTask.getRemoteTaskList(getRemoteTaskListEntity.getRemoteTaskSearchEntity(), getRemoteTaskListEntity.getPage());
+            RemoteTaskSearchEntity remoteTaskSearchEntity = (RemoteTaskSearchEntity)JsonUtil.jsonToObject(msg,RemoteTaskSearchEntity.class);
+            return remoteTask.getRemoteTaskList(remoteTaskSearchEntity, remoteTaskSearchEntity.getPage());
         }catch (Exception ex) {
             ex.printStackTrace();
             return "SYS_FAILED";
@@ -162,8 +178,8 @@ public class RemoteTaskCl {
     ))
     public String getUserTaskList(String msg){
         try {
-            GetRemoteTaskListEntity getRemoteTaskListEntity = (GetRemoteTaskListEntity) JsonUtil.jsonToObject(msg,GetRemoteTaskListEntity.class);
-            return remoteTask.getUserTaskList(getRemoteTaskListEntity.getRemoteTaskSearchEntity(),getRemoteTaskListEntity.getPage());
+            RemoteTaskSearchEntity remoteTaskSearchEntity = (RemoteTaskSearchEntity)JsonUtil.jsonToObject(msg,RemoteTaskSearchEntity.class);
+            return remoteTask.getUserTaskList(remoteTaskSearchEntity,remoteTaskSearchEntity.getPage());
         }catch (Exception ex){
             ex.printStackTrace();
             return "SYS_FAILED";

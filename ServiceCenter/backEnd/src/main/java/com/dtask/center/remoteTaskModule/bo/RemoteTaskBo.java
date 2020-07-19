@@ -14,4 +14,9 @@ public class RemoteTaskBo {
     private int creatorID;
 
     private String creatorName;
+
+    private int creatorNode;
+
+    private boolean allowedMemberChangeStatus;
+
 }

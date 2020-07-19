@@ -11,11 +11,13 @@ public interface IRemoteTask {
 
     ResponseData editRemoteTask(int id, String name, int creator, boolean allowedMemberChangeStatus, int creatorNodeID);
 
+    ResponseData getTaskDetail(int taskID);
+
     ResponseData deleteRemoteTask(int id);
 
     ResponseData getRemoteTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity);
 
-    ResponseData getRemoteTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity,int page);
+    ResponseData getRemoteTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity);
 
     ResponseData addRemoteTaskMember(int taskID, int newUserID, int newUserNodeID);
 
@@ -27,7 +29,7 @@ public interface IRemoteTask {
 
     ResponseData getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity);
 
-    ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity,int page);
+    ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity);
 
     ResponseData getTaskUserRole(int taskID);
 

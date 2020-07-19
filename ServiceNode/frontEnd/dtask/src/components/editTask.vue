@@ -157,9 +157,11 @@
 									confirmButtonText: '确定',
 									callback: action => {
 										localStorage.removeItem('add');
-										this.$router.push({
-											path: '/SubTask'
-										});
+										// 直接跳转到前页会丢失url参数，所以使用返回
+										history.go(-1);
+										// this.$router.push({
+										// 	path: '/SubTask'
+										// });
 									}
 								});
 
@@ -176,9 +178,11 @@
 								confirmButtonText: '确定',
 							});
 							localStorage.removeItem('taskDetail');
-							this.$router.push({
-								path: '/SubTask'
-							});
+							// 直接跳转到前页会丢失url参数，所以使用返回
+							history.go(-1);
+							// this.$router.push({
+							// 	path: '/SubTask'
+							// });
 						});
 				}
 			},

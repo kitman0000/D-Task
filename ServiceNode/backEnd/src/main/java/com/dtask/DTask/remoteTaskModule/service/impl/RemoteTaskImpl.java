@@ -43,6 +43,11 @@ public class RemoteTaskImpl implements IRemoteTask{
         return new ResponseData(1,res,null); // 成功 res = EDIT_SUCCESS
     }
 
+    @Override
+    public ResponseData getTaskDetail(int taskID) {
+        String res = rabbitSender.send("dtask.remoteTask.getTaskDetail",String.valueOf(taskID));
+        return new ResponseData(1,"查询成功",res);
+    }
 
     @Override
     public ResponseData deleteRemoteTask(int id) {
@@ -60,9 +65,10 @@ public class RemoteTaskImpl implements IRemoteTask{
     }
 
     @Override
-    public ResponseData getRemoteTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
-        String res = rabbitSender.send("dtask.remoteTask.getRemoteTaskNumber",
-                "{\"page\":+"+page+",\"RemoteTaskSearchEntity\":\"" + JsonUtil.objectToJson(remoteTaskSearchEntity) + "\"}");
+    public ResponseData getRemoteTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity) {
+
+        String res = rabbitSender.send("dtask.remoteTask.getRemoteTaskList",
+               JsonUtil.objectToJson(remoteTaskSearchEntity));
 
         return new ResponseData(1,"查询成功",res); // 返回任务列表
     }
@@ -122,16 +128,25 @@ public class RemoteTaskImpl implements IRemoteTask{
 
     @Override
     public ResponseData getUserTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity) {
-        String res = rabbitSender.send("dtask.remoteTask.getUserTaskList",
-                "{\"taskName\":\""+remoteTaskSearchEntity.getTaskName()+"\",\"userID\":"+remoteTaskSearchEntity.getUserID()+",\"nodeID\":"+remoteTaskSearchEntity.getNodeID()+"}");
+        int userID = UserCommon.getUserBo().getUserID();
+        int nodeID = nodeCommon.getNodeID();
+
+        String res = rabbitSender.send("dtask.remoteTask.getUserTaskNumber",
+                "{\"taskName\":\""+remoteTaskSearchEntity.getTaskName()+"\",\"userID\":"+userID+",\"nodeID\":"+nodeID+"}");
 
         return new ResponseData(1,"查询成功",res);
     }
 
     @Override
-    public ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity, int page) {
-        String res = rabbitSender.send("dtask.remoteTask.getRemoteTaskNumber",
-                "{\"page\":+"+page+",\"RemoteTaskSearchEntity\":\"" + JsonUtil.objectToJson(remoteTaskSearchEntity) + "\"}");
+    public ResponseData getUserTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity) {
+        int userID = UserCommon.getUserBo().getUserID();
+        int nodeID = nodeCommon.getNodeID();
+
+        remoteTaskSearchEntity.setUserID(userID);
+        remoteTaskSearchEntity.setNodeID(nodeID);
+
+        String res = rabbitSender.send("dtask.remoteTask.getUserTaskList",
+                JsonUtil.objectToJson(remoteTaskSearchEntity));
 
         return new ResponseData(1,"查询成功",res);
     }

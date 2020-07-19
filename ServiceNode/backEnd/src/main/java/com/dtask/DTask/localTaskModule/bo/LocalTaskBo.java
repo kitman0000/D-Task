@@ -16,4 +16,6 @@ public class LocalTaskBo {
     private String creatorName;
 
     private int departmentID;
+
+    private boolean allowedMemberChangeStatus;
 }

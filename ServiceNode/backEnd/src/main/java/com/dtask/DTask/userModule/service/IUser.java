@@ -8,6 +8,8 @@ import com.dtask.common.ResponseData;
  * Created by zhong on 2020-3-24.
  */
 public interface IUser {
+    ResponseData getUserOwnDetail();
+
     ResponseData changeUserDetail(UserAddEntity userAddEntity);
 
     ResponseData getUserNumber(UserSelectEntity userSelectEntity);

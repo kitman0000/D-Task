@@ -11,6 +11,8 @@ public interface IRemoteTask {
 
     String editRemoteTask(EditRemoteTaskEntity editRemoteTaskEntity);
 
+    String getTaskDetail(int taskID);
+
     String deleteRemoteTask(DeleteRemoteTaskEntity deleteRemoteTaskEntity);
 
     String getRemoteTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity);
