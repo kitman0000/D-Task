@@ -131,6 +131,10 @@
 						params.append("nickname",this.nickname);
 						params.append("phone",this.phone);
 						params.append("email",this.email);
+						params.append("roleID",this.role);
+						params.append("departmentID",this.department);
+						params.append("birthday",birthday);
+						params.append("onboardDate",onboardDate);
 						axios.put("/api/user/user",
 						params,
 						{

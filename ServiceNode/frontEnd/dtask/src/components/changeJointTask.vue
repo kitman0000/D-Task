@@ -2,18 +2,18 @@
 	<el-container>
 		</el-aside>
 		<el-main>
-			<el-form >
+			<el-form>
 				<el-form-item label="任务:">
-					<el-input placeholder="任务" v-model="name" style="width: 192px;"></el-input>
+					<el-input placeholder="任务" v-model="taskName" style="width: 192px;"></el-input>
 					</el-form-item>
-				<el-form-item label="部门:">
-					<el-select v-model="department" placeholder="请选择" @change="getUser()">
-						<el-option v-for="item in departmentList" :key="item.value" :label="item.label" :value="item.value">
+				<el-form-item label="任务结点:">
+					<el-select v-model="creatorNode" placeholder="请选择" @change="getUser()">
+						<el-option v-for="item in nodeList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="人员:">
-					<el-select v-model="creator" placeholder="请选择">
+					<el-select v-model="creatorName" placeholder="请选择">
 						<el-option v-for="item in creatorList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
@@ -28,8 +28,6 @@
 				<span style="color: red; font-size: 10px;">{{message}}</span>
 				<el-button type="primary" @click="changeTask()" icon="el-icon-change" style="position: relative; margin-left: 10px; background: #24375E;border: 0px ;">修改</el-button>
 			</el-form>
-						
-			
 		</el-main>
 	</el-container>
 </template>
@@ -39,33 +37,34 @@
 	export default {
 		data() {
 			return{
-				department:"",
-				name:"",
-				allowedMemberChangeStatus:"",
-				creator:"",
+				creatorNode:"",
 				creatorID:"",
+				taskName:"",
+				allowedMemberChangeStatus:"",
+				creatorName:"",
 				message:"",
-				departmentList:[],
+				nodeList:[],
 				creatorList:[],
 				isShow: true,
 			}
 		},
 		methods:{
 			changeTask(){
-				if (!this.name) {
+				if (!this.taskName) {
 					this.message = '任务名不可为空';
 				}
-				else if (!this.creator) {
+				else if (!this.creatorName) {
 					this.message = '创建者不能为空';
 				}
 				else{
 					var params = new URLSearchParams();
 					var taskID =parseInt(localStorage.getItem("taskID"));
 					params.append("id",taskID);
-					params.append("name",this.name);
+					params.append("name",this.taskName);
 					params.append("creator",this.creatorID);
+					params.append("creatorNodeID",this.creatorNode);
 					params.append("allowedMemberChangeStatus",this.allowedMemberChangeStatus);
-					axios.put("/api/localTask/localTask",
+					axios.put("/api/remoteTask/remoteTask",
 					params,
 					{
 						headers:{
@@ -78,7 +77,7 @@
 						console.log(retObj);
 					})
 					this.$router.push({
-						path:'/localTask',
+						path:'/jointTask',
 					})
 				}
 			},
@@ -86,7 +85,7 @@
 				var params = new URLSearchParams();
 				var taskID =parseInt(localStorage.getItem("taskID"));
 				params.append("taskID",taskID);
-				axios.get("/api/localTask/localTaskDetail",{
+				axios.get("/api/remoteTask/remoteTaskDetail",{
 					params:params,
 					headers:{
 						token:localStorage.getItem("token"),
@@ -94,34 +93,22 @@
 				})
 				.then(res => {
 					var response = res.data;
-					var taskObj = eval(response.data);
-					console.log(taskObj);
-					this.name = taskObj.name;
-					this.department = taskObj.departmentID;
-					console.log(this.department);
-					this.creatorID = taskObj.creator;
-					this.creator = taskObj.creatorName;
+					var taskObj = response.data;
+					taskObj = eval("("+taskObj+")");
+					this.taskName = taskObj.taskName;
+					this.creatorNode = taskObj.creatorNode;
+					this.creatorName = taskObj.creatorName;
+					this.creatorID = taskObj.creatorID;
 					this.allowedMemberChangeStatus = taskObj.allowedMemberChangeStatus;
-					this.getDepartment();
+					this.getNode();
 					this.getUser();
 				})
 			},
 			getUser(){
-				console.log("01")
-				console.log(this.department);
-				axios.get('/api/user/userList', {
+				console.log(this.creatorNode);
+				axios.get('/api/user/remoteUser', {
 						params: {
-							username:"",
-							nickname:"",
-							phone:"",
-							email:"",
-							onboardDateStart:"",
-							onboardDateEnd:"",
-							roleID:-1,
-							departmentID:this.department,
-							birthdayStart:"",
-							birthdayEnd:"",
-							page:1,
+							nodeID:this.creatorNode,
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -133,21 +120,15 @@
 						this.creatorList=[];
 						a.forEach((res)=>{
 							this.creatorList.push({
-								value: res.id,
-								label:res.username
+								value: res.userID,
+								label:res.nickname
 								});
 						})
-			
 						console.log(this.creatorList);
 					})
-					.catch(function(error) {
-						this.$alert('请求用户失败', '提示', {
-						         confirmButtonText: '确定',
-						       });
-					});
 			},
-			getDepartment(){
-				axios.get('/api/department/department', {
+			getNode(){
+				axios.get('/api/bindingCl/allNodes', {
 						params: {},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -157,14 +138,14 @@
 						var response = res.data.data;
 						var a = eval(response);
 						a.forEach((res)=>{
-							this.departmentList.push({
+							this.nodeList.push({
 								value: res.id,
-								label:res.departmentName
+								label:res.nodeName
 								});
 						})
 					})
 					.catch(function(error) {
-						this.$alert('请求部门失败', '提示', {
+						this.$alert('请求任务结点失败', '提示', {
 						         confirmButtonText: '确定',
 						       });
 					});

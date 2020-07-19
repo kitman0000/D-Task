@@ -23,12 +23,16 @@ import SubTask from '../components/subTask.vue'
 import EditTask from '../components/editTask.vue'
 import editParticipator from '../components/editParticipator.vue'
 import localTask from "../components/localTask.vue"
-import userTask from "../components/userTask.vue"
+import userLocalTask from "../components/userLocalTask.vue"
 import addLocalTask from "../components/addLocalTask.vue"
 import changeLocalTask from "../components/changeLocalTask.vue"
 import editJoinParticipator from '../components/editJointParticiptor.vue'
 import editJointSubTask from '../components/editJointSubTask.vue'
 import jointSubTask from '../components/jointSubTask.vue'
+import userJointTask from '../components/userJointTask.vue'
+import jointTask from '../components/jointTask.vue'
+import addJointTask from '../components/addJointTask.vue'
+import changeJointTask from '../components/changeJointTask.vue'
 
 
 Vue.use(VueRouter)
@@ -148,9 +152,9 @@ const routes = [{
 			component:localTask
 		},
 		{
-			path:'/userTask',
-			name:'userTask',
-			component:userTask
+			path:'/userLocalTask',
+			name:'userLocalTask',
+			component:userLocalTask
 		},
 		{
 			path:'/addLocalTask',
@@ -176,6 +180,26 @@ const routes = [{
 			path:'/jointSubTask',
 			name:'jointSubTask',
 			component:jointSubTask
+		},
+		{
+			path:'/userJointTask',
+			name:'userJointTask',
+			component:userJointTask
+		},
+		{
+			path:'/jointTask',
+			name:'jointTask',
+			component:jointTask
+		},
+		{
+			path:'/addJointTask',
+			name:'addJointTask',
+			component:addJointTask
+		},
+		{
+			path:'/changeJointTask',
+			name:'changeJointTask',
+			component:changeJointTask
 		},
 		]}
 	]
