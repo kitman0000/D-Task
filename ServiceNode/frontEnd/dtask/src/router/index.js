@@ -24,8 +24,8 @@ import EditTask from '../components/editTask.vue'
 import editParticipator from '../components/editParticipator.vue'
 import localTask from "../components/localTask.vue"
 import userTask from "../components/userTask.vue"
-import addUserTask from "../components/addUserTask.vue"
-import changeUserTask from "../components/changeUserTask.vue"
+import addLocalTask from "../components/addLocalTask.vue"
+import changeLocalTask from "../components/changeLocalTask.vue"
 
 Vue.use(VueRouter)
 
@@ -149,14 +149,14 @@ const routes = [{
 			component:userTask
 		},
 		{
-			path:'/addUserTask',
-			name:'addUserTask',
-			component:addUserTask
+			path:'/addLocalTask',
+			name:'addLocalTask',
+			component:addLocalTask
 		},
 		{
-			path:'/changeUserTask',
-			name:'changeUserTask',
-			component:changeUserTask
+			path:'/changeLocalTask',
+			name:'changeLocalTask',
+			component:changeLocalTask
 		},
 		]}
 	]
