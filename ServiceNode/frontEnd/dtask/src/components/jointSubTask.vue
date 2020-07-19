@@ -180,8 +180,9 @@
 				var url = window.location.href.split('?')[1].split('&');
 				var taskID = url[0].split('=')[1];
 				this.creatorID = url[1].split('=')[1];
+				var nodeID = url[2].split('=')[1];
+				localStorage.setItem('nodeID',nodeID);
 				localStorage.setItem('taskID',taskID);
-				console.log(url);
 				
 				axios.get('/api/remoteTask/remoteSubTaskNumber', {
 						params: {
@@ -263,16 +264,16 @@
 					axios.get('/api/remoteTask/remoteTaskMember', {
 							params: {
 								/* 测试用子任务ID */
-								'taskID': localStorage.getItem('taskID'),
+								'taskID':localStorage.getItem('taskID') ,
 							},
 							headers: {
 								"token": localStorage.getItem("token"),
 							}
 						})
 						.then(res => {
-							var response = res.data.data;
+							var response = eval(res.data.data);
 							for(var i =0;i<response.length;i++){
-								if(response[i].userID == this.creatorID){
+								if(response[i].userID == this.creatorID && response[i].nodeID == nodeID ){
 									this.creator = response[i].username;
 								}
 								if(response[i].admin){
@@ -416,7 +417,7 @@
 				this.$router.push({path:'/editJointSubTask'});
 			},
 			editParticipator(){
-				this.$router.push({path:'/editJointParticiptor'});
+				this.$router.push({path:'/editJoinParticipator'});
 			},
 		},
 		beforeMount: function() {

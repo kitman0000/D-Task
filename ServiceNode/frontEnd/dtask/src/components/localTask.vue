@@ -133,17 +133,35 @@
 					path:'/addLocalTask',
 				})
 			},
-			deleteTask(taskID){
-				var params = new URLSearchParams();
-				params.append("id",this.taskID);
-				axios.get("/api/localTask/localTask",{
-					params:params,
-					headers:{
-						token:localStorage.getItem("token"),
-					}
-				})
-				.catch(err => {
-					alert("请求异常");
+			deleteTask(index) {
+				this.$confirm('删除该任务, 是否确定?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					axios.delete('/api/localTask/localTask', {
+							params: {
+								'id': index,
+							},
+			
+							headers: {
+								"token": localStorage.getItem("token"),
+							}
+						})
+						.then(function(response) {
+							this.$alert('删除成功', '提示', {
+								confirmButtonText: '确定',
+							});
+							window.location.reload();
+						})
+						.catch(function(error) {
+							console.log(error);
+						});
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
 				});
 			},
 			changeTask(taskID){
