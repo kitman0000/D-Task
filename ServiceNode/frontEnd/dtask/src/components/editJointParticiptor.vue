@@ -4,7 +4,7 @@
 		 icon="el-icon-plus" @click="dialogVisible = true">添加人员至该任务</el-button>
 		 <el-dialog title="人员添加" :visible.sync="dialogVisible" width="30%">
 		 <el-form>
-		 	<el-form-item label="部门:">
+		 	<el-form-item label="节点:">
 		 		<el-select v-model="value6" placeholder="请选择" @change="getUser()">
 		 			<el-option v-for="item in options3" :key="item.value" :label="item.label" :value="item.value">
 		 			</el-option>
@@ -74,8 +74,8 @@
 				}).then(() => {
 					axios.delete('/api/remoteTask/remoteTaskMember', {
 							params: {
-								'userID': person.userID,
-								/* 测试用子任务ID */
+								'removeUserID': person.userID,
+								'removeUserNodeID':person.nodeID,
 								'taskID': localStorage.getItem('taskID')
 							},
 							headers: {
@@ -185,19 +185,9 @@
 			},
 			getUser(){
 				console.log(this.value6);
-				axios.get('/api/user/userList', {
-						params: {
-							username:"",
-							nickname:"",
-							phone:"",
-							email:"",
-							onboardDateStart:"",
-							onboardDateEnd:"",
-							roleID:-1,
-							departmentID:this.value6,
-							birthdayStart:"",
-							birthdayEnd:"",
-							page:1,
+				axios.get('/api/user/remoteUser', {
+						params: {	
+							nodeID:this.value6,
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -209,8 +199,8 @@
 						this.options = [];
 						a.forEach((res)=>{
 							this.options.push({
-								value: res.id,
-								label:res.username
+								value: res.userID,
+								label:res.nickname
 								});
 						})
 			
@@ -223,7 +213,7 @@
 					});
 			},
 			getDepartment(){
-				axios.get('/api/department/department', {
+				axios.get('/api/bindingCl/allNodes', {
 						params: {},
 						headers: {
 							"token": localStorage.getItem("token"),
@@ -235,7 +225,7 @@
 						a.forEach((res)=>{
 							this.options3.push({
 								value: res.id,
-								label:res.departmentName
+								label:res.nodeName
 								});
 						})
 					})
@@ -253,7 +243,8 @@
 				} else {
 					var a = new URLSearchParams();
 					a.append('taskID', localStorage.getItem('taskID'));
-					a.append('userID', this.value5);
+					a.append('newUserID', this.value5);
+					a.append('newUserNodeID', this.value6);
 					axios.post('/api/remoteTask/remoteTaskMember', a, {
 							headers: {
 								"token": localStorage.getItem("token"),
