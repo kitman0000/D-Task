@@ -13,19 +13,19 @@ import java.util.List;
 @Mapper
 @Repository
 public interface RemoteSubTaskDao {
-    void addRemoteSubTask(RemoteSubTaskEntity remoteSubTaskEntity);
+    void addRemoteSubTask(@Param("remoteSubTaskEntity") RemoteSubTaskEntity remoteSubTaskEntity);
 
-    void updateRemoteSubTask(RemoteSubTaskEntity remoteSubTaskEntity);
+    void updateRemoteSubTask(@Param("remoteSubTaskEntity") RemoteSubTaskEntity remoteSubTaskEntity);
 
-    void deleteRemoteSubTask(int[] id);
+    void deleteRemoteSubTask(@Param("id") int[] id);
 
-    int getRemoteSubTaskNumber(int taskID);
+    int getRemoteSubTaskNumber(@Param("taskID") int taskID);
 
-    List<RemoteSubTaskBo> getRemoteSubTaskList(int taskID);
+    List<RemoteSubTaskBo> getRemoteSubTaskList(@Param("taskID") int taskID, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
 
-    void updateRemoteSubTaskStatus(RemoteSubTaskEntity localSubTaskEntity);
+    void updateRemoteSubTaskStatus(@Param("remoteSubTaskEntity") RemoteSubTaskEntity remoteSubTaskEntity);
 
     boolean isUserAdmin(@Param("userID") int userID, @Param("nodeID") int nodeID, @Param("taskID") int taskID);
 
-    boolean isAllowUserChangeState(int taskID);
+    boolean isAllowUserChangeState(@Param("taskID") int taskID);
 }

@@ -14,4 +14,6 @@ public class LocalTaskBo {
     private int creator;
 
     private String creatorName;
+
+    private int departmentID;
 }

@@ -52,8 +52,8 @@
 
     <!-- 获取任务列表 -->
     <select id="getRemoteTaskList" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskBo">
-        SELECT name,creator FROM tb_remote_task
-        LEFT JOIN tb_user_info ON creator = tb_user_info.id
+        SELECT tb_remote_task.id,name,creator,nickname as creatorName FROM tb_remote_task
+        LEFT JOIN tb_user_info ON creator = tb_user_info.id AND creatorNode = tb_user_info.nodeID
         <where>
             <include refid="remoteTaskSearchCondition"/>
 
@@ -83,17 +83,17 @@
 
     <!-- 获取用户任务数量列表 -->
     <select id="getUserRemoteTaskList" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskBo">
-        SELECT name,creator FROM tb_remote_task
+        SELECT tb_remote_task.id,name,creator,username as creatorName FROM tb_remote_task
         <where>
             <include refid="remoteTaskSearchCondition"/>
             AND
-            id in (SELECT id FROM tb_remote_task_user WHERE userID = #{remoteTaskSearchEntity.userID} AND nodeID = #{remoteTaskSearchEntity.nodeID})
+            tb_remote_task.id in (SELECT id FROM tb_remote_task_user WHERE userID = #{remoteTaskSearchEntity.userID} AND nodeID = #{remoteTaskSearchEntity.nodeID})
             <!-- 分页的条件 -->
             AND id Not In (Select * from (Select id From tb_remote_task
             <where>
                 <include refid="remoteTaskSearchCondition"/>
                 AND
-                id in (SELECT id FROM tb_remote_task_user WHERE userID = #{remoteTaskSearchEntity.userID} AND nodeID = #{remoteTaskSearchEntity.nodeID})
+                tb_remote_task.id in (SELECT id FROM tb_remote_task_user WHERE userID = #{remoteTaskSearchEntity.userID} AND nodeID = #{remoteTaskSearchEntity.nodeID})
             </where>
             Limit #{startRow})as t) Limit #{rowsOnePage}
             <!-- 分页的条件结束-->
@@ -134,7 +134,7 @@
 
     <!-- 获取任务拥有者ID -->
     <select id="getTaskCreator" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskMemberBo">
-        SELECT creator,nodeID FROM tb_remote_task
+        SELECT creator,creatorNode as nodeID FROM tb_remote_task
         <where>
             id = #{taskID}
         </where>
@@ -152,7 +152,8 @@
 
     <!-- 获取用户列表 -->
     <select id="getTaskUser" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskMemberBo">
-        SELECT userID,isAdmin FROM tb_remote_task_user
+        SELECT userID,tb_remote_task_user.nodeID,isAdmin,nickname as username FROM tb_remote_task_user
+        LEFT JOIN tb_user_info ON tb_remote_task_user.userID = tb_user_info.id AND tb_remote_task_user.nodeID = tb_user_info.nodeID
         <where>
             taskID = #{taskID}
         </where>

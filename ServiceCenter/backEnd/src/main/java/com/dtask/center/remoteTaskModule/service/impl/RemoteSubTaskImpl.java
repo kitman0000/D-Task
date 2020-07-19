@@ -49,7 +49,9 @@ public class RemoteSubTaskImpl implements IRemoteSubTask{
 
     @Override
     public String getRemoteSubTaskList(RemoteSubTaskEntity remoteSubTaskEntity) {
-        List<RemoteSubTaskBo> remoteSubTaskBoList = remoteSubTaskDao.getRemoteSubTaskList(remoteSubTaskEntity.getTaskID());
+        int startRow = (remoteSubTaskEntity.getPage() -1) * COUNT_ONE_PAGE;
+
+        List<RemoteSubTaskBo> remoteSubTaskBoList = remoteSubTaskDao.getRemoteSubTaskList(remoteSubTaskEntity.getTaskID(),startRow,COUNT_ONE_PAGE);
         return JsonUtil.objectToJson(remoteSubTaskBoList);
     }
 

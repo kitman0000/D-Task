@@ -17,11 +17,11 @@ public class LocalSubTaskEntity {
 
     private String content;
 
-    private Date deadline;
+    private String deadline;
 
     private int status;
 
-    private Date startTime;
+    private String startTime;
 
     private int level;
 

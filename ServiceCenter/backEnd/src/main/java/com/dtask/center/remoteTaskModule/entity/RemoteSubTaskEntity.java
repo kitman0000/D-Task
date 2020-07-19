@@ -17,11 +17,11 @@ public class RemoteSubTaskEntity {
 
     private String content;
 
-    private Date deadline;
+    private String deadline;
 
     private int status;
 
-    private Date startTime;
+    private String startTime;
 
     private int level;
 
@@ -33,4 +33,7 @@ public class RemoteSubTaskEntity {
     private int userID;
 
     private int nodeID;
+
+    // 分页查找
+    private int page;
 }

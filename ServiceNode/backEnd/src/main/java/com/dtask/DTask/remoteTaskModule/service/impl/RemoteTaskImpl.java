@@ -99,7 +99,7 @@ public class RemoteTaskImpl implements IRemoteTask{
 
     @Override
     public ResponseData getRemoteTaskMember(int taskID) {
-        String res = rabbitSender.send("dtask.remoteTask.getRemoteTaskMember",
+            String res = rabbitSender.send("dtask.remoteTask.getRemoteMember",
                 "{\"taskID\":"+taskID+"}");
         return new ResponseData(1,"查询成功",res);
     }

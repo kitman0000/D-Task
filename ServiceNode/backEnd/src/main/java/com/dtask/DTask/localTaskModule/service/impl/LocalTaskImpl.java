@@ -38,7 +38,7 @@ public class LocalTaskImpl implements ILocalTask {
 
     @Override
     public ResponseData getTaskDetail(int taskID) {
-        List<LocalTaskBo> localTaskBoList = localTaskDao.getLocalTaskDetail(taskID);
+        LocalTaskBo localTaskBoList = localTaskDao.getLocalTaskDetail(taskID);
         return new ResponseData(1,"查询成功",localTaskBoList);
     }
 

@@ -17,15 +17,23 @@ public class RemoteSubTaskEntity {
 
     private String content;
 
-    private Date deadline;
+    private String deadline;
 
     private int status;
 
-    private Date startTime;
+    private String startTime;
 
     private int level;
 
     private String tag;
 
     private int star;
+
+    // 分页查找
+    private int page;
+
+    // 操作用户信息
+    private int userID;
+
+    private int nodeID;
 }

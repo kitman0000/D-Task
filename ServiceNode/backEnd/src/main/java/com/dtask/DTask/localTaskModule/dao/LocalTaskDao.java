@@ -17,7 +17,7 @@ import java.util.List;
 public interface LocalTaskDao {
     void insertLocalTask(@Param("creatorID") int creatorID, @Param("name") String name);
 
-    List<LocalTaskBo> getLocalTaskDetail(int taskID);
+    LocalTaskBo getLocalTaskDetail(int taskID);
 
     void updateLocalTask(@Param("id") int id, @Param("name") String name,
                          @Param("creator") int creator, @Param("allowedMemberChangeStatus") boolean allowedMemberChangeStatus);
