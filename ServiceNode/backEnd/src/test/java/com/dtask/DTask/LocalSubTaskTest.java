@@ -31,35 +31,35 @@ public class LocalSubTaskTest {
     @Test
     public void addLocalSubTask(){
         for(int i = 2;i < 30;i++) {
-            LocalSubTaskEntity localSubTaskEntity = new LocalSubTaskEntity();
-            localSubTaskEntity.setTaskID(1);
-            localSubTaskEntity.setContent("测试任务内容" + i);
-            localSubTaskEntity.setDeadline(new Date());
-            localSubTaskEntity.setLevel(1);
-            localSubTaskEntity.setStar(2);
-            localSubTaskEntity.setStartTime(new Date());
-            localSubTaskEntity.setName("测试子任务" + i);
-            localSubTaskEntity.setTag("{aaa,vvv,ccc," + i + "}");
-            Object o = localTask.addLocalSubTask(localSubTaskEntity);
-            logger.info(JsonUtil.objectToJson(o));
+//            LocalSubTaskEntity localSubTaskEntity = new LocalSubTaskEntity();
+//            localSubTaskEntity.setTaskID(1);
+//            localSubTaskEntity.setContent("测试任务内容" + i);
+//            localSubTaskEntity.setDeadline(new Date());
+//            localSubTaskEntity.setLevel(1);
+//            localSubTaskEntity.setStar(2);
+//            localSubTaskEntity.setStartTime(new Date());
+//            localSubTaskEntity.setName("测试子任务" + i);
+//            localSubTaskEntity.setTag("{aaa,vvv,ccc," + i + "}");
+//            Object o = localTask.addLocalSubTask(localSubTaskEntity);
+//            logger.info(JsonUtil.objectToJson(o));
         }
     }
 
     @Test
     public void editLocalSubTask(){
-        LocalSubTaskEntity localSubTaskEntity = new LocalSubTaskEntity();
-        localSubTaskEntity.setId(1);
-        localSubTaskEntity.setTaskID(1);
-        localSubTaskEntity.setContent("测试任务内容2");
-        localSubTaskEntity.setDeadline(new Date());
-        localSubTaskEntity.setLevel(1);
-        localSubTaskEntity.setStar(2);
-        localSubTaskEntity.setStartTime(new Date());
-        localSubTaskEntity.setName("测试子任务2");
-        localSubTaskEntity.setTag("{aaa,vvv,ccc,bb}");
-
-        Object o = localTask.editLocalSubTask(localSubTaskEntity);
-        logger.info(JsonUtil.objectToJson(o));
+//        LocalSubTaskEntity localSubTaskEntity = new LocalSubTaskEntity();
+//        localSubTaskEntity.setId(1);
+//        localSubTaskEntity.setTaskID(1);
+//        localSubTaskEntity.setContent("测试任务内容2");
+//        localSubTaskEntity.setDeadline(new Date());
+//        localSubTaskEntity.setLevel(1);
+//        localSubTaskEntity.setStar(2);
+//        localSubTaskEntity.setStartTime(new Date());
+//        localSubTaskEntity.setName("测试子任务2");
+//        localSubTaskEntity.setTag("{aaa,vvv,ccc,bb}");
+//
+//        Object o = localTask.editLocalSubTask(localSubTaskEntity);
+//        logger.info(JsonUtil.objectToJson(o));
     }
 
     @Test

@@ -30,6 +30,7 @@ public class RemoteTaskCl {
             AddRemoteTaskEntity addRemoteTaskEntity = (AddRemoteTaskEntity) JsonUtil.jsonToObject(msg,AddRemoteTaskEntity.class);
             return remoteTask.addRemoteTask(addRemoteTaskEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -44,6 +45,7 @@ public class RemoteTaskCl {
             EditRemoteTaskEntity editRemoteTaskEntity = (EditRemoteTaskEntity) JsonUtil.jsonToObject(msg,EditRemoteTaskEntity.class);
             return remoteTask.editRemoteTask(editRemoteTaskEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -58,6 +60,7 @@ public class RemoteTaskCl {
             DeleteRemoteTaskEntity deleteRemoteTaskEntity = (DeleteRemoteTaskEntity) JsonUtil.jsonToObject(msg,DeleteRemoteTaskEntity.class);
             return remoteTask.deleteRemoteTask(deleteRemoteTaskEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -72,6 +75,7 @@ public class RemoteTaskCl {
             RemoteTaskSearchEntity remoteTaskSearchEntity = (RemoteTaskSearchEntity) JsonUtil.jsonToObject(msg,RemoteTaskSearchEntity.class);
             return remoteTask.getRemoteTaskNumber(remoteTaskSearchEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -86,6 +90,7 @@ public class RemoteTaskCl {
             GetRemoteTaskListEntity getRemoteTaskListEntity = (GetRemoteTaskListEntity)JsonUtil.jsonToObject(msg,GetRemoteTaskListEntity.class);
             return remoteTask.getRemoteTaskList(getRemoteTaskListEntity.getRemoteTaskSearchEntity(), getRemoteTaskListEntity.getPage());
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -100,6 +105,7 @@ public class RemoteTaskCl {
             AddRemoteTaskMemberEntity addRemoteTaskMemberEntity = (AddRemoteTaskMemberEntity) JsonUtil.jsonToObject(msg,AddRemoteTaskMemberEntity.class);
             return remoteTask.addRemoteTaskMember(addRemoteTaskMemberEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -114,6 +120,7 @@ public class RemoteTaskCl {
             RemoveRemoteTaskMemberEntity removeRemoteTaskMemberEntity = (RemoveRemoteTaskMemberEntity) JsonUtil.jsonToObject(msg,RemoveRemoteTaskMemberEntity.class);
             return remoteTask.removeRemoteTaskMember(removeRemoteTaskMemberEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -128,6 +135,7 @@ public class RemoteTaskCl {
             GetRemoteTaskMemberEntity getRemoteTaskMemberEntity = (GetRemoteTaskMemberEntity) JsonUtil.jsonToObject(msg,GetRemoteTaskMemberEntity.class);
             return remoteTask.getRemoteTaskMember(getRemoteTaskMemberEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -142,6 +150,7 @@ public class RemoteTaskCl {
             RemoteTaskSearchEntity remoteTaskSearchEntity = (RemoteTaskSearchEntity) JsonUtil.jsonToObject(msg,RemoteTaskSearchEntity.class);
             return remoteTask.getUserTaskNumber(remoteTaskSearchEntity);
         } catch (Exception ex){
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -156,6 +165,7 @@ public class RemoteTaskCl {
             GetRemoteTaskListEntity getRemoteTaskListEntity = (GetRemoteTaskListEntity) JsonUtil.jsonToObject(msg,GetRemoteTaskListEntity.class);
             return remoteTask.getUserTaskList(getRemoteTaskListEntity.getRemoteTaskSearchEntity(),getRemoteTaskListEntity.getPage());
         }catch (Exception ex){
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -170,6 +180,7 @@ public class RemoteTaskCl {
             ToggleTaskAdminEntity toggleTaskAdminEntity = (ToggleTaskAdminEntity) JsonUtil.jsonToObject(msg,ToggleTaskAdminEntity.class);
             return remoteTask.toggleTaskAdmin(toggleTaskAdminEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -184,6 +195,7 @@ public class RemoteTaskCl {
             GetTaskUserRole getTaskUserRole = (GetTaskUserRole) JsonUtil.jsonToObject(msg,GetTaskUserRole.class);
             return remoteTask.getTaskUserRole(getTaskUserRole);
         }catch (Exception ex){
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -198,6 +210,7 @@ public class RemoteTaskCl {
             int taskID = Integer.valueOf(msg);
             return remoteTask.getAllowUserChangeStatus(taskID);
         } catch (Exception ex){
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }

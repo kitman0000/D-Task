@@ -2,7 +2,9 @@ package com.dtask.DTask.remoteTaskModule.service.impl;
 
 import com.dtask.DTask.remoteTaskModule.entity.RemoteSubTaskEntity;
 import com.dtask.DTask.remoteTaskModule.service.IRemoteSubTask;
+import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
+import com.dtask.common.UserCommon;
 import com.dtask.common.config.RabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RemoteSubTaskImpl implements IRemoteSubTask {
+
+    @Autowired
+    NodeCommon nodeCommon;
+
     @Autowired
     RabbitSender rabbitSender;
 
@@ -58,6 +64,11 @@ public class RemoteSubTaskImpl implements IRemoteSubTask {
 
     @Override
     public ResponseData editRemoteSubTaskStatus(RemoteSubTaskEntity remoteSubTaskEntity) {
+        int nodeID = nodeCommon.getNodeID();
+        int userID = UserCommon.getUserBo().getUserID();
+        remoteSubTaskEntity.setNodeID(nodeID);
+        remoteSubTaskEntity.setUserID(userID);
+
         String res = rabbitSender.send("dtask.remoteSubTask.editRemoteSubTaskStatus",
                 JsonUtil.objectToJson(remoteSubTaskEntity));
 

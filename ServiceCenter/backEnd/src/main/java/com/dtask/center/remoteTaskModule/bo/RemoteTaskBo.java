@@ -7,6 +7,8 @@ import lombok.Data;
  */
 @Data
 public class RemoteTaskBo {
+    private int id;
+
     private String taskName;
 
     private int creatorID;

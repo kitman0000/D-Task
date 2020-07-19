@@ -32,6 +32,7 @@ public class RemoteSubTaskCl {
             RemoteSubTaskEntity remoteSubTaskEntity = (RemoteSubTaskEntity)JsonUtil.jsonToObject(msg,RemoteSubTaskEntity.class);
             return remoteSubTask.addRemoteSubTask(remoteSubTaskEntity);
         }catch (Exception ex){
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -46,6 +47,7 @@ public class RemoteSubTaskCl {
             RemoteSubTaskEntity remoteSubTaskEntity = (RemoteSubTaskEntity) JsonUtil.jsonToObject(msg,RemoteSubTaskEntity.class);
             return remoteSubTask.editRemoteSubTask(remoteSubTaskEntity);
         }catch (Exception ex){
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -60,6 +62,7 @@ public class RemoteSubTaskCl {
             int[] id = (int[]) JsonUtil.jsonToObject(msg, int[].class);
             return remoteSubTask.deleteRemoteSubTask(id);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -74,6 +77,7 @@ public class RemoteSubTaskCl {
             RemoteSubTaskEntity remoteSubTaskEntity = (RemoteSubTaskEntity)JsonUtil.jsonToObject(msg,RemoteSubTaskEntity.class);
             return remoteSubTask.getRemoteSubTaskNumber(remoteSubTaskEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -88,6 +92,7 @@ public class RemoteSubTaskCl {
             RemoteSubTaskEntity remoteSubTaskEntity = (RemoteSubTaskEntity) JsonUtil.jsonToObject(msg, RemoteSubTaskEntity.class);
             return remoteSubTask.getRemoteSubTaskList(remoteSubTaskEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
@@ -102,6 +107,7 @@ public class RemoteSubTaskCl {
             RemoteSubTaskEntity remoteSubTaskEntity = (RemoteSubTaskEntity)JsonUtil.jsonToObject(msg,RemoteSubTaskEntity.class);
             return remoteSubTask.editRemoteSubTaskStatus(remoteSubTaskEntity);
         }catch (Exception ex) {
+            ex.printStackTrace();
             return "SYS_FAILED";
         }
     }
