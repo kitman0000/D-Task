@@ -32,7 +32,7 @@
 		<div style="text-align: center;">
 			<el-pagination
 			  @current-change="searchMail"
-			  :current-page="currentPage"
+			  :current-page="currentpage"
 			  :page-size="10"
 			  layout="prev, pager, next, jumper"
 			  :total="pageNumber">

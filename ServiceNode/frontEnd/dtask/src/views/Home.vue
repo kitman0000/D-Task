@@ -80,18 +80,23 @@
 									path: "/Menu"
 								});
 							} else if (response.ret == 2) {
-								alert("账号或者密码错误");
-								location.reload();
+								this.$alert('账号或密码错误', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							} else if (response.ret == 3) {
-								alert("该账号已被锁定");
-								location.reload();
+								this.$alert('账号已被锁定', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							} else if (response.ret == 4) {
-								alert("该账号已被禁止");
-								location.reload();
+								this.$alert('账号已被禁止', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							}
 					
 						}).catch(err => {
-							alert("请求异常");
+							this.$alert('服务器请求异常', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						});
 				}
 				else{
@@ -105,18 +110,23 @@
 									path: "/Menu"
 								});
 							} else if (response.ret == 2) {
-								alert("用户不存在或不具有权限");
-								location.reload();
+								this.$alert('用户不存在或不具有权限', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							} else if (response.ret == 3) {
-								alert("密码错误");
-								location.reload();
+								this.$alert('账号或密码错误', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							} else if (response.ret == 4) {
-								alert("未知错误");
-								location.reload();
+								this.$alert('未知错误', '提示', {
+								         confirmButtonText: '确定',
+								       });
 							}
 					
 						}).catch(err => {
-							alert("请求异常");
+							this.$alert('服务器请求异常', '提示', {
+							         confirmButtonText: '确定',
+							       });
 						});
 				}
 				
@@ -130,7 +140,9 @@
 						this.options = eval(response);
 					})
 					.catch(function(error) {
-						console.log(error);
+						this.$alert('服务器请求异常', '提示', {
+						         confirmButtonText: '确定',
+						       });
 					});
 			}
 		},
