@@ -103,7 +103,7 @@ public class UserImpl implements IUser {
     }
 
     @Override
-    public void syncUserInfo() {
+    public boolean syncUserInfo() {
         Object lastUpdateTime = cacheUtil.read("userInfo.lastUpdateTime");
         String lastUpdateTimeStr = "";
         if(lastUpdateTime == null){
@@ -117,9 +117,12 @@ public class UserImpl implements IUser {
 
         // 发送数据到中心调配节点
         SyncUserInfoBo syncUserInfoBo = new SyncUserInfoBo();
+        if(userList.isEmpty()){
+            return false;
+        }
         int nodeID = nodeCommon.getNodeID();
         if(nodeID == -1){
-            return;
+            return false;
         }
         syncUserInfoBo.setNodeID(nodeID);
         syncUserInfoBo.setUserListBo(userList);
@@ -128,6 +131,7 @@ public class UserImpl implements IUser {
 
         lastUpdateTimeStr = DateUtil.getTimestamp();
         cacheUtil.write("userInfo.lastUpdateTime",lastUpdateTimeStr);
+        return true;
     }
 
     @Override

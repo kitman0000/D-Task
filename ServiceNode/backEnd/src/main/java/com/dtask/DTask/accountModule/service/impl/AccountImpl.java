@@ -5,6 +5,8 @@ import com.dtask.DTask.accountModule.entity.RemoteLoginEntity;
 import com.dtask.DTask.accountModule.service.IAccount;
 import com.dtask.DTask.accountModule.type.LoginType;
 import com.dtask.DTask.accountModule.bo.AccountBo;
+import com.dtask.DTask.userModule.bo.PermissionBo;
+import com.dtask.DTask.userModule.dao.RoleDao;
 import com.dtask.common.AuthFilter;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
@@ -18,6 +20,8 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by zhong on 2020-3-12.
@@ -36,6 +40,9 @@ public class AccountImpl implements IAccount{
 
     @Autowired
     private NodeCommon nodeCommon;
+
+    @Autowired
+    private RoleDao roleDao;
 
     @Override
     public ResponseData login(String username, String pwd) {
@@ -194,7 +201,21 @@ public class AccountImpl implements IAccount{
      */
     @Override
     public String mqRemoteLogin(String username, String pwd) {
-        String pwdInDb = accountDao.getRemoteUserPwd(username);
+        int userID = accountDao.findUserIDByName(username).getId();
+        int roleID = roleDao.getUserRole(userID).getRoleID();
+        List<PermissionBo> permissionBoList = roleDao.getRolePermission(roleID);
+
+        boolean has_permission = false;
+        for(PermissionBo permissionBo :permissionBoList){
+            if((permissionBo.getPCategory() + ":" + permissionBo.getPObject() + ":" + permissionBo.getPOperate()).equals("account:remote:login")){
+                has_permission = true;
+            }
+        }
+        if(!has_permission){
+            return "NONE_ALLOWED_ACCOUNT";
+        }
+
+        String pwdInDb = accountDao.getUserPwd(userID);
         if(pwdInDb == null || pwdInDb.equals("")){
             // 用户名不存在或不具有权限
             return "NONE_ALLOWED_ACCOUNT";

@@ -10,6 +10,7 @@ import com.dtask.common.util.PageDivideUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -75,6 +76,36 @@ public class LocalSubTaskImpl implements ILocalSubTask{
     public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page) {
         int startRow = (page -1) * COUNT_ONE_PAGE;
         List<LocalSubTaskBo> localSubTaskBoList = localSubTaskDao.getLocalSubTaskList(localSubTaskEntity.getTaskID(),startRow,COUNT_ONE_PAGE);
+
+        // 根据Deadline，调整星级
+        // 5天以内自动变为重要 2天以内自动变为特别重要
+        final long FIVE_DAY = 5*24*60*60*1000;
+        final long TWO_DAY = 2*24*60*60*1000;
+        final int IMPORTANT = 2;
+        final int VERY_IMPORTANT = 3;
+        final int FINISH = 2;
+        final int CANCEL = 3;
+
+        for(LocalSubTaskBo localSubTaskBo:localSubTaskBoList){
+
+            // 如果任务已经完成或取消，不变化星级
+            if(localSubTaskBo.getStatus() == FINISH || localSubTaskBo.getStatus() == CANCEL){
+                continue;
+            }
+
+            Date deadline = localSubTaskBo.getDeadline();
+            Date today = new Date();
+
+            long timeLeft = deadline.getTime() - today.getTime();
+
+            if(timeLeft < FIVE_DAY && localSubTaskBo.getStar()!= VERY_IMPORTANT){
+                localSubTaskBo.setStar(IMPORTANT);
+            }
+            if(timeLeft < TWO_DAY){
+                localSubTaskBo.setStar(VERY_IMPORTANT);
+            }
+        }
+
         return new ResponseData(1,"查询成功",localSubTaskBoList);
     }
 
@@ -91,7 +122,7 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         int subTaskID = localSubTaskEntity.getId();
 
         // 判断是否是管理员
-        if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeState(subTaskID)){
+         if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeState(subTaskID)){
             return new ResponseData(2,"权限不足",null);
         }
 

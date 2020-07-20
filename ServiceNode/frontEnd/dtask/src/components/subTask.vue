@@ -18,10 +18,10 @@
 					</el-table-column>
 					<el-table-column prop="status" label="状态" width="100px">
 						<template slot-scope="scope">
-							<p v-if="scope.row.status == 0">计划中</p>
-							<p v-if="scope.row.status == 1">执行中</p>
-							<p v-if="scope.row.status == 2">已完成</p>
-							<p v-if="scope.row.status == 3">已取消</p>
+							<p v-if="scope.row.status == 0" style="color: #3399FF;">计划中</p>
+							<p v-if="scope.row.status == 1" style="color: #FF6600;">执行中</p>
+							<p v-if="scope.row.status == 2" style="color: #009933;">已完成</p>
+							<p v-if="scope.row.status == 3" style="color: #C0C0C0;">已取消</p>
 						</template>
 					</el-table-column>
 					<el-table-column prop="star" label="星级" width="150px">
@@ -273,6 +273,7 @@
 							for(var i =0;i<response.length;i++){
 								if(response[i].userID == this.creatorID){
 									this.creator = response[i].username;
+									continue;
 								}
 								if(response[i].admin){
 									this.managers.push(response[i].username);

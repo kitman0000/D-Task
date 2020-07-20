@@ -106,7 +106,7 @@ public class UserCl {
     }
 
     //@Scheduled(cron = "0 0/30 * * * ? ")
-    @Scheduled(cron = "0/30 * * * * ? ") // 开发期间，30秒一次
+    @Scheduled(cron = "0/60 * * * * ? ") // 30秒一次同步
     public void syncUserInfo() {
         user.syncUserInfo();
     }

@@ -36,6 +36,9 @@ public class UserAspect {
         String methodName = joinPoint.getSignature().getName();
         String args = JsonUtil.objectToJson(joinPoint.getArgs());
 
+        // 不记录同步用户程序
+        if(methodName.equals("syncUserInfo"))
+            return;
         logger.info("用户ID:" + userID + "    执行:" + methodName + "   参数:" + args);
     }
 
@@ -45,6 +48,9 @@ public class UserAspect {
         String methodName = joinPoint.getSignature().getName();
         String keysJson = JsonUtil.objectToJson(keys);
 
+        // 不记录无数据的同步用户程序
+        if(methodName.equals("syncUserInfo") && keysJson.toLowerCase().equals("false"))
+            return;
         logger.info("用户ID:" + userID + "    执行:" + methodName + "   返回:" + keysJson);
     }
 }

@@ -24,7 +24,7 @@ public interface IUser {
 
     void deleteUser(int[] userID);
 
-    void syncUserInfo();
+    boolean syncUserInfo();
 
     ResponseData getRemoteUser(int nodeID);
 }
