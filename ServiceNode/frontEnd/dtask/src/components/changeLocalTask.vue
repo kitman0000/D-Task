@@ -63,7 +63,8 @@
 					var taskID =parseInt(localStorage.getItem("taskID"));
 					params.append("id",taskID);
 					params.append("name",this.name);
-					params.append("creator",this.creatorID);
+					console.log(this.creator)
+					params.append("creator",this.creator);
 					params.append("allowedMemberChangeStatus",this.allowedMemberChangeStatus);
 					axios.put("/api/localTask/localTask",
 					params,
@@ -95,10 +96,8 @@
 				.then(res => {
 					var response = res.data;
 					var taskObj = eval(response.data);
-					console.log(taskObj);
 					this.name = taskObj.name;
 					this.department = taskObj.departmentID;
-					console.log(this.department);
 					this.creatorID = taskObj.creator;
 					this.creator = taskObj.creatorName;
 					this.allowedMemberChangeStatus = taskObj.allowedMemberChangeStatus;
@@ -107,8 +106,6 @@
 				})
 			},
 			getUser(){
-				console.log("01")
-				console.log(this.department);
 				axios.get('/api/user/userList', {
 						params: {
 							username:"",
