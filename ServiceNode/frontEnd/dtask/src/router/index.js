@@ -207,6 +207,11 @@ const routes = [{
 			name:'changeJointTask',
 			component:changeJointTask
 		},
+		{
+			path:'/webUserManual',
+			name:'userManual',
+			component:userManual
+		},
 		]}
 	]
 	

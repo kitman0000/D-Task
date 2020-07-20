@@ -6,7 +6,9 @@ import com.dtask.DTask.localTaskModule.entity.LocalSubTaskEntity;
 import com.dtask.DTask.localTaskModule.service.ILocalSubTask;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
+import com.dtask.common.config.ShiroConfig;
 import com.dtask.common.util.PageDivideUtil;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,6 +76,19 @@ public class LocalSubTaskImpl implements ILocalSubTask{
 
     @Override
     public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page) {
+
+        // 判断用户是否属于此任务
+        if (!SecurityUtils.getSubject().isPermitted("task:localTaskMange:manage")){
+            // 如果用户没有这个权限，则用户不是网站管理员
+            int userID = UserCommon.getUserBo().getUserID();
+            // 如果用户不属于此任务，获取管理员时会报错，则认为是非法请求
+            try {
+                localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID());
+            }catch (Exception ex){
+                return new ResponseData(2,"查询失败",null);
+            }
+        }
+
         int startRow = (page -1) * COUNT_ONE_PAGE;
         List<LocalSubTaskBo> localSubTaskBoList = localSubTaskDao.getLocalSubTaskList(localSubTaskEntity.getTaskID(),startRow,COUNT_ONE_PAGE);
 
@@ -122,9 +137,14 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         int subTaskID = localSubTaskEntity.getId();
 
         // 判断是否是管理员
-         if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeState(subTaskID)){
+        try {
+            if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeState(subTaskID)){
+                return new ResponseData(2,"权限不足",null);
+            }
+        } catch (Exception ex){
             return new ResponseData(2,"权限不足",null);
         }
+
 
         localSubTaskDao.updateLocalSubTaskStatus(localSubTaskEntity);
 

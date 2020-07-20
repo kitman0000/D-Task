@@ -8,7 +8,7 @@
 				 icon="el-icon-plus" v-if="role != 3" @click="addTask()">添加子任务</el-button>
 				<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="name" label="子子任务名称" width="150px">
+					<el-table-column prop="name" label="子任务名称" width="150px">
 					</el-table-column>
 					<el-table-column prop="startTime" label="开始时间">
 					</el-table-column>
@@ -190,7 +190,7 @@
 							"token": localStorage.getItem("token"),
 						}
 					})
-					.then(res => {
+					.then(res => {				
 						var response = res.data.data;
 						this.page = response * 10;
 					})
@@ -209,6 +209,15 @@
 						}
 					})
 					.then(res => {
+						
+						if(res.data.ret == 2){
+							this.$alert('您不具有访问此任务的权限', '提示', {
+								confirmButtonText: '确定',
+							}).then(()=>{
+								this.$router.push({path:'/userLocalTask'});
+							})
+						}
+						
 						var response = res.data.data;
 						var a = eval(response);
 						

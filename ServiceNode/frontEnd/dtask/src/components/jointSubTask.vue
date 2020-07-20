@@ -8,7 +8,7 @@
 				 icon="el-icon-plus" v-if="role != 3" @click="addTask()">添加子任务</el-button>
 				<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="name" label="子子任务名称" width="150px">
+					<el-table-column prop="name" label="子任务名称" width="150px">
 					</el-table-column>
 					<el-table-column prop="startTime" label="开始时间">
 					</el-table-column>
