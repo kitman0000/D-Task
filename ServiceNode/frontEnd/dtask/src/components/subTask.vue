@@ -434,6 +434,12 @@
 		},
 		beforeMount: function() {
 			this.getDefaultSubTask();
+			
+			const h = this.$createElement;
+			this.$notify({
+				title: '提示',
+				message: h('i', { style: 'color: rgb(36, 55, 94)'}, '当一个子任务离任务截止日期小于5天且未完成时，“星级”会自动变为重要，当离截止日期小于2天或逾期且未完成时，“星级”会自动变为非常重要。')
+			});
 		}
 	}
 </script>

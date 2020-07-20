@@ -77,7 +77,7 @@
 							if (response.ret == 1) {
 								localStorage.setItem("token", response.data);
 								this.$router.push({
-									path: "/Menu"
+									path: "/webUserManual"
 								});
 							} else if (response.ret == 2) {
 								alert("账号或者密码错误");
