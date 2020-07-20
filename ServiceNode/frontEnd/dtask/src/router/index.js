@@ -33,6 +33,7 @@ import userJointTask from '../components/userJointTask.vue'
 import jointTask from '../components/jointTask.vue'
 import addJointTask from '../components/addJointTask.vue'
 import changeJointTask from '../components/changeJointTask.vue'
+import userManual from '../components/userManual.vue'
 
 
 Vue.use(VueRouter)
@@ -46,6 +47,11 @@ const routes = [{
 		path: '/test',
 		name: 'test',
 		component: test
+	},
+	{
+		path:'/userManual',
+		name:'userManual',
+		component:userManual
 	},
 	{
 		path: '/Menu',
@@ -200,6 +206,11 @@ const routes = [{
 			path:'/changeJointTask',
 			name:'changeJointTask',
 			component:changeJointTask
+		},
+		{
+			path:'/webUserManual',
+			name:'userManual',
+			component:userManual
 		},
 		]}
 	]

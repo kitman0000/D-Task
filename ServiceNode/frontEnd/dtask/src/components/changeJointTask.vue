@@ -61,7 +61,7 @@
 					var taskID =parseInt(localStorage.getItem("taskID"));
 					params.append("id",taskID);
 					params.append("name",this.taskName);
-					params.append("creator",this.creatorID);
+					params.append("creator",this.creator);
 					params.append("creatorNodeID",this.creatorNode);
 					params.append("allowedMemberChangeStatus",this.allowedMemberChangeStatus);
 					axios.put("/api/remoteTask/remoteTask",

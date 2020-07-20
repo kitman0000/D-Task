@@ -66,6 +66,7 @@ public class RemoteTaskImpl implements IRemoteTask {
 
     @Override
     public String getRemoteTaskList(RemoteTaskSearchEntity localTaskSearchEntity, int page) {
+
         int startRow = (page -1) * COUNT_ONE_PAGE;
         List<RemoteTaskBo> remoteTaskBoList = remoteTaskDao.getRemoteTaskList(localTaskSearchEntity,startRow,COUNT_ONE_PAGE);
 
