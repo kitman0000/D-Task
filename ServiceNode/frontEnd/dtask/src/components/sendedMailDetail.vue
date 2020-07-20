@@ -6,8 +6,10 @@
 		<p>内容: </br>{{content}}</p>
 		<p>发件时间: {{sendTime}}</p>
 		<p>是否紧急: {{isImportant}}</p>
+		<div v-if='attachment.length !=0'>
 		<label>附件：</label>
-		<p v-for="item1 in attachment"><a href="item1">{{item1}}</a></p>
+		<p  v-for="item1 in attachment"><a href="item1">{{item1}}</a></p>
+		</div>
 	</div>
 </template>
 
@@ -34,13 +36,13 @@
 				}
 				  })
 				  .then(res=>{
-					  
+					  						
 						var response=res.data.data;
 						this.sender = response.sender;
 						this.receiver = response.receiver;
 						this.title = response.title;
 						this.content = response.content;
-						this.sendTime = response.sendTime;
+						this.sendTime = new Date(response.sendTime).toLocaleDateString().replace(/\//g, '-');
 						this.receiver = localStorage.getItem("receiver");
 						if(response.important == true){
 							this.isImportant = "是";
@@ -49,10 +51,14 @@
 						{
 							this.isImportant = "否";
 						}
-						var a = response.attachment.split(',');
-						for(var i =0 ;i<a.length;i++){
-							this.attachment[i]=  window.location.protocol+"//"+window.location.host +"//"+a[i];
+						console.log(response.attachment.length);
+						if(response.attachment.length != 0){
+							var a = response.attachment.split(',');
+							for(var i =0 ;i<a.length;i++){
+								this.attachment[i]=  window.location.protocol+"//"+window.location.host +"//"+a[i];
+							}
 						}
+						
 					})
 				  .catch(err=> {
 					  
