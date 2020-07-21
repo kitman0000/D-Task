@@ -20,7 +20,6 @@
             <el-select
               v-model="cache"
               placeholder="请选择"
-              @change="caChange()"
               class="tx">
               <el-option
                 v-for="item in options"
@@ -33,7 +32,7 @@
           <el-form-item label="最大登录次数:">
             <el-input-number
               v-model="maxLogin"
-              @change="" :min="1" :max="10"
+              :min="1" :max="10"
               label="最大登陆次数"
               class="tx">
             </el-input-number>
@@ -42,7 +41,6 @@
           <el-form-item label="任务日志开关:">
             <el-switch
               v-model="taskLog"
-              @change="taChange()"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="开"
@@ -53,7 +51,6 @@
           <el-form-item label="用户操作日志:">
             <el-switch
               v-model="userLog"
-              @change="userChange()"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="开"
@@ -70,6 +67,7 @@
             确认提交</el-button>
 
         </el-form>
+
       </el-main>
 
       <el-header>
@@ -88,7 +86,9 @@
           </el-form-item>
 
         </el-form>
+
       </el-main>
+
 
     </el-container>
   </div>
@@ -106,7 +106,7 @@
       return {
         websiteName: '',
         maxLogin: null ,
-        cache: 0,
+        cache: '',
         options: [{
           value: 1,
           label: 'Redis'
@@ -116,44 +116,41 @@
         }],
         taskLog: false, //任务日志开关
         userLog: false, //用户日志开关
-        webClose: false  //网站开关
+        webClose: false,//网站开关
+        problem: 0,
       }
     },
     methods: {
       caChange: function() {
         console.log('缓存使用:' + this.cache)
       },
-      taChange: function() {
-        console.log('任务日志发生改变')
-      },//任务日志开关
-      userChange: function() {
-        console.log('用户操作日志发生改变')
-      },//管理员日志开关
-      onConfirm: function() {
-        console.log('网站重启')
-      },
+
       changeWebInfo(){
+
         var params = new URLSearchParams();
         params.append("websiteName",this.websiteName);
         params.append("maxLogin",this.maxLogin);
         params.append("cache",this.cache);
         params.append("taJudge",this.taskLog);
         params.append("userJudge",this.userLog);
+
         axios.post("api/webSiteSettings/setting",params,{
             headers:{
               token:localStorage.getItem("token"),
             }
-          })
-          .then(res => {
+          }).then(res => {
             var response = res.data;
             var retObj = eval(response.data);
-            if(res.data.ret == 1){
-				 this.$alert('设置成功', '提示', {
-				  confirmButtonText: '确定',
-				});
-			}
+          }).catch(err =>{
+          console.log("timeout");
+          console.log(err);
           })
-        console.log("提交成功");
+
+          this.$message({
+            type: 'success',
+            message: `提交成功`
+          })
+
       },
       getWebInfo(){
         axios.get("/api/webSiteSettings/setting",{
@@ -176,19 +173,38 @@
         })
       },
       webChange:function(){
-        this.webClose = !this.webClose;
-        var params = new URLSearchParams();
-        params.append("webClose",this.webClose);
-        axios.post("/api/webSiteSettings/shutDown",null,{
-          headers:{
-            token:localStorage.getItem("token"),
-          }
-        }).then(res => {
-          var response = res.data;
-          var retObj = eval(response.data);
-          console.log(retObj);
-        })
-        console.log("网站关闭");
+
+        this.$confirm('网站即将被关闭, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.webClosedialog = true;
+          this.webClose = !this.webClose;
+          var params = new URLSearchParams();
+          params.append("webClose",this.webClose);
+          axios.post("/api/webSiteSettings/shutDown",null,{
+            headers:{
+              token:localStorage.getItem("token"),
+            }
+          }).then(res => {
+            var response = res.data;
+            var retObj = eval(response.data);
+          }).catch(err =>{
+            console.log("timeout");
+            console.log(err);
+          })
+          this.$message({
+            type: 'success',
+            message: '网站已关闭!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '网站关闭已取消!'
+          });
+        });
+
       }
     },
     //网站开关

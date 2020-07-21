@@ -401,7 +401,9 @@
 							if (res.data.ret == 1) {
 								this.$alert('修改成功', '提示', {
 								         confirmButtonText: '确定',
-								       });
+							   }).then(() => {
+							  window.location.reload();
+							  });
 							} else{
 								this.$alert('权限不足', '提示', {
 								         confirmButtonText: '确定',

@@ -128,11 +128,17 @@
 			当系统在绑定模块完成绑定后，上级系统可以访问所有的子节点。在子节点系统的登录界面中，选择上级系统用户，选择用户所属的父节点。输入正确的账号和密码就可以登录。上级节点登录的用户
 			必须在自己所在节点中，拥有“登录子节点系统”权限。账号密码请参见<strong>“系统登陆”</strong>
 		</p>
+		
+		<h3>代码开源</h3>
+		<p>
+			D-Task源码完全开放，欢迎有志之士参与开发。<a href="https://github.com/kitman0000/D-Task"  target="view_window">点击查看</a>
+		</p>
 		</br>
 		</br>
 		<div align="right" style="margin-bottom: 200px;">
 			Drop Table开发团队 倾力呈上
 		</div>
+		
 	</div>
 	
 </template>

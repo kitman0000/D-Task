@@ -97,7 +97,7 @@ public class RemoteSubTaskImpl implements IRemoteSubTask{
         int nodeID = remoteSubTaskEntity.getNodeID();
 
         // 判断是否是管理员或者有权限
-        if(!remoteSubTaskDao.isUserAdmin(userID,nodeID,taskID) || !remoteSubTaskDao.isAllowUserChangeState(subTaskID)){
+        if(!remoteSubTaskDao.isUserAdmin(userID,nodeID,taskID) || !remoteSubTaskDao.isAllowUserChangeState(taskID)){
             return "";
         }
 

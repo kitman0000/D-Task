@@ -41,6 +41,7 @@ public class RemoteTaskImpl implements IRemoteTask {
         remoteTaskDao.updateRemoteTask(editRemoteTaskEntity.getId(),editRemoteTaskEntity.getName(),
                 editRemoteTaskEntity.getCreatorNode(),editRemoteTaskEntity.getCreator(),
                 editRemoteTaskEntity.isAllowedMemberChangeStatus());
+        remoteTaskDao.setRemoteTaskAdmin(editRemoteTaskEntity.getId(),editRemoteTaskEntity.getCreatorNode(),editRemoteTaskEntity.getCreator(),true);
         return "EDIT_SUCCESS";
     }
 

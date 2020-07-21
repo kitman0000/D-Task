@@ -433,6 +433,8 @@
 			},
 		},
 		beforeMount: function() {
+			localStorage.removeItem('taskDetail');
+			localStorage.removeItem('add');
 			this.getDefaultSubTask();
 			
 			const h = this.$createElement;

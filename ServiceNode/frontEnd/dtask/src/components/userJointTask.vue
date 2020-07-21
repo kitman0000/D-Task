@@ -9,26 +9,10 @@
 				<el-input placeholder="任务创建者名" v-model="taskCreatorName"  style="width: 15%; margin: 20px;"></el-input>
 				<el-button type="primary" @click="getTaskNumber(),handleTaskList()" icon="el-icon-search" style="margin-left: 10px;background: #24375E;border: 0px ;">搜索</el-button>
 				<el-table style="width: 100%;" :data="taskList" @row-click="userTaskDetail">
-					<el-table-column label="任务ID" prop="id" width="180">
+					<el-table-column label="任务名" prop="taskName">
 					</el-table-column>
-					<el-table-column label="任务名" prop="taskName" width="180">
+					<el-table-column label="任务创建者名" prop="creatorName">
 					</el-table-column>
-					<el-table-column label="任务创建者ID" prop="creatorID" width="180">
-					</el-table-column>
-					<el-table-column label="任务创建者名" prop="creatorName" width="180">
-					</el-table-column>
-					<el-table-column label="任务结点ID" prop="creatorNode" width="180">
-					</el-table-column>
-					<!-- <el-table-column label="删除" align="center" min-width="100">
-						<template slot-scope="scope">
-							<el-button type="text" @click="deleteTask(scope.row.id)">删除</el-button>
-						</template>
-					</el-table-column>
-					<el-table-column label="修改" align="center" min-width="100">
-						<template slot-scope="scope">
-							<el-button type="text" @click="changeTask(scope.row.id)">修改</el-button>
-						</template>
-					</el-table-column> -->
 				</el-table>
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
 				layout=" prev, pager, next, jumper" :total="taskNumber">

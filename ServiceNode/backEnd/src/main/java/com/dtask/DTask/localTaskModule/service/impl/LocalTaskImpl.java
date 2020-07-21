@@ -47,6 +47,7 @@ public class LocalTaskImpl implements ILocalTask {
     @Override
     public ResponseData editLocalTask(int id, String name, int creator, boolean allowedMemberChangeStatus) {
         localTaskDao.updateLocalTask(id,name,creator,allowedMemberChangeStatus);
+        localTaskDao.setLocalTaskAdmin(id,creator,true);
         return new ResponseData(1,"修改成功",null);
     }
 

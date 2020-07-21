@@ -17,6 +17,8 @@
 						<el-option v-for="item in creatorList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
+					</br>
+					<span style="color: #f00;font-size: 12px;" >修改此项后，原拥有者将会成为管理员</span>
 				</el-form-item>
 				<el-form-item label="是否允许用户修改:">
 					<el-switch style="margin-bottom: 10px !important;"

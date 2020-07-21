@@ -9,13 +9,9 @@
 				<el-input placeholder="任务创建者名" v-model="taskCreatorName"  style="width: 15%; margin: 20px;"></el-input>
 				<el-button type="primary" @click="getTaskNumber(),handleTaskList()" icon="el-icon-search" style="margin-left: 10px;background: #24375E;border: 0px ;">搜索</el-button>
 				<el-table style="width: 100%;" :data="taskList" @row-click="userTaskDetail">
-					<el-table-column label="任务ID" prop="id" width="180">
+					<el-table-column label="任务名" prop="name" >
 					</el-table-column>
-					<el-table-column label="任务名" prop="name" width="180">
-					</el-table-column>
-					<el-table-column label="任务创建者ID" prop="creator" width="180">
-					</el-table-column>
-					<el-table-column label="任务创建者名" prop="creatorName" width="180">
+					<el-table-column label="任务创建者名" prop="creatorName">
 					</el-table-column>
 					<el-table-column label="删除" align="center" min-width="100">
 						<template slot-scope="scope">
