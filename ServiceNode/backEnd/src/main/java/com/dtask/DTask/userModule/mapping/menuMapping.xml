@@ -7,7 +7,7 @@
         SELECT
         distinct pCategory
         FROM
-        dtask_db.tb_role_permission
+        tb_role_permission
         INNER JOIN
         tb_permission ON tb_role_permission.permissionID = tb_permission.id
         <where>
@@ -32,7 +32,7 @@
             pObject IN (SELECT
                     pObject
                 FROM
-                    dtask_db.tb_role_permission
+                    tb_role_permission
                         INNER JOIN
                     tb_permission ON tb_role_permission.permissionID = tb_permission.id
                 WHERE

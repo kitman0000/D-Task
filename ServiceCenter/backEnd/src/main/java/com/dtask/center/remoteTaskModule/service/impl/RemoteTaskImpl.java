@@ -38,10 +38,20 @@ public class RemoteTaskImpl implements IRemoteTask {
 
     @Override
     public String editRemoteTask(EditRemoteTaskEntity editRemoteTaskEntity) {
-        remoteTaskDao.updateRemoteTask(editRemoteTaskEntity.getId(),editRemoteTaskEntity.getName(),
-                editRemoteTaskEntity.getCreatorNode(),editRemoteTaskEntity.getCreator(),
-                editRemoteTaskEntity.isAllowedMemberChangeStatus());
-        remoteTaskDao.setRemoteTaskAdmin(editRemoteTaskEntity.getId(),editRemoteTaskEntity.getCreatorNode(),editRemoteTaskEntity.getCreator(),true);
+        int taskID = editRemoteTaskEntity.getId();
+        int nodeID = editRemoteTaskEntity.getCreatorNode();
+        int creator = editRemoteTaskEntity.getCreator();
+
+        remoteTaskDao.updateRemoteTask(taskID,editRemoteTaskEntity.getName(),
+                nodeID,creator, editRemoteTaskEntity.isAllowedMemberChangeStatus());
+
+        try {
+            remoteTaskDao.checkIsAdmin(taskID,nodeID,creator);
+        }catch (Exception ex){
+            remoteTaskDao.addTaskMember(taskID,nodeID,creator);
+        }
+
+        remoteTaskDao.setRemoteTaskAdmin(taskID,nodeID,creator,true);
         return "EDIT_SUCCESS";
     }
 

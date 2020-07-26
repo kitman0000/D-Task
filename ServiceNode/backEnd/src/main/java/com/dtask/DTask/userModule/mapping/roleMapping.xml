@@ -82,7 +82,7 @@
         SELECT
             tb_permission.id,pCategory,pObject,pOperate,pDescribe
         FROM
-            dtask_db.tb_role_permission
+            tb_role_permission
                 INNER JOIN
             tb_permission ON tb_role_permission.permissionID = tb_permission.id
         <where>

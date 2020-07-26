@@ -8,7 +8,7 @@
 		<p>是否紧急: {{isImportant}}</p>
 		 <div  v-if='attachment.length !=0'>
 		<label>附件：</label>
-		<p v-for="item1 in attachment"><a href="item1">{{item1}}</a></p>
+		<p v-for="item1 in attachment"><a :href="item1">{{item1}}</a></p>
 		</div>
 	</div>
 </template>
@@ -37,7 +37,7 @@
 				  })
 				  .then(res=>{
 						var response=res.data.data;
-						this.sender = response.sender;
+						//this.sender = response.sender;
 						this.receiver = response.receiver;
 						this.title = response.title;
 						this.content = response.content;
@@ -52,7 +52,7 @@
 						if(response.attachment.length != 0){
 							var a = response.attachment.split(',');
 							for(var i =0 ;i<a.length;i++){
-								this.attachment[i]=  window.location.protocol+"//"+window.location.host +"//"+a[i];
+								this.attachment[i]=  window.location.protocol+"//"+window.location.host +"/file/"+a[i];
 							}
 						}
 					})

@@ -124,7 +124,7 @@ public class BindingCl {
     public String setRoot(String msg){
         try {
             NodeEntity nodeEntity = (NodeEntity) JsonUtil.jsonToObject(msg, NodeEntity.class);
-            return JsonUtil.objectToJson(banding.setRoot(nodeEntity));
+            return banding.setRoot(nodeEntity);
         }
         catch (Exception ex){
             ex.printStackTrace();
