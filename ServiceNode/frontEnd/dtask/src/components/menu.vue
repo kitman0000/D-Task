@@ -10,7 +10,8 @@
 			  				<div  v-for="subMenu in menu.childMenuBoList" style="border-bottom:1px solid #5C75A7;">
 								<el-row>
 								  <el-col :span="4" :class="{'theSelectedMenu':theSelectedSubMenu==subMenu.id.toString(),'otherSubMenu':theSelectedSubMenu!=subMenu.id.toString()}" :index="subMenu.id.toString()" style="height: 50px;"></el-col>
-								  <el-col :span="20" style="height: 50px;background-color: #334E85;"><el-menu-item :index="subMenu.id.toString()" @click="test(subMenu)">
+								  <el-col :span="20" style="height: 50px;background-color: #334E85;">
+									  <el-menu-item :index="subMenu.id.toString()" class="cTitle" @click="test(subMenu)">
 										{{subMenu.name}}
 			  						</el-menu-item></el-col>
 								</el-row>						
@@ -99,5 +100,18 @@
 		top: 48% !important;
 		width: 10px !important;
 		height: 35px;
+	}
+	.cTitleBG :hover{
+		background: #dadff0  !important;
+		color: #000;
+	}
+	
+	.cTitleBG .is-active{
+		background: #a4aaca   !important;
+		color: #fff !important;
+	}
+	
+	.is-active{
+		color: #fff !important;
 	}
 </style>

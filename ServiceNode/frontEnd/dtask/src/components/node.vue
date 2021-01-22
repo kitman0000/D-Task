@@ -14,8 +14,7 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-button type="text" size="small" v-if="scope.row.id != nowNode" @click="askBinding(scope.row)">申请绑定</el-button>
-					
+					<el-button type="text" size="small" v-if="scope.row.id != nowNode" @click="askBinding(scope.row)">申请绑定</el-button>		
 				</template>
 			</el-table-column>
 		</el-table>
@@ -33,6 +32,10 @@
 				nowNode: 0,
 				change:true,
 				data4:[],
+				data: [],
+				max:0,
+				array:[[]],
+				TreeData:{},
 			}
 		},
 		methods: {
@@ -44,98 +47,56 @@
 					})
 					.then(res => {
 						var response = res.data.data;
-						this.datatest = eval(response);
-						console.log(this.datatest);
-						for (var i = 0; i < this.datatest.length; i++) {
-							var newNode;
-							if (this.datatest[i].inheritRp.split(':').length == 1) {
-								newNode = {
-									id: this.datatest[i].id,
-									label: this.datatest[i].nodeName,
-									children: []
-								};
-								this.data4.push(newNode)
-							} else if (this.datatest[i].inheritRp.split(':').length == 2) {
-								newNode = {
-									id: this.datatest[i].id,
-									label: this.datatest[i].nodeName,
-									children: []
-								};
-								this.data4[0].children.push(newNode);
-							} else if (this.datatest[i].inheritRp.split(':').length == 3) {
-								newNode = {
-									id: this.datatest[i].id,
-									label: this.datatest[i].nodeName,
-									children: []
-								};
-								for (var k = 0; k < this.data4[0].children.length + 1; k++) {
-									if (this.data4[0].children[k].id == this.datatest[i].inheritRp.split(':')[1]) {
-										this.data4[0].children[k].children.push(newNode);
-									}
-									if (k == this.data4[0].children.length) {
-										eNode.push(this.datatest[i]);
-									}
-								}
-							} else if (this.datatest[i].inheritRp.split(':').length == 4) {
-								newNode = {
-									id: this.datatest[i].id,
-									label: this.datatest[i].nodeName,
-									children: []
-								};
-								for (var k = 0; k < this.data4[0].children.length + 1; k++) {
-									for (var m = 0; m < this.data4[0].children[k].length + 1; m++) {
-										if (this.data4[0].children[k].id == this.datatest[i].inheritRp.split(':')[1] && this.data4[0].children[k].children[
-												m].id == this.datatest[i].inheritRp.split(':')[2]) {
-											this.data4[0].children[k].children[m].children.push(newNode);
-										}
-										if (m == this.data4[0].children[k].length) {
-											this.eNode.push(this.datatest[i]);
-										}
-									}
-									if (k == this.data4[0].children.length) {
-										this.eNode.push(this.datatest[i]);
-									}
-								}
+						this.data = eval(response);
+						this.TreeData.id = this.data[0].id;
+						this.TreeData.label = this.data[0].nodeName;
+						this.TreeData.children = [];
+						var tmp = 1;
+						this.array[tmp-1] = new Array();
+						for(var i = 0;i<this.data.length;i++){
+							if(this.data[i].inheritRp.split(":").length == tmp){
+								this.array[tmp-1].push(this.data[i].id);
+							}
+							else{
+								tmp = this.data[i].inheritRp.split(":").length;
+								this.array[tmp-1] = new Array();
+								this.array[tmp-1].push(this.data[i].id);
 							}
 						}
-						for (var i = 0; i < this.eNode.length; i++) {
-							if (this.eNode[i].inheritRp.split(':').length == 3) {
-								var newNode = {
-									id: this.eNode[i].id,
-									label: this.eNode[i].nodeName,
-									children: []
-								};
-								for (var k = 0; k < this.data4[0].children.length + 1; k++) {
-									if (this.data4[0].children[k].id == this.eNode[i].inheritRp.split(':')[1]) {
-										this.data4[0].children[k].children.push(newNode);
-									}
-								}
-							} else if (this.eNode[i].inheritRp.split(':').length == 4) {
-								newNode = {
-									id: this.eNode[i].id,
-									label: this.eNode[i].nodeName,
-									children: []
-								};
-								for (var k = 0; k < this.data4[0].children.length + 1; k++) {
-									for (var m = 0; m < this.data4[0].children[k].length + 1; m++) {
-										if (this.data4[0].children[k].id == this.eNode[i].inheritRp.split(':')[1] && this.data4[0].children[k].children[
-												m].id == this.datatest[i].inheritRp.split(':')[2]) {
-											this.data4[0].children[k].children[m].children.push(newNode);
-										}
-										if (m == this.data4[0].children[k].length) {
-											this.eNode.push(this.eNode[i]);
-										}
-									}
-									if (k == this.data4[0].children.length) {
-										this.eNode.push(this.eNode[i]);
-									}
-								}
+						
+						for(var i = 0;i<this.data.length;i++){
+							var newNode = {
+								id: this.data[i].id,
+								label: this.data[i].nodeName,
+								children: []
+							};
+							if(this.data[i].inheritRp.split(":").length == 2){ //根节点的子节点直接挂载
+								this.TreeData.children.push(newNode);
+							}
+							else{
+								this.pushNode(this.data[i].inheritRp.split(":"), 1, this.data[i].inheritRp.split(":").length-1, newNode, this.TreeData.children); 
 							}
 						}
+						console.log(this.array);
 					})
 					.catch(err => {
 
 					});
+			},
+			pushNode(arr, point, size, newNode, Tree){
+				if(point == size){
+					Tree.push(newNode);
+				}
+				else{
+					for(var i = 0;i<this.array[point].length;i++){
+						console.log(Tree);
+						if(this.array[point][i] == arr[point]){	
+							this.pushNode(arr, point+1, size, newNode, Tree[i].children);
+							break;
+						}
+					}
+				}
+				
 			},
 			askBinding(index) {
 				var id = new URLSearchParams();
@@ -253,17 +214,7 @@
 			changit(){
 				this.change = !this.change;
 			},
-			renderContent(h, { node, data, store }) {
-			        return (
-			          <span style=" flex:1;align-items: center;display:flex; justify-content: space-between; font-size: 14px; padding-right: 8px;">
-			            <span>
-			              <span>{node.label}</span>
-			            </span>
-			            <span>
-			              <el-button style="font-size: 12px;" type="text" on-click={ () => this.askBinding(data) }>申请绑定</el-button>
-			            </span>
-			          </span>);
-			      }
+			
 		},
 		beforeMount: function() {
 			this.getAllNode();
