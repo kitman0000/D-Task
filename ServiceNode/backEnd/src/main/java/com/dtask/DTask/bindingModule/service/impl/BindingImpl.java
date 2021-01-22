@@ -1,9 +1,9 @@
 package com.dtask.DTask.bindingModule.service.impl;
 
+import com.MQClouder.EncryptRabbitSender;
 import com.dtask.DTask.bindingModule.service.IBinding;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
-import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.CacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

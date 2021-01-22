@@ -1,5 +1,6 @@
 package com.dtask.DTask.accountModule.controller;
 
+import com.MQClouder.MessageReceiver;
 import com.dtask.DTask.accountModule.entity.RemoteLoginEntity;
 import com.dtask.DTask.accountModule.service.IAccount;
 import com.dtask.common.ResponseData;
@@ -49,6 +50,7 @@ public class AccountCl {
     /**
      * 处理消息队列发送至本节点的登录请求，即本节点用户申请登录至其他节点
      */
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.account.login." + "#{${nodeName}}"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -62,7 +64,6 @@ public class AccountCl {
             ex.printStackTrace();
             return "SYS_FAILED";
         }
-
     }
 
 }

@@ -1,10 +1,13 @@
-package com.dtask.common.util;
+package com.MQClouder;
 
-import com.dtask.common.config.RabbitSender;
+import com.util.AESUtil;
+import com.util.EncodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Created by zhong on 2021-1-11.
@@ -15,6 +18,12 @@ public class EncryptRabbitSender extends RabbitSender {
 
     @Value("${secretKey}")
     private String secretKey;
+
+    @PostConstruct
+    public void init() {
+        rabbitTemplate.setConfirmCallback(this);
+        rabbitTemplate.setReturnCallback(this);
+    }
 
     public String encryptSend(String routingKey,String msg){
         byte[] encryptAES = AESUtil.encryptAES(msg, secretKey);

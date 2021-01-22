@@ -1,5 +1,7 @@
-package com.dtask.common.config;
+package com.MQClouder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -14,38 +16,34 @@ import java.util.UUID;
  * Created by zhong on 2020-5-12.
  */
 
-
+@Component
 public class RabbitSender implements RabbitTemplate.ConfirmCallback, ReturnCallback{
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
 
-    @PostConstruct
-    public void init() {
-        rabbitTemplate.setConfirmCallback(this);
-        rabbitTemplate.setReturnCallback(this);
-    }
+    protected String exchangeName = "topicExchange";
+
+    private Logger logger = LoggerFactory.getLogger(RabbitSender.class);
+
+    @Autowired
+    protected RabbitTemplate rabbitTemplate;
 
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
         if (ack) {
-            System.out.println("消息发送成功:" + correlationData);
+            logger.info("Message send success:",correlationData);
         } else {
-            System.out.println("消息发送失败:" + cause);
+            logger.error("Message send failed:",correlationData,cause);
         }
 
     }
 
     @Override
     public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
-        System.out.println(message.getMessageProperties().getMessageId() + " 发送失败");
-
+        logger.error("Message send failed:",message.getBody(),replyCode);
     }
 
-    //发送消息，不需要实现任何接口，供外部调用。
     protected String send(String routingKey,String msg){
         CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString());
-        String response = rabbitTemplate.convertSendAndReceive("topicExchange", routingKey, msg, correlationId).toString();
-        return response;
+        return rabbitTemplate.convertSendAndReceive("topicExchange", routingKey, msg, correlationId).toString();
     }
 
     protected void sendWithoutResponse(String routingKey,String msg){

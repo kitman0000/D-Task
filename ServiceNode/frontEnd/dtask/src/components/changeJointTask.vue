@@ -12,8 +12,8 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="人员:">
-					<el-select v-model="creatorName" placeholder="请选择">
+				<el-form-item label="拥有者:">
+					<el-select v-model="creatorID" placeholder="请选择">
 						<el-option v-for="item in creatorList" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>

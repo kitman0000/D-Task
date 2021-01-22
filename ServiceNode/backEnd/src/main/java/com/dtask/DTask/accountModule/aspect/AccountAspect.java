@@ -1,5 +1,6 @@
 package com.dtask.DTask.accountModule.aspect;
 
+import com.MQClouder.MessageEncoder;
 import com.dtask.common.UserCommon;
 import com.dtask.common.util.AESUtil;
 import com.dtask.common.util.EncodeUtil;
@@ -42,40 +43,6 @@ public class AccountAspect {
             logger.info("未登录用户执行:" + methodName + "   参数:" + args);
         }
     }
-
-    // 需要检查的Url
-    private static HashSet<String> mqUrl = new HashSet<>();
-    static {
-        mqUrl.add("mqRemoteLogin");
-    }
-
-    @Around("accountPointCut()")
-    public Object encryptMsg(ProceedingJoinPoint pjp){
-        try {
-            if(!mqUrl.contains(pjp.getSignature().getName())){
-                return pjp.proceed();
-            }
-
-            Object[] objects = pjp.getArgs();
-
-            if(objects.length == 1) {
-                // 解密数据
-                byte[] bytes = EncodeUtil.decodeBase64ToByte(objects[0].toString());
-                objects[0] = new String(AESUtil.decryptAES(bytes, secretKey));
-            }
-
-            // 执行
-            String result = pjp.proceed(objects).toString();
-
-            // 加密返回
-            byte[] encryptAES = AESUtil.encryptAES(result, secretKey);
-            return EncodeUtil.encodeBase64(encryptAES);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-            return null;
-        }
-    }
-
 
     @AfterReturning(value = "accountPointCut()",returning = "keys")
     public void doAfterPointCut(JoinPoint joinPoint, Object keys){

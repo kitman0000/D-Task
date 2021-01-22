@@ -1,11 +1,11 @@
 package com.dtask.DTask.remoteTaskModule.service.impl;
 
+import com.MQClouder.EncryptRabbitSender;
 import com.dtask.DTask.remoteTaskModule.entity.RemoteSubTaskEntity;
 import com.dtask.DTask.remoteTaskModule.service.IRemoteSubTask;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
-import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

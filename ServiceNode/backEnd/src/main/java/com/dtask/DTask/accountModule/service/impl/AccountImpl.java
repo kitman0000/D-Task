@@ -1,5 +1,6 @@
 package com.dtask.DTask.accountModule.service.impl;
 
+import com.MQClouder.EncryptRabbitSender;
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.entity.RemoteLoginEntity;
 import com.dtask.DTask.accountModule.service.IAccount;
@@ -11,7 +12,6 @@ import com.dtask.common.AuthFilter;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
-import com.dtask.common.config.RabbitSender;
 import com.dtask.common.config.WebsiteConfig;
 import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.JsonUtil;
@@ -36,7 +36,7 @@ public class AccountImpl implements IAccount{
     private CacheUtil cacheUtil;
 
     @Autowired
-    private RabbitSender rabbitSender;
+    private EncryptRabbitSender rabbitSender;
 
     @Autowired
     private NodeCommon nodeCommon;
@@ -147,7 +147,7 @@ public class AccountImpl implements IAccount{
     @Override
     public ResponseData getParentNodes() {
         int nodeID = nodeCommon.getNodeID();
-        String res = rabbitSender.send("dtask.account.getParentNodes",String.valueOf(nodeID));
+        String res = rabbitSender.encryptSend("dtask.account.getParentNodes",String.valueOf(nodeID));
 
         return new ResponseData(1,"查询成功",res);
     }
@@ -158,7 +158,7 @@ public class AccountImpl implements IAccount{
         remoteLoginEntity.setPwd(UserCommon.encodePwd(remoteLoginEntity.getPwd()));
         remoteLoginEntity.setLoginNodeID(nodeCommon.getNodeID());
 
-        String res =  rabbitSender.send("dtask.account.remoteLogin", JsonUtil.objectToJson(remoteLoginEntity));
+        String res =  rabbitSender.encryptSend("dtask.account.remoteLogin", JsonUtil.objectToJson(remoteLoginEntity));
 
         switch (res){
             case "NONE_ALLOWED_ACCOUNT":{

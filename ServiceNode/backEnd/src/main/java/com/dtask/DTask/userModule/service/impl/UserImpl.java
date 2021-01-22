@@ -1,5 +1,6 @@
 package com.dtask.DTask.userModule.service.impl;
 
+import com.MQClouder.EncryptRabbitSender;
 import com.dtask.DTask.userModule.bo.SyncUserInfoBo;
 import com.dtask.DTask.userModule.bo.UserDetailBo;
 import com.dtask.DTask.userModule.bo.UserListBo;
@@ -10,7 +11,6 @@ import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
-import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.DateUtil;
 import com.dtask.common.util.JsonUtil;
