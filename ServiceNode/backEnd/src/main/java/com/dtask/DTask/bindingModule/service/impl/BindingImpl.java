@@ -3,7 +3,7 @@ package com.dtask.DTask.bindingModule.service.impl;
 import com.dtask.DTask.bindingModule.service.IBinding;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
-import com.dtask.common.config.RabbitSender;
+import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.CacheUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @PropertySource(value="classpath:application.properties",encoding = "utf-8")
 public class BindingImpl implements IBinding{
     @Autowired
-    RabbitSender rabbitSender;
+    EncryptRabbitSender rabbitSender;
 
     @Autowired
     CacheUtil cacheUtil;
@@ -30,7 +30,7 @@ public class BindingImpl implements IBinding{
 
     @Override
     public ResponseData getAllNodes() {
-        String res = rabbitSender.send("dtask.getAllNodes","");
+        String res = rabbitSender.encryptSend("dtask.getAllNodes","");
         return new ResponseData(1,"查询成功",res);
     }
 
@@ -45,7 +45,7 @@ public class BindingImpl implements IBinding{
             return new ResponseData(3,"BINDING_YOURSELF",null);
         }
 
-        String res = rabbitSender.send("dtask.binding.ask","{\"nodeID\":"+nodeID+",\"requestBindID\":"+requestBindID+"}");
+        String res = rabbitSender.encryptSend("dtask.binding.ask","{\"nodeID\":"+nodeID+",\"requestBindID\":"+requestBindID+"}");
         if(res.equals("BIND_SUCCESS")){
             return new ResponseData(1,"申请成功",null);
         }else {
@@ -59,7 +59,7 @@ public class BindingImpl implements IBinding{
         if(nodeID == -1){
             return new ResponseData(2,"SYS_FAILED",null);
         }
-        String res = rabbitSender.send("dtask.binding.getBindRequest","{\"nodeID\":"+nodeID+"}");
+        String res = rabbitSender.encryptSend("dtask.binding.getBindRequest","{\"nodeID\":"+nodeID+"}");
         return new ResponseData(1,"查询成功",res);
     }
 
@@ -69,7 +69,7 @@ public class BindingImpl implements IBinding{
         if(nodeID == -1){
             return new ResponseData(2,"SYS_FAILED",null);
         }
-        String res = rabbitSender.send("dtask.binding.handle","{\"requestID\":"+request+",\"accept\":"+accept+",\"nodeID\":" + nodeID + "}");
+        String res = rabbitSender.encryptSend("dtask.binding.handle","{\"requestID\":"+request+",\"accept\":"+accept+",\"nodeID\":" + nodeID + "}");
         return new ResponseData(1,res,null);
     }
 
@@ -79,7 +79,7 @@ public class BindingImpl implements IBinding{
         if(nodeID == -1){
             return new ResponseData(2,"SYS_FAILED",null);
         }
-        String res = rabbitSender.send("dtask.binding.setRoot","{\"nodeID\":"+nodeID+"}");
+        String res = rabbitSender.encryptSend("dtask.binding.setRoot","{\"nodeID\":"+nodeID+"}");
         if(res.equals("SET_SUCCESS")){
             return new ResponseData(1,"设置成功",null);
         }else if(res.equals("ROOT_EXIST")){
@@ -97,7 +97,7 @@ public class BindingImpl implements IBinding{
             return new ResponseData(2,"SYS_FAILED",null);
         }
 
-        String res = rabbitSender.send("dtask.binding.unbind","{\"nodeID\":\""+nodeID+"\"}");
+        String res = rabbitSender.encryptSend("dtask.binding.unbind","{\"nodeID\":\""+nodeID+"\"}");
 
         if(res.equals("UNBIND_SUCCESS")){
             return new ResponseData(1,"解绑成功",null);
@@ -122,12 +122,12 @@ public class BindingImpl implements IBinding{
     @Override
     public void addNode() {
         String sendJsonMsg = "{\"nodeName\":"+nodeName+"}";
-        rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+        rabbitSender.encryptSendWithoutResponse("dtask.addNode",sendJsonMsg);
     }
 
     @Override
     public void getNodeID() {
-        String nodeID = rabbitSender.send("dtask.getNodeID","{\"nodeName\":" + nodeName + "}");
+        String nodeID = rabbitSender.encryptSend("dtask.getNodeID","{\"nodeName\":" + nodeName + "}");
         cacheUtil.write("nodeID",nodeID);
     }
 }

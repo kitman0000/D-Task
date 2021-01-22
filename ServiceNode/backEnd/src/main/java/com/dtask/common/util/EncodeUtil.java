@@ -1,7 +1,11 @@
 package com.dtask.common.util;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
 import java.util.Base64;
 
 /**
@@ -30,6 +34,37 @@ public class EncodeUtil {
         {
             return null;
         }
+    }
+
+    /**
+     * BASE64 加密
+     *
+     * @param cleartext 明文
+     * @return 密文
+     */
+    public static String encodeBase64(byte[] cleartext) {
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+        String cipherText = base64Encoder.encode(cleartext);
+        return cipherText.replace("\r","").replace("\n","");
+
+    }
+
+    /**
+     * BASE64 解密
+     *
+     * @param cipherText 密文
+     * @return 明文
+     */
+    public static byte[] decodeBase64ToByte(String cipherText) {
+        try {
+            BASE64Decoder base64Decoder = new BASE64Decoder();
+            byte[] cipherTextBytes = base64Decoder.decodeBuffer(cipherText);
+            return cipherTextBytes;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 解密错误返回 null
+        return null;
     }
 
 }

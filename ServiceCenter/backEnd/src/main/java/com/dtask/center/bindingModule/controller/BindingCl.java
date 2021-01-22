@@ -5,7 +5,6 @@ import com.dtask.center.bindingModule.entity.AskBindingEntity;
 import com.dtask.center.bindingModule.entity.HandleBindingEntity;
 import com.dtask.center.bindingModule.entity.NodeEntity;
 import com.dtask.center.bindingModule.service.IBinding;
-import com.dtask.common.config.RabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +28,6 @@ public class BindingCl {
     @Autowired
     IBinding banding;
 
-    @Autowired
-    RabbitSender rabbitSender;
 
     @RabbitListener(queues = "dtask.binding.ask")
     public String askBanding(String msg){

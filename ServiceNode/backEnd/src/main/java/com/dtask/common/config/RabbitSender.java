@@ -14,7 +14,7 @@ import java.util.UUID;
  * Created by zhong on 2020-5-12.
  */
 
-@Component
+
 public class RabbitSender implements RabbitTemplate.ConfirmCallback, ReturnCallback{
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -42,22 +42,14 @@ public class RabbitSender implements RabbitTemplate.ConfirmCallback, ReturnCallb
     }
 
     //发送消息，不需要实现任何接口，供外部调用。
-    public String send(String routingKey,String msg){
-
+    protected String send(String routingKey,String msg){
         CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString());
-
-        System.out.println("开始发送消息 : " + msg.toLowerCase());
         String response = rabbitTemplate.convertSendAndReceive("topicExchange", routingKey, msg, correlationId).toString();
-        System.out.println("结束发送消息 : " + msg.toLowerCase());
-        System.out.println("消费者响应 : " + response + " 消息处理完成");
-
         return response;
     }
 
-    public void sendWithoutResponse(String routingKey,String msg){
+    protected void sendWithoutResponse(String routingKey,String msg){
         CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString());
-
-        System.out.println("开始发送消息 : " + msg.toLowerCase());
         rabbitTemplate.convertAndSend(routingKey,msg);
     }
 }

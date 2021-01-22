@@ -5,7 +5,7 @@ import com.dtask.DTask.remoteTaskModule.service.IRemoteSubTask;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
-import com.dtask.common.config.RabbitSender;
+import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,11 @@ public class RemoteSubTaskImpl implements IRemoteSubTask {
     NodeCommon nodeCommon;
 
     @Autowired
-    RabbitSender rabbitSender;
+    EncryptRabbitSender rabbitSender;
 
     @Override
     public ResponseData addRemoteSubTask(RemoteSubTaskEntity remoteSubTaskEntity) {
-        String res = rabbitSender.send("dtask.remoteSubTask.addRemoteSubTask",
+        String res = rabbitSender.encryptSend("dtask.remoteSubTask.addRemoteSubTask",
                 JsonUtil.objectToJson(remoteSubTaskEntity));
 
         return handleResponse(res,false);
@@ -32,7 +32,7 @@ public class RemoteSubTaskImpl implements IRemoteSubTask {
 
     @Override
     public ResponseData editRemoteSubTask(RemoteSubTaskEntity remoteSubTaskEntity) {
-        String res = rabbitSender.send("dtask.remoteSubTask.editRemoteSubTask",
+        String res = rabbitSender.encryptSend("dtask.remoteSubTask.editRemoteSubTask",
                 JsonUtil.objectToJson(remoteSubTaskEntity));
 
         return handleResponse(res,false);
@@ -40,7 +40,7 @@ public class RemoteSubTaskImpl implements IRemoteSubTask {
 
     @Override
     public ResponseData deleteRemoteSubTask(int[] id) {
-        String res = rabbitSender.send("dtask.remoteSubTask.deleteRemoteSubTask",
+        String res = rabbitSender.encryptSend("dtask.remoteSubTask.deleteRemoteSubTask",
                 JsonUtil.objectToJson(id));
 
         return handleResponse(res,false);
@@ -48,7 +48,7 @@ public class RemoteSubTaskImpl implements IRemoteSubTask {
 
     @Override
     public ResponseData getRemoteSubTaskNumber(RemoteSubTaskEntity remoteSubTaskEntity) {
-        String res = rabbitSender.send("dtask.remoteSubTask.getRemoteSubTaskNumber",
+        String res = rabbitSender.encryptSend("dtask.remoteSubTask.getRemoteSubTaskNumber",
                 JsonUtil.objectToJson(remoteSubTaskEntity));
 
         return handleResponse(res,true);
@@ -56,7 +56,7 @@ public class RemoteSubTaskImpl implements IRemoteSubTask {
 
     @Override
     public ResponseData getRemoteSubTaskList(RemoteSubTaskEntity remoteSubTaskEntity) {
-        String res = rabbitSender.send("dtask.remoteSubTask.getRemoteSubTaskList",
+        String res = rabbitSender.encryptSend("dtask.remoteSubTask.getRemoteSubTaskList",
                 JsonUtil.objectToJson(remoteSubTaskEntity));
 
         return handleResponse(res,true);
@@ -69,7 +69,7 @@ public class RemoteSubTaskImpl implements IRemoteSubTask {
         remoteSubTaskEntity.setNodeID(nodeID);
         remoteSubTaskEntity.setUserID(userID);
 
-        String res = rabbitSender.send("dtask.remoteSubTask.editRemoteSubTaskStatus",
+        String res = rabbitSender.encryptSend("dtask.remoteSubTask.editRemoteSubTaskStatus",
                 JsonUtil.objectToJson(remoteSubTaskEntity));
 
         return handleResponse(res,false);

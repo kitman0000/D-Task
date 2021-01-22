@@ -5,7 +5,7 @@ import com.dtask.DTask.remoteTaskModule.service.IRemoteTask;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
-import com.dtask.common.config.RabbitSender;
+import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RemoteTaskImpl implements IRemoteTask{
     @Autowired
-    RabbitSender rabbitSender;
+    EncryptRabbitSender rabbitSender;
 
     @Autowired
     NodeCommon nodeCommon;
@@ -26,7 +26,7 @@ public class RemoteTaskImpl implements IRemoteTask{
         int userID = UserCommon.getUserBo().getUserID();
         int nodeID = nodeCommon.getNodeID();
 
-        String res = rabbitSender.send("dtask.remoteTask.addRemoteTask",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.addRemoteTask",
                 "{\"name\":\""+name+"\",\"userID\":"+userID+",\"nodeID\":"+nodeID+"}");
 
         return new ResponseData(1,res,null); // 成功res = ADD_SUCCESS
@@ -36,7 +36,7 @@ public class RemoteTaskImpl implements IRemoteTask{
     public ResponseData editRemoteTask(int id, String name, int creator, boolean allowedMemberChangeStatus, int creatorNodeID) {
         int userID = UserCommon.getUserBo().getUserID();
 
-        String res = rabbitSender.send("dtask.remoteTask.editRemoteTask",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.editRemoteTask",
                 "{\"id\":"+id+",\"name\":\""+name+"\",\"creator\":"+creator+
                         ",\"allowedMemberChangeStatus\":"+allowedMemberChangeStatus+",\"userID\":"+userID+",\"creatorNode\":"+creatorNodeID+"}");
 
@@ -45,20 +45,20 @@ public class RemoteTaskImpl implements IRemoteTask{
 
     @Override
     public ResponseData getTaskDetail(int taskID) {
-        String res = rabbitSender.send("dtask.remoteTask.getTaskDetail",String.valueOf(taskID));
+        String res = rabbitSender.encryptSend("dtask.remoteTask.getTaskDetail",String.valueOf(taskID));
         return new ResponseData(1,"查询成功",res);
     }
 
     @Override
     public ResponseData deleteRemoteTask(int id) {
-        String res = rabbitSender.send("dtask.remoteTask.deleteRemoteTask","{\"id\":"+id+"}");
+        String res = rabbitSender.encryptSend("dtask.remoteTask.deleteRemoteTask","{\"id\":"+id+"}");
 
         return new ResponseData(1,res,null); // 成功 res = DELETE_SUCCESS
     }
 
     @Override
     public ResponseData getRemoteTaskNumber(RemoteTaskSearchEntity remoteTaskSearchEntity) {
-        String res = rabbitSender.send("dtask.remoteTask.getRemoteTaskNumber",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.getRemoteTaskNumber",
                 "{\"taskName\":\""+remoteTaskSearchEntity.getTaskName()+"\"}");
 
         return new ResponseData(1,"查询成功",res); // 返回页数
@@ -67,7 +67,7 @@ public class RemoteTaskImpl implements IRemoteTask{
     @Override
     public ResponseData getRemoteTaskList(RemoteTaskSearchEntity remoteTaskSearchEntity) {
 
-        String res = rabbitSender.send("dtask.remoteTask.getRemoteTaskList",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.getRemoteTaskList",
                JsonUtil.objectToJson(remoteTaskSearchEntity));
 
         return new ResponseData(1,"查询成功",res); // 返回任务列表
@@ -78,7 +78,7 @@ public class RemoteTaskImpl implements IRemoteTask{
         int nodeID = nodeCommon.getNodeID();
         int userID = UserCommon.getUserBo().getUserID();
 
-        String res = rabbitSender.send("dtask.remoteTask.addRemoteTaskMember",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.addRemoteTaskMember",
                 "{\"taskID\":"+taskID+",\"nodeID\":"+nodeID+",\"userID\":"+userID
                         +",\"newUserID\":"+newUserID+",\"newUserNodeID\":"+newUserNodeID+"}");
 
@@ -93,7 +93,7 @@ public class RemoteTaskImpl implements IRemoteTask{
         int nodeID = nodeCommon.getNodeID();
         int userID = UserCommon.getUserBo().getUserID();
 
-        String res = rabbitSender.send("dtask.remoteTask.removeRemoteTaskMember",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.removeRemoteTaskMember",
                 "{\"taskID\":"+taskID+",\"userID\":"+userID+",\"nodeID\":"+nodeID
                         +",\"removeUserID\":"+removeUserID+",\"removeUserNodeID\":"+removeUserNodeID+"}");
         if(res.equals("DELETE_SUCCESS")){
@@ -105,7 +105,7 @@ public class RemoteTaskImpl implements IRemoteTask{
 
     @Override
     public ResponseData getRemoteTaskMember(int taskID) {
-            String res = rabbitSender.send("dtask.remoteTask.getRemoteMember",
+            String res = rabbitSender.encryptSend("dtask.remoteTask.getRemoteMember",
                 "{\"taskID\":"+taskID+"}");
         return new ResponseData(1,"查询成功",res);
     }
@@ -115,7 +115,7 @@ public class RemoteTaskImpl implements IRemoteTask{
         int nodeID = nodeCommon.getNodeID();
         int userID = UserCommon.getUserBo().getUserID();
 
-        String res = rabbitSender.send("dtask.remoteTask.toggleTaskAdmin",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.toggleTaskAdmin",
                 "{\"taskID\":"+taskID+",\"userID\":"+userID+",\"nodeID\":"+nodeID
                         +",\"isAdmin\":"+isAdmin+",\"toggleUserID\":"+toggleUserID+",\"toggleUserNodeID\":"+ toggleUserNodeID +"}");
 
@@ -131,7 +131,7 @@ public class RemoteTaskImpl implements IRemoteTask{
         int userID = UserCommon.getUserBo().getUserID();
         int nodeID = nodeCommon.getNodeID();
 
-        String res = rabbitSender.send("dtask.remoteTask.getUserTaskNumber",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.getUserTaskNumber",
                 "{\"taskName\":\""+remoteTaskSearchEntity.getTaskName()+"\",\"userID\":"+userID+",\"nodeID\":"+nodeID+"}");
 
         return new ResponseData(1,"查询成功",res);
@@ -145,7 +145,7 @@ public class RemoteTaskImpl implements IRemoteTask{
         remoteTaskSearchEntity.setUserID(userID);
         remoteTaskSearchEntity.setNodeID(nodeID);
 
-        String res = rabbitSender.send("dtask.remoteTask.getUserTaskList",
+        String res = rabbitSender.encryptSend("dtask.remoteTask.getUserTaskList",
                 JsonUtil.objectToJson(remoteTaskSearchEntity));
 
         return new ResponseData(1,"查询成功",res);
@@ -155,13 +155,13 @@ public class RemoteTaskImpl implements IRemoteTask{
     public ResponseData getTaskUserRole(int taskID) {
         int userID = UserCommon.getUserBo().getUserID();
         int nodeID = nodeCommon.getNodeID();
-        String res = rabbitSender.send("dtask.remoteTask.getTaskUserRole","{\"userID\":"+userID+",\"nodeID\":"+nodeID+",\"taskID\":"+taskID+"}");
+        String res = rabbitSender.encryptSend("dtask.remoteTask.getTaskUserRole","{\"userID\":"+userID+",\"nodeID\":"+nodeID+",\"taskID\":"+taskID+"}");
         return new ResponseData(1,"查询成功",res);
     }
 
     @Override
     public ResponseData getAllowUserChangeStatus(int taskID) {
-        String res = rabbitSender.send("dtask.remoteTask.getAllowUserChangeStatus",String.valueOf(taskID));
+        String res = rabbitSender.encryptSend("dtask.remoteTask.getAllowUserChangeStatus",String.valueOf(taskID));
         return new ResponseData(1,"查询成功",res);
     }
 }

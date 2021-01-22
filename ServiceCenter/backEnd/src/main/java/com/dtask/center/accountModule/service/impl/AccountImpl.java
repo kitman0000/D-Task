@@ -4,7 +4,7 @@ import com.dtask.center.accountModule.entity.RemoteLoginEntity;
 import com.dtask.center.accountModule.service.IAccount;
 import com.dtask.center.bindingModule.bo.NodeBo;
 import com.dtask.center.bindingModule.dao.BindingDao;
-import com.dtask.common.config.RabbitSender;
+import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.List;
 public class AccountImpl implements IAccount {
 
     @Autowired
-    RabbitSender rabbitSender;
+    private EncryptRabbitSender rabbitSender;
 
     @Autowired
     BindingDao bindingDao;
@@ -46,7 +46,7 @@ public class AccountImpl implements IAccount {
 
         // 从接受的消息中，获取节点名称，并向routingKey 发送访问登录，并返回给原节点
         String nodeName = bindingDao.getNodeName(remoteLoginEntity.getUserNodeID());
-        return rabbitSender.send("dtask.account.login." + nodeName,msg);
+        return rabbitSender.encryptSend("dtask.account.login." + nodeName,msg);
     }
 
     @Override

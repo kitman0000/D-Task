@@ -81,10 +81,16 @@ public class SettingImpl implements ISetting ,ApplicationRunner{
         int cacheMode = settingDao.getSettings().getCache();
         cacheUtil.setCacheMode(cacheMode);
 
-        // 获取节点ID
-        binding.addNode();
-        Thread.sleep(3000);
-        binding.getNodeID();
+        try {
+            // 获取节点ID
+            binding.addNode();
+            Thread.sleep(3000);
+            binding.getNodeID();
+        }catch (Exception ex){
+            // 不能连接到中心服务器，进入单机模式
+            logger.warn("Can't connect to D-task Center Service,running in single mode.");
+        }
+
     }
 
 

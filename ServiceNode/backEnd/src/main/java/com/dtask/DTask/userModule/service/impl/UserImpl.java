@@ -10,7 +10,7 @@ import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
-import com.dtask.common.config.RabbitSender;
+import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.DateUtil;
 import com.dtask.common.util.JsonUtil;
@@ -33,7 +33,7 @@ public class UserImpl implements IUser {
     private CacheUtil cacheUtil;
 
     @Autowired
-    private RabbitSender rabbitSender;
+    private EncryptRabbitSender rabbitSender;
 
     @Autowired
     private NodeCommon nodeCommon;
@@ -127,7 +127,7 @@ public class UserImpl implements IUser {
         syncUserInfoBo.setNodeID(nodeID);
         syncUserInfoBo.setUserListBo(userList);
         String msg = JsonUtil.objectToJson(syncUserInfoBo);
-        rabbitSender.send("dtask.syncUserInfo",msg);
+        rabbitSender.encryptSend("dtask.syncUserInfo",msg);
 
         lastUpdateTimeStr = DateUtil.getTimestamp();
         cacheUtil.write("userInfo.lastUpdateTime",lastUpdateTimeStr);
@@ -136,7 +136,7 @@ public class UserImpl implements IUser {
 
     @Override
     public ResponseData getRemoteUser(int nodeID) {
-        String res = rabbitSender.send("dtask.user.remote",String.valueOf(nodeID));
+        String res = rabbitSender.encryptSend("dtask.user.remote",String.valueOf(nodeID));
         return new ResponseData(1,"查询成功",res);
     }
 }
