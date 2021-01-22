@@ -3,7 +3,7 @@
 		<el-button type="primary" @click="changit()"  style="background: #24375E;border: 0px ;margin-left: 10px;">展现形式变化</el-button>
 		<el-button type="primary"  @click="setRoot()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">将自身设为根节点</el-button>
 		<el-button type="primary"  @click="unbind()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">解绑自身</el-button>
-		<el-table :data="datatest" tooltip-effect="dark" style="width: 100%" v-if="!change">
+		<el-table :data="data" tooltip-effect="dark" style="width: 100%" v-if="!change">
 			<el-table-column prop="id" label="id" width="120px">
 			</el-table-column>
 			<el-table-column prop="nodeName" label="节点名">
@@ -18,7 +18,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<vue2-org-tree v-if="change" :data="TreeData"/>
+		<vue2-org-tree v-if="change" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" :data="TreeData"/>
 	</div>
 </template>
 
@@ -27,10 +27,8 @@
 	export default {
 		data() {
 			return {
-				datatest: [],
 				nowNode: 0,
 				change:true,
-				data4:[],
 				data: [],
 				max:0,
 				array:[[]],
@@ -45,6 +43,7 @@
 						}
 					})
 					.then(res => {
+						//创建一个二维数组 a[i][j] i表示第几层 root为第0层 每一层放节点的id方便后续遍历
 						var response = res.data.data;
 						this.data = eval(response);
 						this.TreeData.id = this.data[0].id;
@@ -76,12 +75,12 @@
 								this.pushNode(this.data[i].inheritRp.split(":"), 1, this.data[i].inheritRp.split(":").length-1, newNode, this.TreeData.children); 
 							}
 						}
-						console.log(this.array);
 					})
 					.catch(err => {
 
 					});
 			},
+			//通过递归从根节点一步一步向下寻找所在的枝处于上层的第几个位置，直到层数和继承关系字符串一一对应
 			pushNode(arr, point, size, newNode, Tree){
 				if(point == size){
 					Tree.push(newNode);

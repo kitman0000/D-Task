@@ -11,7 +11,7 @@
 								<el-row>
 								  <el-col :span="4" :class="{'theSelectedMenu':theSelectedSubMenu==subMenu.id.toString(),'otherSubMenu':theSelectedSubMenu!=subMenu.id.toString()}" :index="subMenu.id.toString()" style="height: 50px;"></el-col>
 								  <el-col :span="20" style="height: 50px;background-color: #334E85;">
-									  <el-menu-item :index="subMenu.id.toString()" class="cTitle" @click="test(subMenu)">
+									  <el-menu-item :index="subMenu.id.toString()" @click="test(subMenu)">
 										{{subMenu.name}}
 			  						</el-menu-item></el-col>
 								</el-row>						
@@ -101,17 +101,12 @@
 		width: 10px !important;
 		height: 35px;
 	}
-	.cTitleBG :hover{
-		background: #dadff0  !important;
-		color: #000;
+	.el-menu-item:focus, .el-menu-item:hover {
+	    outline: 0;
+	    background-color: #c6d8ff;
+	    color: #000 !important;
 	}
-	
-	.cTitleBG .is-active{
-		background: #a4aaca   !important;
-		color: #fff !important;
-	}
-	
-	.is-active{
-		color: #fff !important;
+	.el-submenu__title:focus,.el-submenu__title:hover{
+		color: #000 !important;
 	}
 </style>
