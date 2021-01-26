@@ -3,7 +3,7 @@
 		<el-button type="primary" @click="changit()"  style="background: #24375E;border: 0px ;margin-left: 10px;">展现形式变化</el-button>
 		<el-button type="primary"  @click="setRoot()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">将自身设为根节点</el-button>
 		<el-button type="primary"  @click="unbind()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">解绑自身</el-button>
-		<el-table :data="data" tooltip-effect="dark" style="width: 100%" v-if="!change">
+		<el-table :data="data" tooltip-effect="dark" style="width: 100%" v-if="change">
 			<el-table-column prop="id" label="id" width="120px">
 			</el-table-column>
 			<el-table-column prop="nodeName" label="节点名">
@@ -18,7 +18,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<vue2-org-tree v-if="change" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" :data="TreeData"/>
+		<vue2-org-tree v-if="!change" @on-node-click="NodeClick" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" :data="TreeData"/>
 	</div>
 </template>
 
@@ -80,6 +80,11 @@
 
 					});
 			},
+			//data 为节点信息
+			NodeClick(e,data){  
+			    askBinding(data);
+			    
+			},
 			//通过递归从根节点一步一步向下寻找所在的枝处于上层的第几个位置，直到层数和继承关系字符串一一对应
 			pushNode(arr, point, size, newNode, Tree){
 				if(point == size){
@@ -96,6 +101,7 @@
 				}
 				
 			},
+			//请求绑定
 			askBinding(index) {
 				var id = new URLSearchParams();
 					id.append("requestBindID", index.id);
