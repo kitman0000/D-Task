@@ -3,7 +3,7 @@
 		<el-button type="primary" @click="changit()"  style="background: #24375E;border: 0px ;margin-left: 10px;">展现形式变化</el-button>
 		<el-button type="primary"  @click="setRoot()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">将自身设为根节点</el-button>
 		<el-button type="primary"  @click="unbind()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">解绑自身</el-button>
-		<el-table :data="data" tooltip-effect="dark" style="width: 100%" v-if="change">
+		<el-table :data="data" tooltip-effect="dark" style="width: 100%" v-if="!change">
 			<el-table-column prop="id" label="id" width="120px">
 			</el-table-column>
 			<el-table-column prop="nodeName" label="节点名">
@@ -18,7 +18,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<vue2-org-tree v-if="!change" @on-node-click="NodeClick" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" :data="TreeData"/>
+		<vue2-org-tree v-if="change && data.length !=0" @on-node-click="NodeClick" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" @on-node-mouseover="mouseOver" :style="active" :data="TreeData"/>
 	</div>
 </template>
 
@@ -33,6 +33,7 @@
 				max:0,
 				array:[[]],
 				TreeData:{},
+				active:""
 			}
 		},
 		methods: {
@@ -82,8 +83,11 @@
 			},
 			//data 为节点信息
 			NodeClick(e,data){  
-			    askBinding(data);
+			    this.askBinding(data);
 			    
+			},
+			mouseOver(){
+				this.active="cursor:pointer";
 			},
 			//通过递归从根节点一步一步向下寻找所在的枝处于上层的第几个位置，直到层数和继承关系字符串一一对应
 			pushNode(arr, point, size, newNode, Tree){
@@ -103,30 +107,41 @@
 			},
 			//请求绑定
 			askBinding(index) {
-				var id = new URLSearchParams();
-					id.append("requestBindID", index.id);
-					axios.post('/api/bindingCl/askBinding', id, {
-							headers: {
-								"token": localStorage.getItem("token"),
-							}
-						})
-						.then(res => {
-							if(res.data.ret == 1){
-								this.$alert('请求成功', '提示', {
-								         confirmButtonText: '确定',
-								       });
-							}
-							else if(res.data.ret == 2){
-								this.$alert('系统错误', '提示', {
-								         confirmButtonText: '确定',
-								       });
-							}
-							else{
-								this.$alert('不允许绑定自身', '提示', {
-								         confirmButtonText: '确定',
-								       });
-							}
-						});
+				this.$confirm('是否要将自身绑定至该节点下?', '提示', {
+				          confirmButtonText: '确定',
+				          cancelButtonText: '取消',
+				          type: 'warning'
+				        }).then(() => {
+				          var id = new URLSearchParams();
+				          	id.append("requestBindID", index.id);
+				          	axios.post('/api/bindingCl/askBinding', id, {
+				          			headers: {
+				          				"token": localStorage.getItem("token"),
+				          			}
+				          		})
+				          		.then(res => {
+				          			if(res.data.ret == 1){
+				          				this.$alert('请求成功', '提示', {
+				          				         confirmButtonText: '确定',
+				          				       });
+				          			}
+				          			else if(res.data.ret == 2){
+				          				this.$alert('系统错误', '提示', {
+				          				         confirmButtonText: '确定',
+				          				       });
+				          			}
+				          			else{
+				          				this.$alert('不允许绑定自身', '提示', {
+				          				         confirmButtonText: '确定',
+				          				       });
+				          			}
+				          		});
+				        }).catch(() => {
+				          this.$message({
+				            type: 'info',
+				            message: '已取消绑定'
+				          });          
+				        });
 			},
 			setRoot() {
 				axios.post('/api/bindingCl/setRoot', '',{
