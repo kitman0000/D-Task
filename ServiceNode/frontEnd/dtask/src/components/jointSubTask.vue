@@ -18,10 +18,10 @@
 					</el-table-column>
 					<el-table-column prop="status" label="状态" width="100px">
 						<template slot-scope="scope">
-							<p v-if="scope.row.status == 0" style="color: #3399FF;">计划中</p>
-							<p v-if="scope.row.status == 1" style="color: #FF6600;">执行中</p>
-							<p v-if="scope.row.status == 2" style="color: #009933;">已完成</p>
-							<p v-if="scope.row.status == 3" style="color: #C0C0C0;">已取消</p>
+							<p v-if="scope.row.status == 0" style="color: #3399FF;"><img class="icon" src="../assets/计划.png" /> 计划中</p>
+							<p v-if="scope.row.status == 1" style="color: #FF6600;"><img class="icon" src="../assets/执行.png" /> 执行中</p>
+							<p v-if="scope.row.status == 2" style="color: #009933;"><img class="icon" src="../assets/完成.png" /> 已完成</p>
+							<p v-if="scope.row.status == 3" style="color: #C0C0C0;"><img class="icon" src="../assets/取消.png" /> 已取消</p>
 						</template>
 					</el-table-column>
 					<el-table-column prop="star" label="星级" width="150px">
@@ -430,4 +430,8 @@
 </script>
 
 <style>
+	.icon{
+		height: 17px;
+		width: 17px;
+	}
 </style>
