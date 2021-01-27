@@ -20,9 +20,11 @@
 
 ## 4.部署与安装
 前端部分请使用`npm run build`编译，并放入Nginx中
+
 后端部分请使用IDEA打包为jar包单独运行，或打包为war包放入Tomcat中
 
 节点服务数据库请使用：https://github.com/kitman0000/D-Task/blob/master/Data_DTask.sql
+
 中心服务器数据库请使用：https://github.com/kitman0000/D-Task/blob/master/Data_DTask_Center.sql
 
 **注意：以上数据文件均只包含表结构，请自行添加数据，系统需要添加用户后才能登录**
@@ -68,14 +70,17 @@
 			ex.printStackTrace();
 			return "SYS_FAILED";
 		}
-}
+	}
 ```
 **注意：这只是目前初代版本的方式，后续版本更新后可能有很多变化**
 
 ## 7. 其他文档链接
 设计文档：https://docs.qq.com/doc/DSUNMaWZKZGdUb1ZF
+
 API文档：https://docs.qq.com/sheet/DSUdGbnBRTUhqTVll?tab=BB08J2
+
 用户手册:成功运行项目后，用户手册地址在http://{主机地址}:{端口号}/#/webUserManual
+
 
 **注意：以上文档都在更新中，都不是最终版本**
 
