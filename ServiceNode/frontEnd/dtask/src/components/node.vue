@@ -18,7 +18,13 @@
 				</template>
 			</el-table-column>
 		</el-table>
+		<div style="width: 100%;" align="center">
 		<vue2-org-tree v-if="change && data.length !=0" @on-node-click="NodeClick" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" @on-node-mouseover="mouseOver" :style="active" :data="TreeData"/>
+		</br>
+		<div v-if="change" style="margin-top: 50px;">
+			<span>点击节点名称，申请绑定</span>
+		</div>
+		</div>
 	</div>
 </template>
 
@@ -63,12 +69,13 @@
 							}
 						}
 						
-						for(var i = 0;i<this.data.length;i++){
+						for(var i = 0;i<this.data.length;i++){							
 							var newNode = {
 								id: this.data[i].id,
 								label: this.data[i].nodeName,
 								children: []
 							};
+														
 							if(this.data[i].inheritRp.split(":").length == 2){ //根节点的子节点直接挂载
 								this.TreeData.children.push(newNode);
 							}
@@ -80,6 +87,8 @@
 					.catch(err => {
 
 					});
+
+					
 			},
 			//data 为节点信息
 			NodeClick(e,data){  
@@ -243,4 +252,48 @@
 </script>
 
 <style>
+	.org-tree-node-label{
+		font-size: 12px;
+		background: #eeeefe;
+		background-image: url(../assets/节点.png);
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+		width: 130px;
+		height: 150px;
+		line-height: 1px;
+		border-bottom: 4px solid #888;
+		border-radius: 10px;
+	}
+	
+	.org-tree-node-label:hover{
+		background-image: url(../assets/节点.png);
+	}
+	
+	.org-tree-node-label-inner{
+		margin-top: 160px;
+		background: #333388;
+		color: #fff;
+		height: 10px;
+		line-height: 10px;
+	}
+	
+	.org-tree-node-label-inner:hover{
+		background: #6666ff;
+	}
+
+	/* 根节点 */
+	.org-tree>.org-tree-node>.org-tree-node-label{
+		font-size: 12px;
+		background-image: url(../assets/根节点.png);
+		background-repeat: no-repeat;
+		background-position: center;
+		width: 130px;
+		height: 150px;
+		line-height: 1px;
+		border-bottom: 4px solid #888;
+		border-radius: 10px;
+	}
+	
+
 </style>
