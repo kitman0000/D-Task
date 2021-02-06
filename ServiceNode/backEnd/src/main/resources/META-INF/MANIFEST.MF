@@ -37,5 +37,6 @@ Class-Path: hibernate-validator-6.0.17.Final.jar logback-classic-1.2.3
  .4.1.jar log4j-to-slf4j-2.11.2.jar log4j-api-2.11.2.jar mybatis-sprin
  g-2.0.0.jar tomcat-embed-core-9.0.24.jar snakeyaml-1.23.jar mybatis-s
  pring-boot-starter-2.0.0.jar spring-boot-starter-2.1.8.RELEASE.jar
+ MQClouder.jar pluginTemplate.jar
 Main-Class: com.dtask.DTask.DTaskApplication
 
