@@ -15,4 +15,6 @@ public class ChildMenuBo {
     private String url;
 
     private String pObject;
+
+    private String icon;
 }

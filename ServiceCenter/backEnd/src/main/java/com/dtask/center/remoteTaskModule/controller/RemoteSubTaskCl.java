@@ -1,5 +1,6 @@
 package com.dtask.center.remoteTaskModule.controller;
 
+import com.MQClouder.MessageReceiver;
 import com.dtask.center.remoteTaskModule.entity.RemoteSubTaskEntity;
 import com.dtask.center.remoteTaskModule.service.IRemoteSubTask;
 import com.dtask.common.util.JsonUtil;
@@ -22,6 +23,7 @@ public class RemoteSubTaskCl {
     @Autowired
     IRemoteSubTask remoteSubTask;
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteSubTask.addRemoteSubTask"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -37,6 +39,7 @@ public class RemoteSubTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteSubTask.editRemoteSubTask"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -52,6 +55,7 @@ public class RemoteSubTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteSubTask.deleteRemoteSubTask"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -67,6 +71,7 @@ public class RemoteSubTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteSubTask.getRemoteSubTaskNumber"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -82,6 +87,7 @@ public class RemoteSubTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteSubTask.getRemoteSubTaskList"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -97,6 +103,7 @@ public class RemoteSubTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteSubTask.editRemoteSubTaskStatus"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),

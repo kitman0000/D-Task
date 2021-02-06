@@ -1,5 +1,6 @@
 package com.dtask.center.bindingModule.controller;
 
+import com.MQClouder.MessageReceiver;
 import com.dtask.center.bindingModule.bo.NodeBo;
 import com.dtask.center.bindingModule.entity.AskBindingEntity;
 import com.dtask.center.bindingModule.entity.HandleBindingEntity;
@@ -28,7 +29,7 @@ public class BindingCl {
     @Autowired
     IBinding banding;
 
-
+    @MessageReceiver
     @RabbitListener(queues = "dtask.binding.ask")
     public String askBanding(String msg){
         try {
@@ -40,6 +41,7 @@ public class BindingCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(queues = "dtask.addNode")
     public void addNode(String msg){
         try {
@@ -50,6 +52,7 @@ public class BindingCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(queues = "dtask.binding.handle")
     @Transactional
     public String handleRequest(String msg){
@@ -63,6 +66,7 @@ public class BindingCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(queues = "dtask.getNodeID")
     public String getNodeID(String msg)
     {
@@ -78,6 +82,7 @@ public class BindingCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(queues = "dtask.getAllNodes")
     public String getAllNodes()
     {
@@ -90,6 +95,7 @@ public class BindingCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(queues = "dtask.binding.unbind")
     public String unbind(String msg)
     {
@@ -106,6 +112,7 @@ public class BindingCl {
     /**
      * 获取当前节点可处理的请求
      */
+    @MessageReceiver
     @RabbitListener(queues = "dtask.binding.getBindRequest")
     public String getBindRequest(String msg){
         try {
@@ -117,6 +124,8 @@ public class BindingCl {
             return "SYS_FAILED";
         }
     }
+
+    @MessageReceiver
     @RabbitListener(queues = "dtask.binding.setRoot")
     public String setRoot(String msg){
         try {
@@ -129,6 +138,7 @@ public class BindingCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.test"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),

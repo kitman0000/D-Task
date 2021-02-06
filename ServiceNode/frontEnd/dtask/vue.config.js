@@ -6,7 +6,7 @@ module.exports = {
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
         'api': {
-          target: 'http://47.100.23.230:80', //代理接口
+          target: 'http://localhost:8080', //代理接口
           changeOrigin: true
           //,
           // pathRewrite: {

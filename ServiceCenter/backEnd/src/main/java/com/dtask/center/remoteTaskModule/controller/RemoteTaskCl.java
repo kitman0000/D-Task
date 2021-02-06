@@ -1,5 +1,6 @@
 package com.dtask.center.remoteTaskModule.controller;
 
+import com.MQClouder.MessageReceiver;
 import com.dtask.center.remoteTaskModule.entity.*;
 import com.dtask.center.remoteTaskModule.service.IRemoteTask;
 import com.dtask.common.util.CacheUtil;
@@ -20,6 +21,7 @@ public class RemoteTaskCl {
     @Autowired
     IRemoteTask remoteTask;
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.addRemoteTask"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -35,6 +37,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.editRemoteTask"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -50,6 +53,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getTaskDetail"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -66,6 +70,7 @@ public class RemoteTaskCl {
 
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.deleteRemoteTask"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -81,6 +86,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getRemoteTaskNumber"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -96,6 +102,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getRemoteTaskList"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -111,6 +118,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.addRemoteTaskMember"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -126,6 +134,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.removeRemoteTaskMember"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -141,6 +150,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getRemoteMember"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -156,6 +166,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getUserTaskNumber"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -171,6 +182,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getUserTaskList"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -186,6 +198,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.toggleTaskAdmin"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -201,6 +214,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getTaskUserRole"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -216,6 +230,7 @@ public class RemoteTaskCl {
         }
     }
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.remoteTask.getAllowUserChangeStatus"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),

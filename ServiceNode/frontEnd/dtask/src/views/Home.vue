@@ -67,6 +67,7 @@
 				this.isPrimelUser = true;
 			},
 			login() {
+				var username = this.userName;
 				var userLogin = new URLSearchParams();
 				userLogin.append("username", this.userName);
 				userLogin.append("pwd", this.$md5(this.pwd));
@@ -76,8 +77,9 @@
 							var response = res.data;
 							if (response.ret == 1) {
 								localStorage.setItem("token", response.data);
+								sessionStorage.setItem("username",username);
 								this.$router.push({
-									path: "/webUserManual"
+									path: "/webUserManual#login"
 								});
 							} else if (response.ret == 2) {
 								this.$alert('账号或密码错误', '提示', {

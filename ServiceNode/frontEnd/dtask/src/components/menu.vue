@@ -9,19 +9,29 @@
 			  			<template slot="title"  >{{menu.name}}</template>
 			  				<div  v-for="subMenu in menu.childMenuBoList" style="border-bottom:1px solid #5C75A7;">
 								<el-row>
-								  <el-col :span="4" :class="{'theSelectedMenu':theSelectedSubMenu==subMenu.id.toString(),'otherSubMenu':theSelectedSubMenu!=subMenu.id.toString()}" :index="subMenu.id.toString()" style="height: 50px;"></el-col>
-								  <el-col :span="20" style="height: 50px;background-color: #334E85;">
-									  <el-menu-item :index="subMenu.id.toString()" @click="test(subMenu)">
-										{{subMenu.name}}
-			  						</el-menu-item></el-col>
+									<el-col :span="4" :class="{'theSelectedMenu':theSelectedSubMenu==subMenu.id.toString(),'otherSubMenu':theSelectedSubMenu!=subMenu.id.toString()}" :index="subMenu.id.toString()" style="height: 50px;">
+										<img style="margin-left: 10px;margin-top: 20px;" height="15px" v-bind:src="require(`../assets/${subMenu.icon}`)" />
+									</el-col>
+									<el-col :span="20" style="height: 50px;background-color: #334E85;">
+										<el-menu-item :index="subMenu.id.toString()" @click="test(subMenu)" style="padding-left: 10px;">
+											{{subMenu.name}}
+										</el-menu-item>
+									</el-col>
 								</el-row>						
 			  				</div>
 			  		</el-submenu>
 			  	</li>
 				</el-menu>
 		  </el-aside>
+
 		  <el-main>
-			 <router-view></router-view>
+			  <div style="margin-top: 0px; position: absolute; right: 10%; 
+						top: 20px;background: rgb(189, 206, 240);padding-left: 10px;
+						padding-right: 10px;border-radius: 3px;" >
+			  	早上好！<span>{{userName}}</span>
+			  </div>
+			 <router-view>
+			 </router-view>
 		  </el-main>
 		</el-container>
 	</div>
@@ -35,7 +45,7 @@
 			const item = {};
 			return {
 				tableData: Array(20).fill(item),
-				userName: '',
+				userName: localStorage.getItem("username"),
 				userPwd: '',
 				menus:[],
 				theSelectedMenu:'',

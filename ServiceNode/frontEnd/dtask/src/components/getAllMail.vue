@@ -20,13 +20,11 @@
 			<el-button type="primary" @click="searchMail_searchButton()" icon="el-icon-search" style="background: #24375E;border: 0px ;margin-left: 10px;">搜索</el-button>
 		</div>
 		<el-table :data="tableData2" style="width: 100%"  @row-click="MailDetail">
-			<el-table-column prop="id" label="邮件id" width="200">
+			<el-table-column prop="title" label="标题" width="720">
 			</el-table-column>
-			<el-table-column prop="sender" label="发件人" width="200">
+			<el-table-column prop="sender" label="发件人" width="300">
 			</el-table-column>
-			<el-table-column prop="title" label="标题" width="220">
-			</el-table-column>
-			<el-table-column prop="sendTime" label="发送时间" width="280">
+			<el-table-column prop="sendTime" label="发送时间" width="500">
 			</el-table-column>
 		</el-table>
 		<div style="text-align: center;">
