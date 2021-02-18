@@ -8,10 +8,10 @@ module.exports = {
         'api': {
           target: 'http://localhost:8080', //代理接口
           changeOrigin: true
-          //,
-          // pathRewrite: {
-          //   '^/api/*': '/api'    //代理的路径
-          // }
+        },
+        'pluginPage': {
+          target: 'http://localhost:8080', //代理接口
+          changeOrigin: true
         }
       }
     }

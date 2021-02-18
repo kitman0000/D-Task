@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dtask.DTask.userModule.dao.MenuDao">
     <!-- 获取某角色所有菜单 -->
-    <select id="getRoleMenu" resultType="com.dtask.DTask.userModule.bo.ParentMenuBo">
+    <select id="getRoleMenu" resultType="com.dtask.pluginsdk.userModule.bo.ParentMenuBo">
         SELECT * FROM tb_parent_menu WHERE tb_parent_menu.pCategory in (
         SELECT
         distinct pCategory
@@ -17,13 +17,13 @@
     </select>
 
     <!-- 获取某父菜单的子菜单 -->
-    <select id="getChildMenu" resultType="com.dtask.DTask.userModule.bo.ChildMenuBo">
+    <select id="getChildMenu" resultType="com.dtask.pluginsdk.userModule.bo.ChildMenuBo">
         SELECT * FROM tb_child_menu
         <where>
             parentID = #{parentMenuID}
         </where>
     </select>
-    <select id="getRoleChildMenu" resultType="com.dtask.DTask.userModule.bo.ChildMenuBo">
+    <select id="getRoleChildMenu" resultType="com.dtask.pluginsdk.userModule.bo.ChildMenuBo">
         SELECT
             *
         FROM

@@ -4,31 +4,34 @@ import com.MQClouder.EncryptRabbitSender;
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.entity.RemoteLoginEntity;
 import com.dtask.DTask.accountModule.service.IAccount;
+import com.dtask.DTask.accountModule.service.ITestInterface;
 import com.dtask.DTask.accountModule.type.LoginType;
 import com.dtask.DTask.accountModule.bo.AccountBo;
 import com.dtask.DTask.userModule.bo.PermissionBo;
 import com.dtask.DTask.userModule.dao.RoleDao;
-import com.dtask.common.AuthFilter;
-import com.dtask.common.NodeCommon;
-import com.dtask.common.ResponseData;
-import com.dtask.common.UserCommon;
+import com.dtask.common.*;
 import com.dtask.common.config.WebsiteConfig;
 import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.JsonUtil;
+import com.dtask.pluginsdk.accountModule.IAccountEvent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhong on 2020-3-12.
  */
 
 @Service
-public class AccountImpl implements IAccount{
+public class AccountImpl implements IAccount {
     @Autowired
     private AccountDao accountDao;
 
@@ -43,6 +46,9 @@ public class AccountImpl implements IAccount{
 
     @Autowired
     private RoleDao roleDao;
+
+    @Autowired
+    private ApplicationContextAwareCommon applicationContextAware;
 
     @Override
     public ResponseData login(String username, String pwd) {
@@ -82,6 +88,14 @@ public class AccountImpl implements IAccount{
 
             // 将密码放入HashMap缓存
             AuthFilter.userPwdMap.put(username,pwd);
+
+            Map<String,IAccountEvent> interfaceMap = applicationContextAware.getImplementsMap(IAccountEvent.class);
+
+            if (interfaceMap != null){
+                interfaceMap.forEach((K,V)->{
+                    V.login(username);
+                });
+            }
 
             return new ResponseData(1, LoginType.LOGIN_SUCCESS.toString(),token);
         }
@@ -130,6 +144,7 @@ public class AccountImpl implements IAccount{
 
         pwd = UserCommon.encodePwd(pwd);
         accountDao.addAccount(username,pwd);
+
     }
 
     @Override
@@ -141,6 +156,15 @@ public class AccountImpl implements IAccount{
     @Override
     public ResponseData deleteUser(int[] userID) {
         accountDao.deleteAccount(userID);
+
+        Map<String,IAccountEvent> interfaceMap = applicationContextAware.getImplementsMap(IAccountEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.deleteUser(userID);
+            });
+        }
+
         return new ResponseData(1,"删除成功",null);
     }
 
@@ -185,6 +209,14 @@ public class AccountImpl implements IAccount{
                 // 将密码放入HashMap缓存
                 AuthFilter.userPwdMap.put(RC_USERNAME,RC_PASSWORD);
 
+                Map<String,IAccountEvent> interfaceMap = applicationContextAware.getImplementsMap(IAccountEvent.class);
+
+                if (interfaceMap != null){
+                    interfaceMap.forEach((K,V)->{
+                        V.remoteLogin(remoteLoginEntity.getUsername(),remoteLoginEntity.getUserNodeID(),remoteLoginEntity.getLoginNodeID());
+                    });
+                }
+
                 return new ResponseData(1,"登录成功",token);
             }
             case "LOGIN_FAILED":{
@@ -221,6 +253,15 @@ public class AccountImpl implements IAccount{
             return "NONE_ALLOWED_ACCOUNT";
         }
         if(pwdInDb.equals(pwd)){
+
+            Map<String,IAccountEvent> interfaceMap = applicationContextAware.getImplementsMap(IAccountEvent.class);
+
+            if (interfaceMap != null){
+                interfaceMap.forEach((K,V)->{
+                    V.mqRemoteLogin(username);
+                });
+            }
+
             return "LOGIN_SUCCESS";
         }
         return "LOGIN_FAILED";

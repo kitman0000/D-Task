@@ -2,13 +2,18 @@ package com.dtask.DTask.bindingModule.service.impl;
 
 import com.MQClouder.EncryptRabbitSender;
 import com.dtask.DTask.bindingModule.service.IBinding;
+import com.dtask.common.ApplicationContextAwareCommon;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.util.CacheUtil;
+import com.dtask.pluginsdk.accountModule.IAccountEvent;
+import com.dtask.pluginsdk.bindingModule.IBindingEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * Created by zhong on 2020-6-14.
@@ -27,6 +32,9 @@ public class BindingImpl implements IBinding{
 
     @Autowired
     NodeCommon nodeCommon;
+
+    @Autowired
+    private ApplicationContextAwareCommon applicationContextAware;
 
     @Override
     public ResponseData getAllNodes() {
@@ -47,6 +55,14 @@ public class BindingImpl implements IBinding{
 
         String res = rabbitSender.encryptSend("dtask.binding.ask","{\"nodeID\":"+nodeID+",\"requestBindID\":"+requestBindID+"}");
         if(res.equals("BIND_SUCCESS")){
+            Map<String,IBindingEvent> interfaceMap = applicationContextAware.getImplementsMap(IBindingEvent.class);
+
+            if (interfaceMap != null){
+                interfaceMap.forEach((K,V)->{
+                    V.askBinding(requestBindID);
+                });
+            }
+
             return new ResponseData(1,"申请成功",null);
         }else {
             return new ResponseData(2,res,null);
@@ -70,6 +86,15 @@ public class BindingImpl implements IBinding{
             return new ResponseData(2,"SYS_FAILED",null);
         }
         String res = rabbitSender.encryptSend("dtask.binding.handle","{\"requestID\":"+request+",\"accept\":"+accept+",\"nodeID\":" + nodeID + "}");
+
+        Map<String,IBindingEvent> interfaceMap = applicationContextAware.getImplementsMap(IBindingEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.handleBindingRequest(request, accept);
+            });
+        }
+
         return new ResponseData(1,res,null);
     }
 
@@ -81,6 +106,14 @@ public class BindingImpl implements IBinding{
         }
         String res = rabbitSender.encryptSend("dtask.binding.setRoot","{\"nodeID\":"+nodeID+"}");
         if(res.equals("SET_SUCCESS")){
+            Map<String,IBindingEvent> interfaceMap = applicationContextAware.getImplementsMap(IBindingEvent.class);
+
+            if (interfaceMap != null){
+                interfaceMap.forEach((K,V)->{
+                    V.setRoot();
+                });
+            }
+
             return new ResponseData(1,"设置成功",null);
         }else if(res.equals("ROOT_EXIST")){
             return new ResponseData(2,"根节点已存在",null);
@@ -100,6 +133,15 @@ public class BindingImpl implements IBinding{
         String res = rabbitSender.encryptSend("dtask.binding.unbind","{\"nodeID\":\""+nodeID+"\"}");
 
         if(res.equals("UNBIND_SUCCESS")){
+
+            Map<String,IBindingEvent> interfaceMap = applicationContextAware.getImplementsMap(IBindingEvent.class);
+
+            if (interfaceMap != null){
+                interfaceMap.forEach((K,V)->{
+                    V.unbind();
+                });
+            }
+
             return new ResponseData(1,"解绑成功",null);
         }else if(res.equals("UNBIND_FAILED")){
             // 当自身没有绑定时，返回解绑失败
