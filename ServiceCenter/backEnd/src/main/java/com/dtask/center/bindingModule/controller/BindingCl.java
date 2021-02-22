@@ -1,6 +1,5 @@
 package com.dtask.center.bindingModule.controller;
 
-import com.dtask.center.bindingModule.bo.NodeBo;
 import com.dtask.center.bindingModule.entity.AskBindingEntity;
 import com.dtask.center.bindingModule.entity.HandleBindingEntity;
 import com.dtask.center.bindingModule.entity.NodeEntity;
@@ -16,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 /**
  * Created by zhong on 2020-5-13.
  */
@@ -26,14 +23,14 @@ public class BindingCl {
     private Logger logger = LoggerFactory.getLogger(BindingCl.class);
 
     @Autowired
-    IBinding banding;
+    IBinding binding;
 
 
     @RabbitListener(queues = "dtask.binding.ask")
     public String askBanding(String msg){
         try {
             AskBindingEntity askBindingEntity = (AskBindingEntity) JsonUtil.jsonToObject(msg, AskBindingEntity.class);
-            return banding.askBanding(askBindingEntity);
+            return binding.askBanding(askBindingEntity);
         }catch (Exception ex){
             ex.printStackTrace();
             return "SYS_FAILED";
@@ -44,7 +41,7 @@ public class BindingCl {
     public void addNode(String msg){
         try {
             NodeEntity nodeEntity = (NodeEntity) JsonUtil.jsonToObject(msg, NodeEntity.class);
-            banding.addNode(nodeEntity);
+            binding.addNode(nodeEntity);
         }catch (Exception ex){
             ex.printStackTrace();
         }
@@ -55,7 +52,7 @@ public class BindingCl {
     public String handleRequest(String msg){
         try {
             HandleBindingEntity handleBindingEntity = (HandleBindingEntity)JsonUtil.jsonToObject(msg,HandleBindingEntity.class);
-            return banding.handleBinding(handleBindingEntity);
+            return binding.handleBinding(handleBindingEntity);
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -68,7 +65,7 @@ public class BindingCl {
     {
         try {
             NodeEntity nodeEntity = (NodeEntity) JsonUtil.jsonToObject(msg, NodeEntity.class);
-            int nodeID = banding.getNodeID(nodeEntity.getNodeName());
+            int nodeID = binding.getNodeID(nodeEntity.getNodeName());
 
             return String.valueOf(nodeID);
         }
@@ -82,7 +79,7 @@ public class BindingCl {
     public String getAllNodes()
     {
         try {
-            return JsonUtil.objectToJson(banding.getAllNodes());
+            return JsonUtil.objectToJson(binding.getAllNodes());
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -95,7 +92,7 @@ public class BindingCl {
     {
         try {
             NodeEntity nodeEntity = (NodeEntity) JsonUtil.jsonToObject(msg, NodeEntity.class);
-            return banding.unbind(nodeEntity);
+            return binding.unbind(nodeEntity);
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -110,7 +107,7 @@ public class BindingCl {
     public String getBindRequest(String msg){
         try {
             NodeEntity nodeEntity = (NodeEntity) JsonUtil.jsonToObject(msg, NodeEntity.class);
-            return JsonUtil.objectToJson(banding.getBindRequest(nodeEntity));
+            return JsonUtil.objectToJson(binding.getBindRequest(nodeEntity));
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -121,7 +118,7 @@ public class BindingCl {
     public String setRoot(String msg){
         try {
             NodeEntity nodeEntity = (NodeEntity) JsonUtil.jsonToObject(msg, NodeEntity.class);
-            return banding.setRoot(nodeEntity);
+            return binding.setRoot(nodeEntity);
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -137,6 +134,19 @@ public class BindingCl {
     public String test(String msg){
         logger.info("测试" + msg);
         return "ok";
+    }
+
+    /***
+     * 接受到心跳包
+     * @param nodeID 节点ID
+     */
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue("dtask.test"),
+            exchange = @Exchange(value = "topicExchange",type = "topic"),
+            key = "dtask.test"
+    ))
+    public void receiveKeepAlive(String nodeID){
+        binding.receiveKeepAlive(Integer.parseInt(nodeID));
     }
 
 

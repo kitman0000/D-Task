@@ -6,7 +6,6 @@ import com.dtask.center.bindingModule.entity.AskBindingEntity;
 import com.dtask.center.bindingModule.entity.HandleBindingEntity;
 import com.dtask.center.bindingModule.entity.NodeEntity;
 
-import javax.xml.soap.Node;
 import java.util.List;
 
 /**
@@ -29,4 +28,6 @@ public interface IBinding {
     List<BindingRequestBo> getBindRequest(NodeEntity nodeEntity);
 
     String setRoot(NodeEntity nodeEntity);
+
+    void receiveKeepAlive(int nodeID);
 }

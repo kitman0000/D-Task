@@ -25,4 +25,6 @@ public interface IBinding {
     void getNodeID();
 
     ResponseData apiGetNodeID();
+
+    void sendKeepAlive();
 }
