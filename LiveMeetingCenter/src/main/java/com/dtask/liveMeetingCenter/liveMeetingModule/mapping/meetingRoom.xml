@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.liveMeetingCenter.liveMeetingModule.dao.MeetingRoomDao">
+
+    <!-- 获取会议室 -->
+    <select id="getMeetingRoom" resultType="com.dtask.liveMeetingCenter.liveMeetingModule.bo.MeetingRoomBo">
+        SELECT *,(length(password) > 0) as hasPwd FROM tb_meeting_room
+    </select>
+
+    <!-- 更新会议室 -->
+    <update id="setMeetingRoom">
+        UPDATE tb_meeting_room
+        <set>
+            name = #{meetingRoomEntity.name},
+            hostID = #{meetingRoomEntity.hostID},
+            password = #{meetingRoomEntity.password}
+        </set>
+        <where>
+            id = #{meetingRoomEntity.id}
+        </where>
+    </update>
+</mapper>

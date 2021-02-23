@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <h1>Welcome to D-Task</h1>
+    <p>
+        This is a templates of the plugin.You can customize your own plugin here.</br>
+        If you can see this page and the token below,it is working!</br>
+        </br>
+        Your token is <span id="tokenSpan"></span>
+    </p>
+
+    <script>
+        var token = getQueryString("token");
+        sessionStorage.setItem("token",token);
+        document.getElementById("tokenSpan").innerHTML = token;
+        
+
+        function getQueryString(name) {
+            let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            let r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return decodeURIComponent(r[2]);
+            };
+            return null;
+        }
+    </script>
+</html>
