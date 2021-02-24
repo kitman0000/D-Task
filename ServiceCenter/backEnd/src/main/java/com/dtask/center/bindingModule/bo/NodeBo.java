@@ -11,4 +11,5 @@ public class NodeBo {
     String nodeName;
     String inheritRp;
     int parentNode;
+    private boolean online;
 }
