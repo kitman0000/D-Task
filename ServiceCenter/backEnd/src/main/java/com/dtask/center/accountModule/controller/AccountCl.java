@@ -1,5 +1,6 @@
 package com.dtask.center.accountModule.controller;
 
+import com.MQClouder.MessageReceiver;
 import com.dtask.center.accountModule.service.IAccount;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -17,6 +18,7 @@ public class AccountCl {
     @Autowired
     IAccount account;
 
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.account.remoteLogin"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -36,6 +38,7 @@ public class AccountCl {
      * @param msg 节点ID
      * @return 父节点
      */
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.account.getParentNodes"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),

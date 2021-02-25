@@ -130,4 +130,16 @@ public class BindingImpl implements IBinding{
         String nodeID = rabbitSender.encryptSend("dtask.getNodeID","{\"nodeName\":" + nodeName + "}");
         cacheUtil.write("nodeID",nodeID);
     }
+
+    @Override
+    public void sendKeepAlive() {
+        Object nodeID = String.valueOf(cacheUtil.read("nodeID"));
+
+        if (nodeID == null){
+            // 尚未获取到nodeID，也可能是没有连接到MQ，不继续发送心跳包
+            return;
+        }
+
+        rabbitSender.encryptSendWithoutResponse("dtask.keepAlive",String.valueOf(nodeID));
+    }
 }

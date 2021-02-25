@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan({"com.dtask.common","com.dtask.common.*","com.dtask.DTask.*","com.MQClouder"})
+@ComponentScan({"com.dtask.common","com.dtask.common.*","com.dtask.*.*","com.MQClouder"})
 @SpringBootApplication
 public class DTaskApplication {
 

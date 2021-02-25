@@ -43,6 +43,11 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
             return true;
         }
 
+        // 如果是插件页面，不拦截
+        if (httpServletRequest.getRequestURI().startsWith("/pluginPage")){
+            return true;
+        }
+
         // 如果是登出，不拦截
         if(httpServletRequest.getRequestURI().equals( "/api/account/logout")){
             return true;

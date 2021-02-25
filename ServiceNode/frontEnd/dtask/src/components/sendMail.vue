@@ -17,7 +17,7 @@
 				<el-input v-model="title"></el-input>
 			</el-form-item>
 			<el-form-item label="内容">
-				<el-input v-model="content" type="textarea"></el-input>
+				<el-input v-model="content" type="textarea" rows="20"></el-input>
 			</el-form-item>
 			<el-form-item label="是否紧急">
 				<el-select filterable placeholder="请选择状态" ref="isImportantSelector" v-model="IsImportantValue" style="width: 150px;">

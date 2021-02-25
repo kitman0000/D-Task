@@ -34,7 +34,7 @@ import jointTask from '../components/jointTask.vue'
 import addJointTask from '../components/addJointTask.vue'
 import changeJointTask from '../components/changeJointTask.vue'
 import userManual from '../components/userManual.vue'
-
+import pluginPage from '../components/pluginPage.vue'
 
 Vue.use(VueRouter)
 
@@ -212,6 +212,11 @@ const routes = [{
 			name:'userManual',
 			component:userManual
 		},
+		{
+			path:'/pluginPage',
+			name:'pluginPage',
+			component:pluginPage
+		}
 		]}
 	]
 	

@@ -1,5 +1,6 @@
 package com.dtask.center.syncModule.controller;
 
+import com.MQClouder.MessageReceiver;
 import com.dtask.center.syncModule.entity.SyncUserInfoEntity;
 import com.dtask.center.syncModule.entity.UserListEntity;
 import com.dtask.center.syncModule.service.ISyncUserInfo;
@@ -23,6 +24,7 @@ public class UserSyncCl {
     /**
      * 同步子节点的用户数据
      */
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.syncUserInfo"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
@@ -42,6 +44,7 @@ public class UserSyncCl {
     /**
      * 获取远程用户信息（时间紧迫，先不分页）
      */
+    @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue("dtask.user.remote"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),

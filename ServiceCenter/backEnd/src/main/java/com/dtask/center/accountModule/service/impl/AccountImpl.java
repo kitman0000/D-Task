@@ -1,10 +1,10 @@
 package com.dtask.center.accountModule.service.impl;
 
+import com.MQClouder.EncryptRabbitSender;
 import com.dtask.center.accountModule.entity.RemoteLoginEntity;
 import com.dtask.center.accountModule.service.IAccount;
 import com.dtask.center.bindingModule.bo.NodeBo;
 import com.dtask.center.bindingModule.dao.BindingDao;
-import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

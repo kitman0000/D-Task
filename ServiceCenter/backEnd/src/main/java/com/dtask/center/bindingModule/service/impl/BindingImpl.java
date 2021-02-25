@@ -10,7 +10,7 @@ import com.dtask.center.bindingModule.service.IBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zhong on 2020-5-16.
@@ -19,6 +19,8 @@ import java.util.List;
 public class BindingImpl implements IBinding {
     @Autowired
     private BindingDao bindingDao;
+
+    private static HashMap<Integer, Date> nodeAliveCache; // 节点心跳包缓存，记录上次心跳包发送时间
 
     @Override
     public String askBanding(AskBindingEntity askBindingEntity) {
@@ -63,7 +65,17 @@ public class BindingImpl implements IBinding {
 
     @Override
     public List<NodeBo> getAllNodes() {
-        return bindingDao.getAllNodes();
+        List<NodeBo> nodeList = bindingDao.getAllNodes();
+
+        // 获取是否在线
+        for (NodeBo node : nodeList) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MINUTE, -2);
+
+            node.setOnline(BindingImpl.nodeAliveCache.get(node.getId()).after(calendar.getTime()));
+        }
+
+        return nodeList;
     }
 
     @Override
@@ -88,5 +100,10 @@ public class BindingImpl implements IBinding {
         bindingDao.setRoot(nodeEntity.getNodeID());
 
         return "SET_SUCCESS";
+    }
+
+    @Override
+    public void receiveKeepAlive(int nodeID) {
+        nodeAliveCache.put(nodeID,new Date());
     }
 }

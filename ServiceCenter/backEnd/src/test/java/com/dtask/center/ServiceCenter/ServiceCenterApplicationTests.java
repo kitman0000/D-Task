@@ -1,8 +1,8 @@
 package com.dtask.center.ServiceCenter;
 
+import com.MQClouder.EncryptRabbitSender;
 import com.dtask.center.remoteTaskModule.entity.GetRemoteTaskListEntity;
 import com.dtask.center.remoteTaskModule.entity.RemoteTaskSearchEntity;
-import com.dtask.common.util.EncryptRabbitSender;
 import com.dtask.common.util.JsonUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,15 +26,15 @@ public class ServiceCenterApplicationTests {
 	@Test
 	public void addNode(){
 		String sendJsonMsg = "{\"nodeName\":"+"\"北京节点\""+"}";
-		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		rabbitSender.encryptSendWithoutResponse("dtask.addNode",sendJsonMsg);
 		sendJsonMsg = "{\"nodeName\":"+"\"深圳节点\""+"}";
-		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		rabbitSender.encryptSendWithoutResponse("dtask.addNode",sendJsonMsg);
 		sendJsonMsg = "{\"nodeName\":"+"\"广东节点\""+"}";
-		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		rabbitSender.encryptSendWithoutResponse("dtask.addNode",sendJsonMsg);
 		sendJsonMsg = "{\"nodeName\":"+"\"杭州节点\""+"}";
-		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		rabbitSender.encryptSendWithoutResponse("dtask.addNode",sendJsonMsg);
 		sendJsonMsg = "{\"nodeName\":"+"\"薿峬哕椟节点\""+"}";
-		rabbitSender.sendWithoutResponse("dtask.addNode",sendJsonMsg);
+		rabbitSender.encryptSendWithoutResponse("dtask.addNode",sendJsonMsg);
 	}
 
 	// 16
