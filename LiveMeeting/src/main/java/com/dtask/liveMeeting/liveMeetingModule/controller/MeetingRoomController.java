@@ -16,6 +16,6 @@ public class MeetingRoomController {
 
     @RequestMapping(value = "/meetingRoom",method = RequestMethod.GET)
     List<MeetingRoom> getMeetingRoom(){
-
+        return null;
     }
 }
