@@ -76,7 +76,18 @@
 				 :total="page">
 				</el-pagination>
 			</el-main>
-			<el-aside width="200px">
+			<el-aside width="250px">
+				<div id="statusChart" style="height:150px"></div>
+				<div id="starChart" style="height:150px"></div>
+				<div id="levelChart" style="height:150px"></div>
+				<div style="margin-top: 20px">
+					<el-radio-group v-model="dayName" @change="getSubTaskEchartsAmount()" size="mini">
+					<el-radio-button label="一周"></el-radio-button>
+					<el-radio-button label="30天"></el-radio-button>
+					<el-radio-button label="半年"></el-radio-button>
+					<el-radio-button label="一年"></el-radio-button>
+					</el-radio-group>
+				</div>
 				<b>拥有者：</b>
 				<p>{{creator}}</p>
 				<b>管理者：</b>
@@ -93,6 +104,10 @@
 <script>
 	import axios from 'axios';
 	import qs from 'qs';
+	var echarts = require("echarts/lib/echarts")
+	require('echarts/lib/component/tooltip')
+	require('echarts/lib/component/title')
+	require('echarts/lib/chart/pie')
 	export default {
 		data() {
 			return {
@@ -138,10 +153,278 @@
 				managers:[],
 				employees:[],
 				urlManagers:[],
-				urlEmployees:[]
+				urlEmployees:[],
+				dayName:"一周",
+				day:0,
+				planningStatusAmount:0,
+				doingStatusAmount:0,
+				completedStatusAmount:0,
+				cancelledStatusAmount:0,
+				normalStarAmount:0,
+				relativelyImportantStarAmount:0,
+				importantStarAmount:0,
+				particularlyImportantStarAmount:0,
+				level0Amount:0,
+				level1Amount:0,
+				level2Amount:0,
+				level3Amount:0
 			}
 		},
+		mounted(){
+			this.getSubTaskEchartsAmount();
+		},
 		methods: {
+			subTaskStateEcharts(){
+				var statusChart = echarts.init(document.getElementById('statusChart'));
+				statusChart.setOption({
+					title:{
+						 text: '任务状态统计',
+						 left: 'center',
+						 textStyle: {
+							 fontSize:17
+						 }
+					},
+					tooltip: {
+						trigger: 'item'
+					},
+					legend: {
+						top: '17%',
+						left: 'center',
+						itemWidth: 17,   
+            			itemHeight: 8,
+						textStyle: {
+							 fontSize:9.5
+						}
+					},
+					color:['#3399FF','#FF6600','#009933','#C0C0C0'],
+					series: [
+						{
+							name: '状态',
+							type: 'pie',
+							radius: ['55%','65%'],
+							center: ['50%','65%'],
+							avoidLabelOverlap: false,
+							label: {
+								show: false,
+								position: 'center',
+							},
+							emphasis: {
+								label: {
+									show: true,
+									fontSize: '8',
+									fontWeight: 'bold'
+								}
+							},
+							labelLine: {
+								show: false
+							},
+							data: [
+								{value:this.planningStatusAmount, name: '计划中'},
+								{value:this.doingStatusAmount, name: '执行中'},
+								{value:this.completedStatusAmount, name: '已完成'},
+								{value:this.cancelledStatusAmount, name: '已取消'}
+							]
+						}
+					]
+				});
+				var starChart = echarts.init(document.getElementById('starChart'));
+				starChart.setOption({
+					title:{
+						 text: '任务星级统计',
+						 left: 'center',
+						 textStyle: {
+							 fontSize:17
+						 }
+					},
+					tooltip: {
+						trigger: 'item'
+					},
+					legend: {
+						top: '17%',
+						left: 'center',
+						itemWidth: 17,   
+            			itemHeight: 8,
+						textStyle: {
+							 fontSize:9.5
+						}
+					},
+					color:['blue','darkgreen','orange','red'],
+					series: [
+						{
+							name: '星级',
+							type: 'pie',
+							radius: ['55%','65%'],
+							center: ['50%','65%'],
+							avoidLabelOverlap: false,
+							label: {
+								show: false,
+								position: 'center',
+							},
+							emphasis: {
+								label: {
+									show: true,
+									fontSize: '8',
+									fontWeight: 'bold'
+								}
+							},
+							labelLine: {
+								show: false
+							},
+							data: [
+								{value:this.normalStarAmount, name: '一般'},
+								{value:this.relativelyImportantStarAmount, name: '较重要'},
+								{value:this.importantStarAmount, name: '重要'},
+								{value:this.particularlyImportantStarAmount, name: '特别重要'}
+							]
+						}
+					]
+				});
+				var levelChart = echarts.init(document.getElementById('levelChart'));
+				levelChart.setOption({
+					title:{
+						 text: '任务级别统计',
+						 left: 'center',
+						 textStyle: {
+							 fontSize:17
+						 }
+					},
+					tooltip: {
+						trigger: 'item'
+					},
+					legend: {
+						top: '17%',
+						left: 'center',
+						itemWidth: 17,   
+            			itemHeight: 8,
+						textStyle: {
+							 fontSize:9.5
+						}
+					},
+					series: [
+						{
+							name: '级别',
+							type: 'pie',
+							radius: ['55%','65%'],
+							center: ['50%','65%'],
+							avoidLabelOverlap: false,
+							label: {
+								show: false,
+								position: 'center',
+							},
+							emphasis: {
+								label: {
+									show: true,
+									fontSize: '8',
+									fontWeight: 'bold'
+								}
+							},
+							labelLine: {
+								show: false
+							},
+							data: [
+								{value:this.level0Amount, name: '等级0'},
+								{value:this.level1Amount, name: '等级1'},
+								{value:this.level2Amount, name: '等级2'},
+								{value:this.level3Amount, name: '等级3'}
+							]
+						}
+					]
+				});
+			},
+			getSubTaskEchartsAmount(){
+				switch(this.dayName){
+					case '一周':
+						this.day=7;
+						break;
+					case '30天':
+						this.day=30;
+						break;
+					case '半年':
+						this.day=183;
+						break;
+					case '一年':
+						this.day=365;
+						break;
+				}
+
+				axios.get('/api/localTask/localSubTaskChart', {
+						params: {
+							'day':this.day,
+							'taskID': localStorage.getItem('taskID')
+							
+						},
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {
+						this.level0Amount=0;
+						this.level1Amount=0;
+						this.level2Amount=0;
+						this.level3Amount=0;
+						this.planningStatusAmount=0;
+						this.doingStatusAmount=0;
+						this.completedStatusAmount=0;
+						this.cancelledStatusAmount=0;
+						this.normalStarAmount=0;
+						this.relativelyImportantStarAmount=0;
+						this.importantStarAmount=0;
+						this.particularlyImportantStarAmount=0;
+						var response = res.data.data;
+						var a = eval(response);
+						var i=0;
+						for(i=0;i<a.chartLevelBo.length;i++){
+							switch(a.chartLevelBo[i].level){
+								case 0:
+									this.level0Amount=a.chartLevelBo[i].levelAmount;
+									break;
+								case 1:
+									this.level1Amount=a.chartLevelBo[i].levelAmount;
+									break;
+								case 2:
+									this.level2Amount=a.chartLevelBo[i].levelAmount;
+									break;
+								case 3:
+									this.level3Amount=a.chartLevelBo[i].levelAmount;	
+									break;
+							}
+						};
+						for(i=0;i<a.chartStarBo.length;i++){
+							switch(a.chartStarBo[i].star){
+								case 0:
+									this.normalStarAmount=a.chartStarBo[i].starAmount;
+									break;
+								case 1:
+									this.relativelyImportantStarAmount=a.chartStarBo[i].starAmount;
+									break;
+								case 2:
+									this.importantStarAmount=a.chartStarBo[i].starAmount;
+									break;
+								case 3:
+									this.particularlyImportantStarAmount=a.chartStarBo[i].starAmount;	
+									break;
+							}
+						};
+						for(i=0;i<a.chartStatusBo.length;i++){
+							switch(a.chartStatusBo[i].status){
+								case 0:
+									this.planningStatusAmount=a.chartStatusBo[i].statusAmount;
+									break;
+								case 1:
+									this.doingStatusAmount=a.chartStatusBo[i].statusAmount;
+									break;
+								case 2:
+									this.completedStatusAmount=a.chartStatusBo[i].statusAmount;
+									break;
+								case 3:
+									this.cancelledStatusAmount=a.chartStatusBo[i].statusAmount;	
+									break;
+							}
+						};
+						this.subTaskStateEcharts();
+					})
+
+			},
 			handleSelectionChange(val) {
 				let that_ = this;
 				that_.multipleSelection = val;
@@ -436,7 +719,6 @@
 			localStorage.removeItem('taskDetail');
 			localStorage.removeItem('add');
 			this.getDefaultSubTask();
-			
 			const h = this.$createElement;
 			this.$notify({
 				title: '提示',

@@ -7,7 +7,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import md5 from 'js-md5'
 import VueCookies from 'vue-cookies'
 import Vue2OrgTree from 'vue-tree-color'
+import * as echarts from 'echarts';
 Vue.prototype.$md5 = md5;
+Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookies)
