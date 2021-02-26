@@ -8,16 +8,19 @@ import com.dtask.liveMeetingCenter.liveMeetingModule.service.IMeetingRoom;
 import io.agora.media.AccessToken;
 import io.agora.rtm.RtmTokenBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class MeetingRoomImpl implements IMeetingRoom {
+    @Value("${agora.appId}")
+    private String appId;
 
-    private String appId = "";
-    private String appCertificate = "";
-    private String userId = "";
+    @Value("${agora.appCertificate}")
+    private String appCertificate;
+
     private int expireTimestamp = 1446455471;
 
     @Autowired
@@ -44,7 +47,7 @@ public class MeetingRoomImpl implements IMeetingRoom {
         String token = "";
         try {
             RtmTokenBuilder builder = new RtmTokenBuilder();
-            token = builder.buildToken(appId, appCertificate, userId,meetingRoomID, RtmTokenBuilder.Role.Rtm_User, expireTimestamp);
+            token = builder.buildToken(appId, appCertificate, userID,meetingRoomID, RtmTokenBuilder.Role.Rtm_User, expireTimestamp);
         }catch (Exception ex){
             ex.printStackTrace();
             return "TOKEN_CREATE_FAILED";
