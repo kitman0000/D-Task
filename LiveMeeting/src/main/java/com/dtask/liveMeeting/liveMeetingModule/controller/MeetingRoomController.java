@@ -45,7 +45,7 @@ public class MeetingRoomController {
     /**
      * 进入房间
      * @param accessToMeetingRoomEntity 要加入的房间信息
-     * @return token
+     * @return token TOKEN_CREATE_FAILED
      */
     @RequestMapping(value = "/access",method = RequestMethod.POST)
     public String accessToMeetingRoom(AccessToMeetingRoomEntity accessToMeetingRoomEntity){

@@ -5,6 +5,8 @@ import com.dtask.liveMeetingCenter.liveMeetingModule.dao.MeetingRoomDao;
 import com.dtask.liveMeetingCenter.liveMeetingModule.entity.AccessToMeetingRoomEntity;
 import com.dtask.liveMeetingCenter.liveMeetingModule.entity.MeetingRoomEntity;
 import com.dtask.liveMeetingCenter.liveMeetingModule.service.IMeetingRoom;
+import io.agora.media.AccessToken;
+import io.agora.rtm.RtmTokenBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,11 @@ import java.util.List;
 
 @Service
 public class MeetingRoomImpl implements IMeetingRoom {
+
+    private String appId = "";
+    private String appCertificate = "";
+    private String userId = "";
+    private int expireTimestamp = 1446455471;
 
     @Autowired
     private MeetingRoomDao meetingRoomDao;
@@ -30,7 +37,20 @@ public class MeetingRoomImpl implements IMeetingRoom {
     @Override
     public String accessToMeetingRoom(AccessToMeetingRoomEntity accessToMeetingRoomEntity) {
         // todo 登录获取token
-        return null;
+        String meetingRoomID = String.valueOf(accessToMeetingRoomEntity.getMeetingRoomID());
+        // todo userID需要重新获取
+        String userID = accessToMeetingRoomEntity.getUserID();
+
+        String token = "";
+        try {
+            RtmTokenBuilder builder = new RtmTokenBuilder();
+            token = builder.buildToken(appId, appCertificate, userId,meetingRoomID, RtmTokenBuilder.Role.Rtm_User, expireTimestamp);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return "TOKEN_CREATE_FAILED";
+        }
+
+        return token;
     }
 
 

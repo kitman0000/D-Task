@@ -113,6 +113,15 @@
             <systemPath>${project.basedir}/src/main/resources/plugin-sdk.jar</systemPath>
         </dependency>
 
+        <!-- 声网SDK -->
+        <dependency>
+            <groupId>io.agora</groupId>
+            <artifactId>authentication</artifactId>
+            <version>1.6.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/agora-authentication.jar</systemPath>
+        </dependency>
+
 
     </dependencies>
 
