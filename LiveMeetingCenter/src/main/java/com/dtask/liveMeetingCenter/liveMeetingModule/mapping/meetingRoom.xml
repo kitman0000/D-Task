@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dtask.liveMeetingCenter.liveMeetingModule.dao.MeetingRoomDao">
+    <!--  首次运行，创建表MeeetingRoom  -->
+    <insert id="initMeetingRoom">
+        CREATE TABLE  IF NOT EXISTS `tb_meeting_room` (
+            `id`  int NOT NULL AUTO_INCREMENT ,
+            `name`  varchar(255) NULL ,
+            `hostID`  int(255) NULL ,
+            `password`  varchar(255) NULL ,
+            PRIMARY KEY (`id`)
+        )
+    </insert>
 
     <!-- 获取会议室 -->
     <select id="getMeetingRoom" resultType="com.dtask.liveMeetingCenter.liveMeetingModule.bo.MeetingRoomBo">

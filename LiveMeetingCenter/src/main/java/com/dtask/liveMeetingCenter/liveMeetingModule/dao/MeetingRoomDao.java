@@ -11,6 +11,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface MeetingRoomDao {
+    void initMeetingRoom();
+
     List<MeetingRoomBo> getMeetingRoom();
 
     void setMeetingRoom(@Param("meetingRoomEntity") MeetingRoomEntity meetingRoomEntity);
