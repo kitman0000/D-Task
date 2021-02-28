@@ -24,7 +24,7 @@ import java.util.Map;
 @Service
 public class LocalSubTaskImpl implements ILocalSubTask{
 
-    private final int COUNT_ONE_PAGE = 10;
+    private final int COUNT_ONE_PAGE = 20;
 
     @Autowired
     private LocalSubTaskDao localSubTaskDao;

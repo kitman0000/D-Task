@@ -1,8 +1,8 @@
-<template>
+<template  class="page">
 	<div>
-		<el-button type="primary" @click="changit()"  style="background: #24375E;border: 0px ;margin-left: 10px;">展现形式变化</el-button>
-		<el-button type="primary"  @click="setRoot()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">将自身设为根节点</el-button>
-		<el-button type="primary"  @click="unbind()" style="background: #24375E;border: 0px ;margin-left: 10px;float: right;">解绑自身</el-button>
+		<el-button type="primary" @click="changit()"  style="background: rgba(89, 104, 136, 0.4);border: 2px solid #5f5f64 ;margin-left: 10px;">展现形式变化</el-button>
+		<el-button type="primary"  @click="setRoot()" style="background: rgba(89, 104, 136, 0.4);border: 2px solid #5f5f64 ;margin-left: 10px;float: right;">将自身设为根节点</el-button>
+		<el-button type="primary"  @click="unbind()" style="background: rgba(89, 104, 136, 0.4);border: 2px solid #5f5f64 ;margin-left: 10px;float: right;">解绑自身</el-button>
 		<el-table :data="data" tooltip-effect="dark" style="width: 100%" v-if="!change">
 			<el-table-column prop="id" label="id" width="120px">
 			</el-table-column>
@@ -19,10 +19,10 @@
 			</el-table-column>
 		</el-table>
 		<div style="width: 100%;" align="center">
-		<vue2-org-tree v-if="change && data.length !=0" @on-node-click="NodeClick" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" @on-node-mouseover="mouseOver" :style="active" :data="TreeData"/>
+		<vue2-org-tree v-if="change && data.length !=0" :NodeClass="NodeClass" :judge="judge" @on-node-click="NodeClick" style="margin-top: 15px;margin-left: 35%;margin-right: 35%;" @on-node-mouseover="mouseOver" :style="active" :data="TreeData"/>
 		</br>
 		<div v-if="change" style="margin-top: 50px;">
-			<span>点击节点名称，申请绑定</span>
+			<span style="color:rgb(122, 151, 196)">点击节点名称，申请绑定,蓝色节点为在线状态，灰色节点为离线状态</span>
 		</div>
 		</div>
 	</div>
@@ -39,7 +39,11 @@
 				max:0,
 				array:[[]],
 				TreeData:{},
-				active:""
+				active:"",
+				judge:{swtich:true},
+				NodeClass:[
+                    "online","offline"
+                ],
 			}
 		},
 		methods: {
@@ -55,6 +59,10 @@
 						this.data = eval(response);
 						this.TreeData.id = this.data[0].id;
 						this.TreeData.label = this.data[0].nodeName;
+						// 设置在线状态
+						if(this.data[0].online){
+							newNode.swtich = "online";
+						}
 						this.TreeData.children = [];
 						var tmp = 1;
 						this.array[tmp-1] = new Array();
@@ -75,6 +83,12 @@
 								label: this.data[i].nodeName,
 								children: []
 							};
+							
+							// 设置在线状态
+							if(this.data[i].online){
+								newNode.swtich = "online";
+							}
+
 														
 							if(this.data[i].inheritRp.split(":").length == 2){ //根节点的子节点直接挂载
 								this.TreeData.children.push(newNode);
@@ -83,10 +97,9 @@
 								this.pushNode(this.data[i].inheritRp.split(":"), 1, this.data[i].inheritRp.split(":").length-1, newNode, this.TreeData.children); 
 							}
 						}
-					})
-					.catch(err => {
 
-					});
+						this.toggleExpand(this.TreeData,true);
+					})
 
 					
 			},
@@ -242,19 +255,59 @@
 			changit(){
 				this.change = !this.change;
 			},
-			
+			toggleExpand(data, val) {
+                var _this = this;
+                if (Array.isArray(data)) {
+                    data.forEach(function(item) {
+						
+                        _this.$set(item, "expand", val);
+                        if (item.children) {
+                           _this.toggleExpand(item.children, val);
+                        }
+                    });
+                } else {
+					
+                    this.$set(data, "expand", val);
+                    if (data.children) {
+                        _this.toggleExpand(data.children, val);
+                    }
+                }
+        	}
 		},
 		beforeMount: function() {
 			this.getAllNode();
 			this.getNode();
 		},
+		beforeCreate(){
+			  document.querySelector('body').setAttribute('style', 'background-color:#2a2f3d');
+		},
+		beforeDestroy(){
+			document.querySelector('body').removeAttribute('style');
+		}
 	}
 </script>
 
 <style>
+	 .org-tree{
+		background: #2a2f3d;
+		border: 0px;
+	}
+
+	.org-tree-container{
+		padding: 0px !important;
+	}
+
+	.online{
+		background: #5d5dbeb2 !important;
+	}
+
+	.offline{
+
+	}
+
 	.org-tree-node-label{
 		font-size: 12px;
-		background: #eeeefe;
+		background: #69708f79;
 		background-image: url(../assets/节点.png);
 		background-repeat: no-repeat;
 		background-position: center;
@@ -262,7 +315,7 @@
 		width: 130px;
 		height: 150px;
 		line-height: 1px;
-		border-bottom: 4px solid #888;
+		border-bottom: 4px solid rgba(110, 110, 110, 0.774);
 		border-radius: 10px;
 	}
 	
@@ -272,14 +325,15 @@
 	
 	.org-tree-node-label-inner{
 		margin-top: 160px;
-		background: #333388;
+		/* background: #333388; */
 		color: #fff;
 		height: 10px;
 		line-height: 10px;
+		background: #616161;
 	}
 	
 	.org-tree-node-label-inner:hover{
-		background: #6666ff;
+		background: #6666ff !important;
 	}
 
 	/* 根节点 */
@@ -294,6 +348,5 @@
 		border-bottom: 4px solid #888;
 		border-radius: 10px;
 	}
-	
 
 </style>

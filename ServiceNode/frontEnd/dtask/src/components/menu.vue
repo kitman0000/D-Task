@@ -3,7 +3,7 @@
 		<el-container>
 		<img src="../assets/menuShowBtn.png"  @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
 		  <el-aside width="200px" style="min-height: 1000px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
-			  <el-menu   text-color="#fff" active-text-color="#FFF" >
+			  <el-menu   text-color="#fff" active-text-color="#FFF" style="border:0px" >
 			  	<li v-for="menu in menus">
 			  		<el-submenu :index="menu.id.toString()" style="background-color: #10192B;">
 			  			<template slot="title"  >{{menu.name}}</template>
@@ -28,7 +28,7 @@
 			  <div style="margin-top: 0px; position: absolute; right: 10%; 
 						top: 20px;background: rgb(189, 206, 240);padding-left: 10px;
 						padding-right: 10px;border-radius: 3px;" >
-			  	早上好！<span>{{userName}}</span>
+			  	你好！<span>{{userName}}</span>
 			  </div>
 			 <router-view>
 			 </router-view>

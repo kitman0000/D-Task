@@ -1,17 +1,28 @@
 <template>
 	<div>
-		<h3>发件详情</h3>
-		<p>收件人:{{receiver}}</p>
-		<p>标题: {{title}}</p>
-		<p>内容: </br>{{content}}</p>
-		<p>发件时间: {{sendTime}}</p>
-		<p>是否紧急: {{isImportant}}</p>
-		<div v-if='attachment.length !=0'>
-		<label>附件：</label>
-		<p  v-for="item1 in attachment"><a href="item1">{{item1}}</a></p>
+		<h3>收件详情</h3>
+		<el-card class="box-card">
+			<p>主题: {{title}}</p>			
+			<p>来自:{{sender}}</p>
+			<el-tag v-if="isImportant" type="danger">紧急邮件</el-tag>
+		</el-card>
+		<el-card class="box-card" style="min-height:400px" >
+			<p>内容: <br>{{content}}</p>
+		</el-card>
+
+		<div  v-if='attachment.length !=0'>
+			<el-card class="box-card" >
+				<label>附件：</label>
+				<p v-for="item1 in attachment"><a :href="item1">{{item1}}</a></p>
+			</el-card>
 		</div>
+
+		<p>发件时间: {{sendTime}}</p>
+
+
 	</div>
 </template>
+
 
 <script>
 	import axios from 'axios';
@@ -21,7 +32,7 @@
 				title:'',
 				content:'',
 				sendTime:'',
-				isImportant:'',
+				isImportant:false,
 				attachment:[],
 				receiver:'',
 			}
@@ -44,13 +55,7 @@
 						this.content = response.content;
 						this.sendTime = new Date(response.sendTime).toLocaleDateString().replace(/\//g, '-');
 						this.receiver = localStorage.getItem("receiver");
-						if(response.important == true){
-							this.isImportant = "是";
-						}
-						else
-						{
-							this.isImportant = "否";
-						}
+						this.isImportant = response.important;
 						console.log(response.attachment.length);
 						if(response.attachment.length != 0){
 							var a = response.attachment.split(',');

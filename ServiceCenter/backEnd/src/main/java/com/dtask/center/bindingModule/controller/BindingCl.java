@@ -152,9 +152,9 @@ public class BindingCl {
      */
     @MessageReceiver
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue("dtask.test"),
+            value = @Queue("dtask.keepAlive"),
             exchange = @Exchange(value = "topicExchange",type = "topic"),
-            key = "dtask.test"
+            key = "dtask.keepAlive"
     ))
     public void receiveKeepAlive(String nodeID){
         binding.receiveKeepAlive(Integer.parseInt(nodeID));
