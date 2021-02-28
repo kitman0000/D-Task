@@ -14,7 +14,7 @@
     </typeAliases>
 
     <mappers>
-
+        <mapper resource="com/dtask/liveMeetingCenter/liveMeetingModule/mapping/meetingRoom.xml"/>
     </mappers>
 
 </configuration>
