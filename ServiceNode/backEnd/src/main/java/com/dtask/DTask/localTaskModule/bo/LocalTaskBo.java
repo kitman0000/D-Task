@@ -18,4 +18,12 @@ public class LocalTaskBo {
     private int departmentID;
 
     private boolean allowedMemberChangeStatus;
+
+    private int planning;
+
+    private int working;
+
+    private int finish;
+
+    private int cancel;
 }

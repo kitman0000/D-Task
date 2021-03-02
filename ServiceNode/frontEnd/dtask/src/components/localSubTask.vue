@@ -170,6 +170,9 @@
 				level3Amount:0
 			}
 		},
+		mounted(){
+			this.getSubTaskEchartsAmount();
+		},
 		methods: {
 			subTaskStateEcharts(){
 				var statusChart = echarts.init(document.getElementById('statusChart'));
@@ -343,7 +346,8 @@
 						this.day=365;
 						break;
 				}
-				axios.get('/api/remoteTask/remoteSubTaskChart', {
+
+				axios.get('/api/localTask/localSubTaskChart', {
 						params: {
 							'day':this.day,
 							'taskID': localStorage.getItem('taskID')
@@ -419,6 +423,7 @@
 						};
 						this.subTaskStateEcharts();
 					})
+
 			},
 			handleSelectionChange(val) {
 				let that_ = this;
@@ -430,8 +435,7 @@
 				});
 			},
 			handleCurrentChange() {
-				
-				axios.get('/api/remoteTask/remoteSubTaskList', {
+				axios.get('/api/localTask/localSubTaskList', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -458,20 +462,18 @@
 				var url = window.location.href.split('?')[1].split('&');
 				var taskID = url[0].split('=')[1];
 				this.creatorID = url[1].split('=')[1];
-				var nodeID = url[2].split('=')[1];
-				localStorage.setItem('nodeID',nodeID);
 				localStorage.setItem('taskID',taskID);
+				console.log(url);
 				
-				axios.get('/api/remoteTask/remoteSubTaskNumber', {
+				axios.get('/api/localTask/localSubTaskNumber', {
 						params: {
-							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
 						},
 						headers: {
 							"token": localStorage.getItem("token"),
 						}
 					})
-					.then(res => {
+					.then(res => {				
 						var response = res.data.data;
 						this.page = response * 10;
 					})
@@ -479,7 +481,7 @@
 						alert(error);
 					});
 
-				axios.get('/api/remoteTask/remoteSubTaskList', {
+				axios.get('/api/localTask/localSubTaskList', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -490,6 +492,15 @@
 						}
 					})
 					.then(res => {
+						
+						if(res.data.ret == 2){
+							this.$alert('您不具有访问此任务的权限', '提示', {
+								confirmButtonText: '确定',
+							}).then(()=>{
+								this.$router.push({path:'/userLocalTask'});
+							})
+						}
+						
 						var response = res.data.data;
 						var a = eval(response);
 						
@@ -505,7 +516,7 @@
 					});
 
 
-				axios.get('/api/remoteTask/userRole', {
+				axios.get('/api/localTask/userRole', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -522,7 +533,7 @@
 						console.log(error);
 					});
 
-				axios.get('/api/remoteTask/allowUserChangeStatus', {
+				axios.get('/api/localTask/allowUserChangeStatus', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -539,23 +550,24 @@
 						console.log(error);
 					});
 					
-					axios.get('/api/remoteTask/remoteTaskMember', {
+					axios.get('/api/localTask/LocalTaskMember', {
 							params: {
 								/* 测试用子任务ID */
-								'taskID':localStorage.getItem('taskID') ,
+								'taskID': localStorage.getItem('taskID'),
 							},
 							headers: {
 								"token": localStorage.getItem("token"),
 							}
 						})
 						.then(res => {
-							var response = eval(res.data.data);
+							var response = res.data.data;
+							console.log(response);
 							for(var i =0;i<response.length;i++){
-								if(response[i].userID == this.creatorID && response[i].nodeID == nodeID ){
+								if(response[i].userID == this.creatorID){
 									this.creator = response[i].username;
 									continue;
 								}
-								if(response[i].admin && response[i]){
+								if(response[i].admin){
 									this.managers.push(response[i].username);
 									this.urlManagers.push(response[i]);
 								}
@@ -575,7 +587,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					axios.delete('/api/remoteTask/remoteSubTask', {
+					axios.delete('/api/localTask/localSubTask', {
 							params: {
 								'id': index.id,
 							},
@@ -612,7 +624,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					axios.delete('/api/remoteTask/remoteSubTask', {
+					axios.delete('/api/localTask/localSubTask', {
 							params: {
 								
 								'id': selectedArray,
@@ -668,9 +680,10 @@
 			editTaskState(){
 				var a = new URLSearchParams();
 				a.append("status",this.value);
+				/* 测试用子任务ID */
 				a.append("taskID", localStorage.getItem('taskID'));
 				a.append("id",this.id);
-				axios.put('/api/remoteTask/remoteSubTaskStatus', a, {
+				axios.put('/api/localTask/localSubTaskStatus', a, {
 							headers: {
 								"token": localStorage.getItem("token"),
 							}
@@ -679,9 +692,10 @@
 							if (res.data.ret == 1) {
 								this.$alert('修改成功', '提示', {
 								         confirmButtonText: '确定',
-							   }).then(() => {
-							  window.location.reload();
-							  });
+										 callback: action => {
+										             window.location.reload();
+										           }
+								       });
 							} else{
 								this.$alert('权限不足', '提示', {
 								         confirmButtonText: '确定',
@@ -691,18 +705,25 @@
 						});
 			},
 			editTask(){
-				 this.$router.push({path:'/editJointSubTask'});
+				 this.$router.push({path:'/editTask'});
 			},
 			addTask(){
 				localStorage.setItem('add',true);
-				this.$router.push({path:'/editJointSubTask'});
+				this.$router.push({path:'/editTask'});
 			},
 			editParticipator(){
-				this.$router.push({path:'/editJoinParticipator'});
+				this.$router.push({path:'/EditParticipator'});
 			},
 		},
 		beforeMount: function() {
+			localStorage.removeItem('taskDetail');
+			localStorage.removeItem('add');
 			this.getDefaultSubTask();
+			const h = this.$createElement;
+			this.$notify({
+				title: '提示',
+				message: h('i', { style: 'color: rgb(36, 55, 94)'}, '当一个子任务离任务截止日期小于5天且未完成时，“星级”会自动变为重要，当离截止日期小于2天或逾期且未完成时，“星级”会自动变为非常重要。')
+			});
 		}
 	}
 </script>
