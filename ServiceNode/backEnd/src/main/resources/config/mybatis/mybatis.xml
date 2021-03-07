@@ -23,7 +23,7 @@
         <mapper resource="com/dtask/DTask/localTaskModule/mapping/localTaskMapping.xml"/>
         <mapper resource="com/dtask/DTask/localTaskModule/mapping/localSubTaskMapping.xml"/>
         <mapper resource="com/dtask/DTask/settingModule/mapping/settingsMapping.xml"/>
-        <mapper resource="com/dtask/DTask/localTaskModule/mapping/localSubtaskChartMapping.xml"/>
+        <mapper resource="com/dtask/DTask/localTaskModule/mapping/localSubTaskChartMapping.xml"/>
     </mappers>
 
 </configuration>

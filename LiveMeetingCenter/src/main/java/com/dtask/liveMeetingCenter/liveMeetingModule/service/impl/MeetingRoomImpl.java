@@ -6,6 +6,7 @@ import com.dtask.liveMeetingCenter.liveMeetingModule.entity.AccessToMeetingRoomE
 import com.dtask.liveMeetingCenter.liveMeetingModule.entity.MeetingRoomEntity;
 import com.dtask.liveMeetingCenter.liveMeetingModule.service.IMeetingRoom;
 import io.agora.media.AccessToken;
+import io.agora.media.RtcTokenBuilder;
 import io.agora.rtm.RtmTokenBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,9 @@ import java.util.List;
 
 @Service
 public class MeetingRoomImpl implements IMeetingRoom {
+
+    private final int EXPIRATION_TIME_IN_SECONDS = 3600; // token 有效期（秒）
+
     @Value("${agora.appId}")
     private String appId;
 
@@ -39,15 +43,17 @@ public class MeetingRoomImpl implements IMeetingRoom {
 
     @Override
     public String accessToMeetingRoom(AccessToMeetingRoomEntity accessToMeetingRoomEntity) {
-        // todo 登录获取token
         String meetingRoomID = String.valueOf(accessToMeetingRoomEntity.getMeetingRoomID());
-        // todo userID需要重新获取
         String userID = accessToMeetingRoomEntity.getUserID();
 
         String token = "";
+
+
         try {
-            RtmTokenBuilder builder = new RtmTokenBuilder();
-            token = builder.buildToken(appId, appCertificate, userID,meetingRoomID, RtmTokenBuilder.Role.Rtm_User, expireTimestamp);
+            RtcTokenBuilder builder = new RtcTokenBuilder();
+            int timestamp = (int)(System.currentTimeMillis() / 1000 + EXPIRATION_TIME_IN_SECONDS); // token过期时间
+            token = builder.buildTokenWithUid(appId,appCertificate,meetingRoomID,
+                    Integer.valueOf(userID), RtcTokenBuilder.Role.Role_Publisher,timestamp);
         }catch (Exception ex){
             ex.printStackTrace();
             return "TOKEN_CREATE_FAILED";

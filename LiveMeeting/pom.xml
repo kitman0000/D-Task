@@ -113,6 +113,12 @@
             <systemPath>${project.basedir}/src/main/resources/plugin-sdk.jar</systemPath>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 
     </dependencies>
 
@@ -125,6 +131,7 @@
                     <layers>
                         <enabled>true</enabled>
                     </layers>
+                    <fork>true</fork>
                 </configuration>
             </plugin>
         </plugins>

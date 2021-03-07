@@ -14,12 +14,12 @@
 					<el-col :span="5"  v-for="task in taskList" :key="task" >
 					<el-card  class="box-card taskCard" @click.native="userTaskDetail(task.id,task.creator)">
 						任务名：{{task.name}}<br/>
-						创建者:{{task.creatorName}}
+						创建者：{{task.creatorName}}
 
 						<div v-if="task.planning + task.working + task.finish + task.cancel != 0">
 							<div style="height:250px"  v-bind:id="task.id"></div>
 						</div>
-						<div style="margin-top:90px;margin-left:80px">
+						<div style="margin-top:90px;width:100%;" align="center">
 							<span style="color:#ccc;font-size:20px">
 								暂无数据
 							</span>

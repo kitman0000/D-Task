@@ -1,32 +1,34 @@
 Manifest-Version: 1.0
-Class-Path: attoparser-2.0.5.RELEASE.jar spring-expression-5.1.9.RELEA
- SE.jar jackson-datatype-jdk8-2.9.9.jar spring-jcl-5.1.9.RELEASE.jar j
- boss-logging-3.3.3.Final.jar hibernate-validator-6.0.17.Final.jar jav
- ax.annotation-api-1.3.2.jar spring-boot-2.1.8.RELEASE.jar unbescape-1
- .1.6.RELEASE.jar spring-boot-starter-jdbc-2.1.8.RELEASE.jar spring-tx
- -5.1.9.RELEASE.jar thymeleaf-3.0.11.RELEASE.jar mybatis-spring-boot-s
- tarter-2.0.0.jar commons-pool2-2.6.2.jar spring-boot-starter-tomcat-2
- .1.8.RELEASE.jar slf4j-api-1.7.28.jar spring-boot-starter-2.1.8.RELEA
- SE.jar spring-boot-starter-amqp-2.1.8.RELEASE.jar spring-boot-starter
- -aop-2.1.8.RELEASE.jar log4j-to-slf4j-2.11.2.jar spring-beans-5.1.9.R
- ELEASE.jar snakeyaml-1.23.jar spring-jdbc-5.1.9.RELEASE.jar jackson-d
- atabind-2.9.9.3.jar tomcat-embed-websocket-9.0.24.jar amqp-client-5.4
- .3.jar validation-api-2.0.1.Final.jar spring-amqp-2.1.8.RELEASE.jar M
- QClouder.jar logback-classic-1.2.3.jar spring-web-5.1.9.RELEASE.jar s
- pring-boot-autoconfigure-2.1.8.RELEASE.jar jackson-datatype-jsr310-2.
- 9.9.jar log4j-api-2.11.2.jar spring-boot-starter-json-2.1.8.RELEASE.j
- ar tomcat-embed-el-9.0.24.jar thymeleaf-spring5-3.0.11.RELEASE.jar pl
- ugin-sdk.jar mysql-connector-java-8.0.11.jar mybatis-spring-2.0.0.jar
-  mybatis-spring-boot-autoconfigure-2.0.0.jar spring-boot-starter-web-
- 2.1.8.RELEASE.jar classmate-1.4.0.jar spring-aop-5.1.9.RELEASE.jar ja
- ckson-module-parameter-names-2.9.9.jar spring-boot-starter-thymeleaf-
- 2.1.8.RELEASE.jar spring-retry-1.2.4.RELEASE.jar spring-webmvc-5.1.9.
- RELEASE.jar log4j-core-2.13.1.jar mybatis-3.5.0.jar spring-boot-start
- er-logging-2.1.8.RELEASE.jar aspectjweaver-1.8.0.jar logback-core-1.2
- .3.jar HikariCP-3.2.0.jar jackson-core-2.9.8.jar jackson-annotations-
- 2.9.0.jar jul-to-slf4j-1.7.28.jar spring-core-5.1.9.RELEASE.jar tomca
- t-embed-core-9.0.24.jar spring-rabbit-2.1.8.RELEASE.jar spring-contex
- t-5.1.9.RELEASE.jar spring-messaging-5.1.9.RELEASE.jar thymeleaf-extr
- as-java8time-3.0.4.RELEASE.jar
+Class-Path: mysql-connector-java-8.0.11.jar jackson-datatype-jdk8-2.9.
+ 9.jar attoparser-2.0.5.RELEASE.jar spring-core-5.1.9.RELEASE.jar tomc
+ at-embed-core-9.0.24.jar tomcat-embed-el-9.0.24.jar tomcat-embed-webs
+ ocket-9.0.24.jar log4j-to-slf4j-2.11.2.jar thymeleaf-3.0.11.RELEASE.j
+ ar slf4j-api-1.7.28.jar jackson-module-parameter-names-2.9.9.jar myba
+ tis-spring-2.0.0.jar spring-boot-starter-aop-2.1.8.RELEASE.jar spring
+ -boot-starter-websocket-2.1.8.RELEASE.jar spring-tx-5.1.9.RELEASE.jar
+  HikariCP-3.2.0.jar logback-classic-1.2.3.jar bcprov-jdk16-1.46.jar h
+ ibernate-validator-6.0.17.Final.jar jackson-annotations-2.9.0.jar log
+ back-core-1.2.3.jar validation-api-2.0.1.Final.jar jackson-databind-2
+ .9.9.3.jar spring-boot-starter-logging-2.1.8.RELEASE.jar mybatis-3.5.
+ 0.jar jul-to-slf4j-1.7.28.jar spring-websocket-5.1.9.RELEASE.jar jack
+ son-core-2.9.8.jar amqp-client-5.4.3.jar spring-beans-5.1.9.RELEASE.j
+ ar aspectjweaver-1.8.0.jar spring-messaging-5.1.9.RELEASE.jar MQCloud
+ er.jar spring-jcl-5.1.9.RELEASE.jar spring-boot-starter-thymeleaf-2.1
+ .8.RELEASE.jar spring-expression-5.1.9.RELEASE.jar spring-boot-starte
+ r-amqp-2.1.8.RELEASE.jar spring-boot-2.1.8.RELEASE.jar spring-aop-5.1
+ .9.RELEASE.jar unbescape-1.1.6.RELEASE.jar jackson-datatype-jsr310-2.
+ 9.9.jar spring-jdbc-5.1.9.RELEASE.jar mybatis-spring-boot-starter-2.0
+ .0.jar plugin-sdk.jar spring-context-5.1.9.RELEASE.jar spring-boot-st
+ arter-web-2.1.8.RELEASE.jar spring-boot-starter-2.1.8.RELEASE.jar spr
+ ing-boot-autoconfigure-2.1.8.RELEASE.jar agora-authentication.jar cla
+ ssmate-1.4.0.jar spring-web-5.1.9.RELEASE.jar spring-retry-1.2.4.RELE
+ ASE.jar log4j-api-2.11.2.jar jboss-logging-3.3.3.Final.jar javax.anno
+ tation-api-1.3.2.jar commons-pool2-2.6.2.jar spring-webmvc-5.1.9.RELE
+ ASE.jar spring-boot-starter-jdbc-2.1.8.RELEASE.jar mybatis-spring-boo
+ t-autoconfigure-2.0.0.jar spring-amqp-2.1.8.RELEASE.jar spring-boot-s
+ tarter-tomcat-2.1.8.RELEASE.jar spring-boot-starter-json-2.1.8.RELEAS
+ E.jar log4j-core-2.13.1.jar spring-rabbit-2.1.8.RELEASE.jar thymeleaf
+ -extras-java8time-3.0.4.RELEASE.jar thymeleaf-spring5-3.0.11.RELEASE.
+ jar snakeyaml-1.23.jar
 Main-Class: com.dtask.liveMeetingCenter.LiveMeeting
 

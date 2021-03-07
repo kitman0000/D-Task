@@ -1,7 +1,11 @@
 package com.dtask.liveMeetingCenter.liveMeetingModule.controller;
 
 import com.dtask.common.util.JsonUtil;
+import com.dtask.liveMeetingCenter.liveMeetingModule.dao.LiveMeetingDao;
 import com.dtask.liveMeetingCenter.liveMeetingModule.entity.UserEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -10,6 +14,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,27 +24,70 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by zhong on 2021-2-28.
  */
 @Component
-@ServerEndpoint("/liveMeeting/{roomID}/{userID}")
+@ServerEndpoint("/api/liveMeeting/{roomID}/{userID}")
 public class LiveMeetingController  {
 
-    private int userID;
+    static Logger logger = LoggerFactory.getLogger(LiveMeetingController.class);
+
+    static {
+        logger.info("会议插件初始化成功");
+    }
+
+    private static LiveMeetingDao liveMeetingDao;
+
+    private final Object lock = new Object();
+
+    @Autowired
+    public void setLiveMeetingDao(LiveMeetingDao liveMeetingDao) {
+        LiveMeetingController.liveMeetingDao = liveMeetingDao;
+    }
+
+    private String userID;
 
     private int roomID;
 
-    private static ConcurrentHashMap<Integer,UserEntity> userMap = new ConcurrentHashMap<>();
+    private String username;
+
+    private String role = "";
+
+    private boolean isEditor = false;
+
+    private final String ROLE_HOST = "host";
+
+    private final String ROLE_AUDIENCE = "audience";
+
+    private static ConcurrentHashMap<String,UserEntity> userMap = new ConcurrentHashMap<>();
 
     @OnOpen
-    public void onOpen(@PathParam("roomID") int roomID,@PathParam("userID") int userID, Session session){
-        this.userID = userID;
+    public void onOpen(@PathParam("roomID") int roomID,@PathParam("userID") String uUserID, Session session){
+//        int nodeID = Integer.parseInt(uUserID.substring(0,3));
+//        int userID = Integer.parseInt(uUserID.substring(5));
+
+        this.userID = uUserID;
+
+        // 获取节点ID和用户ID
+        int nodeID = Integer.parseInt(uUserID.substring(0,3));
+        int uID = Integer.parseInt(uUserID.substring(3));
+
+        this.username = liveMeetingDao.getUsername(nodeID,uID);
+
         this.roomID = roomID;
 
         UserEntity userEntity = new UserEntity();
         userEntity.setRoomID(roomID)
                 .setUserID(userID)
-                .setSession(session);
+                .setSession(session)
+                .setUsername(this.username);
 
-        // todo 获取用户角色
-        userEntity.setRole("host");
+        String hostID = liveMeetingDao.getRoomHost(roomID);
+        if (userID.equals(hostID)){
+            // 用户是主持人
+            userEntity.setRole(ROLE_HOST);
+            sendSessionText(session,"ROOM_HOST");
+        }else {
+            // 将用户设为普通观众
+            userEntity.setRole(ROLE_AUDIENCE);
+        }
 
         userMap.put(userID,userEntity);
 
@@ -59,13 +107,14 @@ public class LiveMeetingController  {
      */
     @OnMessage
     public String OnMessage(String text) {
-        // todo 获取权限，判断角色
         // 会议纪要
         if (text.startsWith("note:")){
+            if (!userMap.get(userID).isEditor())
+                return ""; // 如果用户不是记录员，返回false;
 
-           Map<Integer,UserEntity> roomMap = getRoomUser(roomID);
+           Map<String,UserEntity> roomMap = getRoomUser(roomID);
            roomMap.forEach((id,user)->{
-               user.getSession().getAsyncRemote().sendText(text);
+               sendSessionText(user.getSession(),text);
            });
             return "";
         }
@@ -73,22 +122,21 @@ public class LiveMeetingController  {
         // 更换记录员
         if (text.startsWith("noteEditor:")){
             // 获取当前记录员,并通知取消记录员身份
-            Map<Integer,UserEntity> roomMap = getRoomUser(roomID);
+            Map<String,UserEntity> roomMap = getRoomUser(roomID);
             roomMap.forEach((id,user)->{
-                if (user.getRole().equals("editor")){
-                    user.getSession().getAsyncRemote().sendText("revokeEditor");
-                    user.setRole("host");
-                    // todo 判断是否是host,如果是则为host,不是则为audience
+                if (user.isEditor()){
+                    sendSessionText(user.getSession(),"revokeEditor");
+                    user.setEditor(false);
                     userMap.put(user.getUserID(),user);
                 }
             });
 
             // 获取当前记录员，并通知授予记录员身份
-            int newEditorID = Integer.parseInt(text.replaceFirst("noteEditor:",""));
-            roomMap.get(newEditorID).getSession().getAsyncRemote().sendText("grantEditor");
+            String newEditorID = text.replaceFirst("noteEditor:","");
+            sendSessionText(roomMap.get(newEditorID).getSession(),"grantEditor");
 
             UserEntity newEditor = userMap.get(newEditorID);
-            newEditor.setRole("editor");
+            newEditor.setEditor(true);
             userMap.put(newEditorID,newEditor);
 
             flushRoomUser(roomID);
@@ -98,8 +146,8 @@ public class LiveMeetingController  {
         return "";
     }
 
-    private Map<Integer,UserEntity> getRoomUser(int roomID){
-        Map<Integer,UserEntity> roomMap = new HashMap<>();
+    private Map<String,UserEntity> getRoomUser(int roomID){
+        Map<String,UserEntity> roomMap = new HashMap<>();
         roomMap.putAll(userMap);
 
         Iterator room = roomMap.entrySet().iterator();
@@ -114,11 +162,21 @@ public class LiveMeetingController  {
     }
 
     private void flushRoomUser(int roomID){
-        Map<Integer,UserEntity> roomMap = getRoomUser(roomID);
+        Map<String,UserEntity> roomMap = getRoomUser(roomID);
 
         roomMap.forEach((id,user)->{
-            user.getSession().getAsyncRemote().sendText("userList:" + JsonUtil.objectToJson(roomMap));
+            sendSessionText(user.getSession(),"userList:" + JsonUtil.objectToJson(roomMap));
         });
+    }
+
+    private void sendSessionText(Session session,String text){
+        synchronized (lock){
+            try {
+                session.getBasicRemote().sendText(text);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /***

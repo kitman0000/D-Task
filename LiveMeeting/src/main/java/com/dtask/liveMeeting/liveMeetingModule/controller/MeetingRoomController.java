@@ -17,7 +17,7 @@ import java.util.List;
  * Created by zhong on 2021-2-21.
  */
 @RestController
-@RequestMapping(value = "/liveMeeting/meetingRoom")
+@RequestMapping(value = "/api/liveMeeting/meetingRoom")
 public class MeetingRoomController {
 
     @Autowired
@@ -52,5 +52,13 @@ public class MeetingRoomController {
         return meetingRoom.accessToMeetingRoom(accessToMeetingRoomEntity);
     }
 
+    /**
+     * 获取多节点下的唯一用户表示
+     * @return uid
+     */
+    @RequestMapping(value = "/UserID",method = RequestMethod.GET)
+    public String getUserID(){
+        return meetingRoom.getUserID();
+    }
 
 }

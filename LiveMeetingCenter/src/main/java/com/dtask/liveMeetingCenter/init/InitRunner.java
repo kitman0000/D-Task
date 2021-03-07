@@ -19,6 +19,6 @@ public class InitRunner implements ApplicationRunner {
     @Order(value = 1)
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        meetingRoomDao.initMeetingRoom();
+        //meetingRoomDao.initMeetingRoom();
     }
 }

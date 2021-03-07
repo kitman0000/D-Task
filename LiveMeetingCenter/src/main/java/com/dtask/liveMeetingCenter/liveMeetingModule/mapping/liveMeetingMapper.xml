@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.liveMeetingCenter.liveMeetingModule.dao.LiveMeetingDao">
+
+    <!-- 获取房间的主持人 -->
+    <select id="getRoomHost" resultType="java.lang.String">
+        SELECT hostID FROM tb_meeting_room
+        <where>
+            id = #{roomID}
+        </where>
+    </select>
+
+    <!-- 获取用户名称 -->
+    <select id="getUsername" resultType="java.lang.String">
+        SELECT nickName FROM tb_user_info
+        <where>
+            id = #{userID}
+            AND
+            nodeID = #{nodeID}
+        </where>
+    </select>
+</mapper>

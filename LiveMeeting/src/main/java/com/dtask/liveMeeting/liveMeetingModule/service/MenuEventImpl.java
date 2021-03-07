@@ -17,10 +17,10 @@ public class MenuEventImpl implements IMenuEvent {
     public void getUserMenu(List<ParentMenuBo> list) {
         ParentMenuBo parentMenu = new ParentMenuBo();
 
-        parentMenu.setName("插件");
+        parentMenu.setName("视频会议插件");
         parentMenu.setId(parentMenu.hashCode());
         ChildMenuBo childMenuBo = new ChildMenuBo();
-        childMenuBo.setName("插件菜单");
+        childMenuBo.setName("视频会议室");
         childMenuBo.setUrl("pluginPage?pageUrl=pluginPage/liveMeeting/liveMeeting");
         childMenuBo.setIcon("chajian.png");
         childMenuBo.setId(childMenuBo.hashCode());

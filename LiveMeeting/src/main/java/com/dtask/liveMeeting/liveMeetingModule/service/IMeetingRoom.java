@@ -12,4 +12,6 @@ public interface IMeetingRoom {
     String setMeetingRoom(MeetingRoomEntity meetingRoomEntity);
 
     String accessToMeetingRoom(AccessToMeetingRoomEntity accessToMeetingRoomEntity);
+
+    String getUserID();
 }

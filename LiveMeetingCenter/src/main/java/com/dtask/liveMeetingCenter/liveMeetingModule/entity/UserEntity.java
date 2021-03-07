@@ -12,11 +12,15 @@ import javax.websocket.Session;
 @Data
 @Accessors(chain = true)
 public class UserEntity {
-    private int userID;
+    private String userID;
 
     private int roomID;
 
     private String role;
+
+    private boolean isEditor = false;
+
+    private String username;
 
     @JsonIgnore
     private Session session;

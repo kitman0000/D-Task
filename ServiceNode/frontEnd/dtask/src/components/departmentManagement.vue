@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<el-button style="float: right;margin-top: 15px;" @click="addDepartment()">添加部门</el-button>
+		<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+		 icon="el-icon-plus" @click="addDepartment()">添加部门</el-button>
 		<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%">
 			<el-table-column prop="id" label="部门ID号" width="120">
 			</el-table-column>

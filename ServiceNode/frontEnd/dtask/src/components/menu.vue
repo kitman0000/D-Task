@@ -2,17 +2,17 @@
 	<div>
 		<el-container>
 		<img src="../assets/menuShowBtn.png"  @click="showList()" :class="{'showListButton':isShow,'hideListButton':!isShow}">
-		  <el-aside width="200px" style="min-height: 1000px;background-color: #24375E; overflow-x: hidden;" v-if="isShow">
+		  <el-aside width="200px" style="min-height: 1000px;background-color: rgb(16, 25, 43); overflow-x: hidden;" v-if="isShow">
 			  <el-menu   text-color="#fff" active-text-color="#FFF" style="border:0px" >
 			  	<li v-for="menu in menus">
-			  		<el-submenu :index="menu.id.toString()" style="background-color: #10192B;">
+			  		<el-submenu :index="menu.id.toString()" style="background-color: rgb(42, 59, 91);">
 			  			<template slot="title"  >{{menu.name}}</template>
 			  				<div  v-for="subMenu in menu.childMenuBoList" style="border-bottom:1px solid #5C75A7;">
 								<el-row>
 									<el-col :span="4" :class="{'theSelectedMenu':theSelectedSubMenu==subMenu.id.toString(),'otherSubMenu':theSelectedSubMenu!=subMenu.id.toString()}" :index="subMenu.id.toString()" style="height: 50px;">
 										<img style="margin-left: 10px;margin-top: 20px;" height="15px" v-bind:src="require(`../assets/${subMenu.icon}`)" />
 									</el-col>
-									<el-col :span="20" style="height: 50px;background-color: #334E85;">
+									<el-col :span="20" style="height: 50px;background-color: rgb(86, 123, 181)">
 										<el-menu-item :index="subMenu.id.toString()" @click="test(subMenu)" style="padding-left: 10px;">
 											{{subMenu.name}}
 										</el-menu-item>
@@ -25,9 +25,7 @@
 		  </el-aside>
 
 		  <el-main>
-			  <div style="margin-top: 0px; position: absolute; right: 10%; 
-						top: 20px;background: rgb(189, 206, 240);padding-left: 10px;
-						padding-right: 10px;border-radius: 3px;" >
+			  <div class="welcomeLabel" @click="toUserSetting()">
 			  	你好！<span>{{userName}}</span>
 			  </div>
 			 <router-view>
@@ -45,7 +43,7 @@
 			const item = {};
 			return {
 				tableData: Array(20).fill(item),
-				userName: localStorage.getItem("username"),
+				userName: sessionStorage.getItem("username"),
 				userPwd: '',
 				menus:[],
 				theSelectedMenu:'',
@@ -78,6 +76,9 @@
 			},
 			showList(){
 				this.isShow=!this.isShow;
+			},
+			toUserSetting(){
+				this.$router.push("userSetting");
 			}
 		},
 		beforeMount:function() {
@@ -87,6 +88,27 @@
 </script>
 	
 <style>
+	.welcomeLabel{
+		margin-top: 0px; 
+		position: absolute; 
+		right: 10%; 
+		top: 15px;
+		background: transparent;
+		padding-left: 10px;
+		padding-right: 10px;
+		border-radius: 13px;
+		border: #77a6e7 2px solid;
+		color: #77a6e7;
+		cursor: pointer;
+		padding-top: 3px;
+		padding-bottom: 3px;
+	}
+
+	.welcomeLabel:hover{
+		background: #77a6e7;
+		color: #000;
+	}
+
 	body{
   margin:0;
 }
@@ -118,5 +140,9 @@
 	}
 	.el-submenu__title:focus,.el-submenu__title:hover{
 		color: #000 !important;
+	}
+	.title {
+		font-size: 20px;
+		color: #A3B6DD;
 	}
 </style>

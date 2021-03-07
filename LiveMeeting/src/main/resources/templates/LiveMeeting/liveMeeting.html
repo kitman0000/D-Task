@@ -6,10 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Basic Communication</title>
-    <link rel="stylesheet" href="../../static/zyf_css/common.css" />
+    <link rel="stylesheet" href="/pluginPage/liveMeeting_css/common.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous">
 </head>
+
+<script src="/pluginPage/liveMeeting_js/jquery.min.js"></script>
+<script src="/pluginPage/liveMeeting_js/materialize.min.js"></script>
+<script src="/pluginPage/liveMeeting_js/AgoraRTCSDK-3.3.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+<script src="/pluginPage/liveMeeting_js/md5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
 <body class="agora-theme">
 
 
@@ -18,7 +27,7 @@
 
 
 <!-- 模态框（Modal） -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background-color: transparent;width: 100%;max-height: 100%;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -39,13 +48,13 @@
 </div><!-- /.modal -->
 ​
 
-
+<!--会议室列表-->
 <table class="table" id="test_id">
     <thead>
     <tr>
         <th>会议室名称</th>
-        <th>房主ID</th>
-        <th>是否拥有密码</th>
+        <th>主持人</th>
+        <th>需要密码</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -53,19 +62,23 @@
     </tbody>
 </table>
 <div style="float: right;width: 200px;display: none;" id="memberList">
-    <b>与会人员</b>
+    <span class="title">在线用户</span>
     <br />
+    <!--    与会人员列表-->
     <div id="userList"></div>
-
-    <button type="button" class="btn btn-lg btn-primary btn-block" style="padding-top: 4px;display: none;" onclick="chooseEditor()" id="selectButton">选择该人员为记录员</button>
-    <button type="button" class="btn btn-lg btn-primary btn-block" style="padding-top: 4px;margin-top: 10px;" onclick="leaveMeeting()">离开会议</button>
+    <!--    默认为不显示 只有当被授予房主是会显示-->
+    <button type="button" class="btn-lg btn-block" style="padding-top: 4px;display: none;background: #24375E;color: #fff;" onclick="chooseEditor()" id="selectButton">设为记录员</button>
+    <button id="toggleCamBtn" type="button" class="btn-lg btn-block" style="padding-top: 4px;margin-top: 10px;color: #24375E;background-color: transparent;border: 1px solid #24375E;" onclick="toggleCam()">关闭摄像头</button>
+	<button type="button" class="btn-lg btn-block" style="padding-top: 4px;margin-top: 10px;color: rgb(202, 56, 56);background-color: transparent;border: 1px solid rgb(202, 56, 56);" onclick="leaveMeeting()">离开会议</button>
 </div>
-<div style="min-width: 300px; max-width: 350px;margin-right: 10px;float: right;display: none;" id="editor">
+<!--纪录区域 默认只显示不可操作的区域-->
+<div style="min-width: 600px; max-width: 350px;margin-right: 10px;float: right;display: none;height: 100%;" id="editor">
+	<span class="title">会议纪要</span>
     <div id="toolbar-container"  class="toolbar" style="display: none;"></div>
     <div id="text-container" class="text" style="display: none;"></div>
     <div id="textTest" class="text"></div>
 </div>
-<!-- ul为设备选项，对功能影响不大，但又不能缺少设备检测且函数部分过于复杂不敢乱动，故隐藏 -->
+<!-- form为设备选项，对功能影响不大，但又不能缺少设备检测且函数部分过于复杂不敢乱动，故隐藏 -->
 <form id="form" class="row col l12 s12" style="display: none;">
     <div class="row container col l12 s12">
         <div class="col" style="min-width: 433px; max-width: 443px">
@@ -156,8 +169,10 @@
 
     </div>
 </form>
-<div class="col s7" style="float: left;padding-left: 25px;">
-    <div class="video-grid" id="video">
+<!--摄像头区域-->
+<div id="videoArea" class="col s7" style="float: left;padding-left: 25px;display: none;">
+	<span class="title">视频会议画面</span>
+    <div class="video-grid" id="video" style="grid-template-columns:repeat(4, auto)">
         <div class="video-view">
             <div id="local_stream" class="video-placeholder"></div>
             <div id="local_video_info" class="video-profile hide"></div>
@@ -165,13 +180,7 @@
         </div>
     </div>
 </div>
-<script src="../../static/zyf_js/jquery.min.js"></script>
-<script src="../../static/zyf_js/materialize.min.js"></script>
-<script src="../../static/zyf_js/AgoraRTCSDK-3.3.1.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
-<script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+
 <script>
     var getText;
     var fields = ["appID", "channel"]
@@ -179,24 +188,41 @@
     var password;
     var UserID;
     var ws;
-    //提前获取数据的ajax
+	var agoraToken; // 进入房间时的token
+	var isHost = false; // 是否是房主,根据房主更新界面
+	var token = getQueryString("token"); // dtask系统的token
+	var _username = null; // 用户自己的用户名
+	var _userList = null;
+	var _hostName = null; // 主持人用户名
+	
+	const wsUrl = "ws://localhost:8090/";
+	const agoraAppID = "cee3803e2d9d4c66aede61a3ff82c6ae";
+	var cameraOn = true; // 摄像头是否打开
+	
+    //选择记录员
     function chooseEditor() {
-        var xxx = $("input[name='gender']:checked").val();
-        ws.send(xxx);
+        var ediorID = $("input[name='gender']:checked").val();
+        ws.send("noteEditor:" + ediorID);
     }
+    //每三秒发送一次纪要内容
     function startGetText(){
         getText = setInterval('sentText();', 3000);
     }
     function sentText(){
-        ws.send(editor.txt.html());
+        ws.send("note:" + editor.txt.html());
     }
     function leaveMeeting(){
         window.location.reload();
     }
     $(document).ready(function() {
+        /*获取会议室*/
         $.ajax({
             type: "GET",
-            url: "http://localhost:8088/liveMeeting/meetingRoom/meetingRoom",
+            url: "/api/liveMeeting/meetingRoom/meetingRoom",
+			contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+			headers:{
+				token:token
+			},
             dataType: "json",
             async: false,
             success: function(data) {
@@ -208,10 +234,11 @@
                     result += "<td>" + a[i].hostID + "</td>";
                     if (a[i].hasPwd) {
                         result += "<td>是</td>";
+						result += "<td data-toggle='modal' data-target='#myModal' onclick='getRoomID(" + a[i].id + ")'>进入会议</td>";
                     } else {
                         result += "<td>否</td>";
+						result += "<td data-toggle='modal' onclick='getRoomID(" + a[i].id + ");joinMeeting()'>进入会议</td>";
                     }
-                    result += "<td data-toggle='modal' data-target='#myModal' onclick='getRoomID(" + a[i].id + ")'>进入会议</td>";
                     $("#t_body").append(result);
                 }
             },
@@ -219,11 +246,15 @@
 
             }
         });
-
+        /*获取ID*/
         $.ajax({
             type: "GET",
-            url: "http://localhost:8088/liveMeeting/meetingRoom/UserID",
-            dataType: "json",
+			contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+            url: "/api/liveMeeting/meetingRoom/UserID",
+			headers:{
+				token:token
+			},
+            dataType: "text",
             async: false,
             success: function(data) {
                 UserID=data;
@@ -233,75 +264,144 @@
             }
         });
     });
-    console.log();
+    //输入密码后加入会议
     function joinMeeting() {
         password = md5($("#meetingpPassword").val());
-
+        /*请求完成获取token*/
         $('#myModal').modal('hide');
         $.ajax({
             type: "POST",
-            url: "http://localhost:8088/liveMeeting/meetingRoom/access",
-            dataType: "json",
+			contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+			headers:{
+				token:token
+			},
+            url: "/api/liveMeeting/meetingRoom/access",
+            dataType: "text",
             async: false,
-            params:{
-                meetingRoomID:meetingRoomID,
-                password:password,
+            data:{
+                "meetingRoomID":meetingRoomID,
+                "password":password,
             },
             success: function(data) {
+				// 缓存token
+				agoraToken = data;
+			
                 var params = {
                     mode: "live",
                     codec: "h264",
-                    appID: "d6c45b08dff146fdbf28ffa625a0aa44",
+                    appID: agoraAppID,
                     channel: "1",
                     uid: UserID,
                     token: data,
                 };
+				
+				
                 if (validator(params, fields)) {
                     join(rtc, params);
                     $("#test_id").css("display", "none");
                     $("#editor").css("display", "");
+					$("#videoArea").css("display", "");
                     $("#memberList").css("display", "");
                     // WebSocket 代码
-                    var url = "ws://localhost:9998//liveMeeting/"+meetingRoomID+"/"+UserID;
+                    var url = wsUrl + "api/liveMeeting/"+meetingRoomID+"/"+UserID;
                     ws = new WebSocket(url);
                     // 建立 web socket 连接成功触发事件
-
+					console.log("ws连接成功！");
+					Toast.info("欢迎进入会议室");
                     // 接收服务端数据时触发事件
                     ws.onmessage = function(evt) {
-                        if(evt.split(":")[0] == "userList"){
-                            var userList = eval(evt.split(":")[1]);
+						evt = evt.data;
+						console.log("ws receive:" + evt);
+                        /*获取人员列表*/ /*因为普通人员列表与房主的列表有冲突 希望授予房主的命令在userList之后*/
+                        /*userList:{"1":{"userID":1,"roomID":1,"role":"host"},"2":{"userID":2,"roomID":1,"role":"host"},"3":{"userID":3,"roomID":1,"role":"host"}}*/
+                        /*此数据类型不好解析 userList.1解析不出来*/
+                        /*[{"userID":1,"roomID":1,"role":"host"},{"userID":2,"roomID":1,"role":"host"},{"userID":3,"roomID":1,"role":"host"}]*/
+                        /*可以的话变成以上的数据类型*/
+                        if(evt.startsWith("userList:")){
+							var data = evt.replace("userList:","");
+							
                             var str = "";
-                            for(var i = 0;i<userList.length;i++){
-                                str +="<p>"+userList[i].userID +"</p>"
-                            }
+							var userList = eval('('+ data + ')');
+							_userList = userList;
+							// 房主与人下人界面不同
+							
+							$.each(userList,function(index,value){
+								if(isHost){
+									str += "<p> <input class='onlineUser onlineUserAdmin' type='radio' value='" + value['userID'] +"' name='gender'/>"+ 
+									'<span style="margin-left:10px">' + value['username'] + '</span>';
+									
+									if(value['role'] == "host"){
+										str += " (主持人)";
+									}
+									if(value['editor']){
+										str += " (记录员)";
+									}
+									
+									str += "</p>";
+								}else{
+									str += "<p class='onlineUser'>" + value['username'];
+
+									if(value['role'] == "host"){
+										str += " (主持人)";
+									}
+									if(value['editor']){
+										str += " (记录员)";
+									}
+									
+									str += "</p>";
+									
+								}
+								
+								if(value['userID'] == UserID){
+									_username = value['username'];
+								}
+								
+								if(value['role'] == "host"){
+									_hostName = value['username'];
+								}
+							});
+							
+							if(isHost){
+								$("#selectButton").css("display","");
+							}
+							
                             $("#userList").html(str);
                         }
+                        /*收会议纪要部分*/
                         else if(evt.split(":")[0] == "note"){
-                            $("#textTest").html(evt.split(":")[1]);
+                            $("#textTest").html(evt.replace("note:"),"");
                         }
-                        else if(evt.split(":")[0] == "grantEditor"){
+                        /*授权记录员 开始执行循环的代码*/
+                        else if(evt == "grantEditor"){
+							Toast.info("你被设置为记录员");
                             $("#text-container,#toolbar-container").css("display","");
+							
+							if($("#textTest").html() != ''){
+								editor.txt.html($("#textTest").html());
+							}else{
+								// 如果没有内容,自动生成模板
+								editor.txt.html(createNoteModel());
+								Toast.info("会议记录模板已生成");
+							}
+							
                             $("#textTest").css("display","none");
                             startGetText();
                         }
-                        else if(evt.split(":")[0] == "revokeEditor"){
+                        /*取消记录员 循环代码被终止*/
+                        else if(evt == "revokeEditor"){
+							Toast.info("你不再是记录员");
                             $("#text-container,#toolbar-container").css("display","none");
                             $("#textTest").css("display","");
                             window.clearInterval(getText);
                         }
-
-                        else if(evt.split(":")[0] == "ROOM_HOST"){
-                            var userList = eval(evt.split(":")[1]);
-                            var str = "";
-                            for(var i = 0;i<userList.length;i++){
-                                str+="<input type='radio' value='" + userList[i].userID+"' name='gender'/>"+ userList[i].userID+"</br>";
-                            }
-                            $("#userList").html(str);
-                            $("selectButton").css("display","");
+                        /*授予房主*/
+                        else if(evt == "ROOM_HOST"){
+							isHost = true;
                         }
                     }
                     // 断开 web socket 连接成功触发事件
                     ws.onclose = function() {
+						Toast.info("与服务器连接断开");
                     }
                 }
             }
@@ -313,6 +413,20 @@
     function getRoomID(id) {
         meetingRoomID = id;
     }
+	
+	function toggleCam(){
+		if(cameraOn){
+			cameraOn = false;
+			unpublish(rtc);
+			Toast.info("摄像头已关闭");
+			$('#toggleCamBtn').html("打开摄像头");
+		}else{
+			cameraOn = true;
+			publish(rtc);
+			Toast.info("摄像头已启动");
+			$('#toggleCamBtn').html("关闭摄像头");
+		}
+	}
 
 
 
@@ -321,7 +435,7 @@
     const editor = new E('#toolbar-container', '#text-container'); // 传入两个元素
     editor.config.zIndex = 1
     editor.create()
-
+    //以下为声网源码
     console.log("agora sdk version: " + AgoraRTC.VERSION + " compatible: " + AgoraRTC.checkSystemRequirements());
     var resolutions = [{
         name: "default",
@@ -349,24 +463,24 @@
     }
 
     var Toast = {
-        info: (msg) => {
-            Toastify({
-                text: msg,
-                classes: "info-toast"
-            })
-        },
+                info: (msg) => {
+                Toastify({
+                             text: msg,
+                             classes: "info-toast"
+                         })
+            },
         notice: (msg) => {
-            Toastify({
-                text: msg,
-                classes: "notice-toast"
-            })
-        },
-        error: (msg) => {
-            Toastify({
-                text: msg,
-                classes: "error-toast"
-            })
-        }
+        Toastify({
+            text: msg,
+            classes: "notice-toast"
+        })
+    },
+    error: (msg) => {
+        Toastify({
+            text: msg,
+            classes: "error-toast"
+        })
+    }
     }
 
     function validator(formData, fields) {
@@ -384,6 +498,14 @@
 
 
     function addView(id, show) {
+		
+		var username = "";
+		$.each(_userList,function(index,value){
+			if(value['userID'] == id){
+				username = value['username'];
+			}
+		});
+		
         if (!$("#" + id)[0]) {
             $("<div/>", {
                 id: "remote_video_panel_" + id,
@@ -404,6 +526,11 @@
                 id: "video_autoplay_" + id,
                 class: "autoplay-fallback hide",
             }).appendTo("#remote_video_panel_" + id)
+			
+			$("<span style='width: 100%;text-align: center;display: inline-block;font-size: 18px;'>"+username+"</span>", {
+				id:"user_span_" + id,
+				class:"user-span",
+			}).appendTo("#remote_video_panel_" + id);
         }
     }
 
@@ -475,7 +602,7 @@
         // Occurs when an error message is reported and requires error handling.
         rtc.client.on("error", (err) => {
             console.log(err)
-        })
+    })
         // Occurs when the peer user leaves the channel; for example, the peer user calls Client.leave.
         rtc.client.on("peer-leave", function(evt) {
             var id = evt.uid;
@@ -489,19 +616,17 @@
             if (id !== rtc.params.uid) {
                 removeView(id)
             }
-            Toast.notice("peer leave")
             console.log("peer-leave", id)
         })
         // Occurs when the local stream is published.
         rtc.client.on("stream-published", function(evt) {
-            Toast.notice("stream published success")
             console.log("stream-published")
         })
         // Occurs when the remote stream is added.
         rtc.client.on("stream-added", function(evt) {
+			Toast.info(rtc.params.uid + "已加入");
             var remoteStream = evt.stream
             var id = remoteStream.getId()
-            Toast.info("stream-added uid: " + id)
             if (id !== rtc.params.uid) {
                 rtc.client.subscribe(remoteStream, function(err) {
                     console.log("stream subscribe failed", err)
@@ -516,14 +641,12 @@
             rtc.remoteStreams.push(remoteStream)
             addView(id)
             remoteStream.play("remote_video_" + id)
-            Toast.info("stream-subscribed remote-uid: " + id)
             console.log("stream-subscribed remote-uid: ", id)
         })
         // Occurs when the remote stream is removed; for example, a peer user calls Client.unpublish.
         rtc.client.on("stream-removed", function(evt) {
             var remoteStream = evt.stream
             var id = remoteStream.getId()
-            Toast.info("stream-removed uid: " + id)
             if (remoteStream.isPlaying()) {
                 remoteStream.stop()
             }
@@ -536,13 +659,11 @@
         rtc.client.on("onTokenPrivilegeWillExpire", function() {
             // After requesting a new token
             // rtc.client.renewToken(token);
-            Toast.info("onTokenPrivilegeWillExpire")
             console.log("onTokenPrivilegeWillExpire")
         })
         rtc.client.on("onTokenPrivilegeDidExpire", function() {
             // After requesting a new token
             // client.renewToken(token);
-            Toast.info("onTokenPrivilegeDidExpire")
             console.log("onTokenPrivilegeDidExpire")
         })
     }
@@ -561,7 +682,6 @@
 
     function join(rtc, option) {
         if (rtc.joined) {
-            Toast.error("Your already joined")
             return;
         }
 
@@ -589,7 +709,6 @@
 
             rtc.client.join(option.token ? option.token : null, option.channel, option.uid ? +option.uid : null, function(
                 uid) {
-                Toast.notice("join channel: " + option.channel + " success, uid: " + uid)
                 console.log("join channel: " + option.channel + " success, uid: " + uid)
                 rtc.joined = true
 
@@ -610,7 +729,12 @@
                     console.log("init local stream success")
                     // play stream with html element id "local_stream"
                     rtc.localStream.play("local_stream")
-
+					
+					$("<span>"+"我"+"</span>", {
+						id:"user_span_me",
+						class:"user-span"
+					}).appendTo("#local_video_info");
+					
                     // publish local stream
                     publish(rtc)
                 }, function(err) {
@@ -645,24 +769,54 @@
                     console.error("init local stream failed ", err)
                 })
             }, function(err) {
-                Toast.error("client join failed, please open console see more detail")
                 console.error("client join failed", err)
             })
         }, (err) => {
-            Toast.error("client init failed, please open console see more detail")
-            console.error(err)
-        })
+        console.error(err)
+    })
+    }
+	
+	function publish (rtc) {
+      if (!rtc.client) {
+        return
+      }
+      if (rtc.published) {
+        return
+      }
+      var oldState = rtc.published
+
+      // publish localStream
+      rtc.client.publish(rtc.localStream, function (err) {
+        rtc.published = oldState
+        console.error(err)
+      })
+      rtc.published = true
+	  $("#local_stream").show();
+    }
+
+    function unpublish (rtc) {
+      if (!rtc.client) {
+        return
+      }
+      if (!rtc.published) {
+        return
+      }
+      var oldState = rtc.published
+      rtc.client.unpublish(rtc.localStream, function (err) {
+        rtc.published = oldState
+        console.error(err)
+      })
+      rtc.published = false
+	  $("#local_stream").hide();
     }
 
 
 
     function leave(rtc) {
         if (!rtc.client) {
-            Toast.error("Please Join First!")
             return
         }
         if (!rtc.joined) {
-            Toast.error("You are not in channel")
             return
         }
         /**
@@ -690,10 +844,8 @@
             console.log("client leaves channel success")
             rtc.published = false
             rtc.joined = false
-            Toast.notice("leave success")
         }, function(err) {
             console.log("channel leave failed")
-            Toast.error("leave success")
             console.error(err)
         })
     }
@@ -734,10 +886,10 @@
             var params = {
                 mode: "live",
                 codec: "h264",
-                appID: "d6c45b08dff146fdbf28ffa625a0aa44",
+                appID: agoraAppID,
                 channel: "1",
-                uid: 123,
-                token: "006d6c45b08dff146fdbf28ffa625a0aa44IACynRaZj6lqNMA04Z0P4xm8cHwjA37Doe+bBggJxtw9hbfv3IMAAAAAEAAdwi3RGnk/YAEAAQAaeT9g",
+                uid: UserID,
+                token: agoraToken,
             };
             console.log(params);
             if (validator(params, fields)) {
@@ -754,10 +906,10 @@
             var params = {
                 mode: "live",
                 codec: "h264",
-                appID: "d6c45b08dff146fdbf28ffa625a0aa44",
+                appID: agoraAppID,
                 channel: "1",
-                uid: 123,
-                token: "006d6c45b08dff146fdbf28ffa625a0aa44IACynRaZj6lqNMA04Z0P4xm8cHwjA37Doe+bBggJxtw9hbfv3IMAAAAAEAAdwi3RGnk/YAEAAQAaeT9g",
+                uid: UserID,
+                token: agoraToken,
             };
             if (validator(params, fields)) {
                 leave(rtc)
@@ -769,6 +921,17 @@
         });
 
     })
+	
+	        
+
+	function getQueryString(name) {
+		let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		let r = window.location.search.substr(1).match(reg);
+		if (r != null) {
+			return decodeURIComponent(r[2]);
+		};
+		return null;
+	}
 </script>
 <style>
     .toolbar {
@@ -777,7 +940,61 @@
 
     .text {
         border: 1px solid #ccc;
-        min-height: 400px;
+        height: 80%;
     }
+	
+	.title {
+		font-size: 18px;
+		color: #A3B6DD;
+	}
+	
+	.onlineUser{
+		
+	}
+	
+	.onlineUserAdmin{
+		padding-left: 10px;
+	}
+
 </style>
 </html>
+
+
+<script>
+	// 生成会议纪要
+	function createNoteModel(){
+		return '<div style="width:100%; height:100%;" class="w-e-text" id="text-elem7394125165966118" contenteditable="true"> <h1 style="text-align:center;">'
+		+'<font id="yh26a" size="7" face="仿宋">会议纪要</font></h1><h2 style="text-align:left;"><font face="仿宋"><strong>​</strong><font size="5">'
+		+'<strong id="tutok">​会议概况：</strong></font></font></h2><p style="text-align:left; padding-left:4em;"><font size="5" face="仿宋">'
+		+'会议时间：' + getNowFormatDate() + '</font></p><p style="text-align:left; padding-left:4em;"><font size="5" face="仿宋">会议主题：</font></p><p style="text-align:left; '
+		+'padding-left:4em;"><font size="5" face="仿宋">会议主持人：'+_hostName+'</font></p><p style="text-align:left; padding-left:4em;"><font size="5" face="仿宋">'
+		+'与会人员：</font></p><p style="text-align:left; padding-left:4em;"><font size="5" face="仿宋">缺席人员：</font></p><p style="text-align:left; '
+		+'padding-left:4em;"><font size="5" face="仿宋">会议形式：在线会议</font></p><p style="text-align:left; padding-left:4em;"><font size="5" face="'
+		+'仿宋">记录员：'+_username+'</font></p><p style="text-align:left"><b><font size="5" face="仿宋"><br></font></b></p><p style="text-align:left"><font size="5"'
+		+' face="仿宋"><b>会议内容：</b><br></font></p><p style="text-align:left; padding-left:4em;"><font size="5" face="仿宋"><br></font></p><p '
+		+'style="text-align:left; padding-left:4em;"><font size="5" face="仿宋"></font><br></p></div>'
+	}
+	
+	
+	// 生成日期
+	 function getNowFormatDate() {
+
+        var date = new Date();
+        var seperator1 = "-";
+
+       // var seperator2 = ":";
+
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+
+        if (month >= 1 && month<= 9) {
+			month = "0" + month;
+        }
+        if (strDate >= 0 && strDate<= 9) {
+			strDate = "0" + strDate;
+        }
+		var currentdate = date.getFullYear() +seperator1 + month + seperator1 + strDate;
+		return currentdate;
+	}
+	
+</script>

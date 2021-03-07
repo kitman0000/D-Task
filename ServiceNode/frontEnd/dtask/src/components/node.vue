@@ -1,9 +1,9 @@
 <template  class="page">
 	<div>
-		<el-button type="primary" @click="changit()"  style="background: rgba(89, 104, 136, 0.4);border: 2px solid #5f5f64 ;margin-left: 10px;">展现形式变化</el-button>
+		<!-- <el-button type="primary" @click="changit()"  style="background: rgba(89, 104, 136, 0.4);border: 2px solid #5f5f64 ;margin-left: 10px;">展现形式变化</el-button> -->
 		<el-button type="primary"  @click="setRoot()" style="background: rgba(89, 104, 136, 0.4);border: 2px solid #5f5f64 ;margin-left: 10px;float: right;">将自身设为根节点</el-button>
 		<el-button type="primary"  @click="unbind()" style="background: rgba(89, 104, 136, 0.4);border: 2px solid #5f5f64 ;margin-left: 10px;float: right;">解绑自身</el-button>
-		<el-table :data="data" tooltip-effect="dark" style="width: 100%" v-if="!change">
+		<el-table :data="data" tooltip-effect="dark" style="width: 100%;" v-if="!change">
 			<el-table-column prop="id" label="id" width="120px">
 			</el-table-column>
 			<el-table-column prop="nodeName" label="节点名">

@@ -6,7 +6,7 @@
         CREATE TABLE  IF NOT EXISTS `tb_meeting_room` (
             `id`  int NOT NULL AUTO_INCREMENT ,
             `name`  varchar(255) NULL ,
-            `hostID`  int(255) NULL ,
+            `hostID`  varchar(255) NULL ,
             `password`  varchar(255) NULL ,
             PRIMARY KEY (`id`)
         )

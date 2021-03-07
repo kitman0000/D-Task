@@ -8,7 +8,7 @@ public class MeetingRoomBo {
 
     private String name;
 
-    private int hostID;
+    private String hostID;
 
     private boolean hasPwd;
 }

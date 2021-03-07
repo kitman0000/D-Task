@@ -27,13 +27,21 @@ public class MessageEncodeAspect {
         try {
             Object[] objects = pjp.getArgs();
 
-            if(objects.length == 1) {
+            String result = "";
+
+            if(objects.length == 1 && objects[0] != null) {
                 // 解密数据
                 objects[0] = messageEncoder.decrypt(objects[0].toString());
+                // 执行
+                result = pjp.proceed(objects).toString();
+            }else {
+                // 没有参数，直接执行
+                result = pjp.proceed().toString();
             }
 
-            // 执行
-            String result = pjp.proceed(objects).toString();
+            if (result == null){
+                return null;
+            }
 
             // 加密返回
             return messageEncoder.encrypt(result);

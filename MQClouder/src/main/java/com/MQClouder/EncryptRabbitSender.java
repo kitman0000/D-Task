@@ -26,10 +26,11 @@ public class EncryptRabbitSender extends RabbitSender {
     }
 
     public String encryptSend(String routingKey,String msg){
-        byte[] encryptAES = AESUtil.encryptAES(msg, secretKey);
-        String result = send(routingKey, EncodeUtil.encodeBase64(encryptAES));
-        byte[] resultByte = EncodeUtil.decodeBase64ToByte(result);
-        return new String(AESUtil.decryptAES(resultByte,secretKey));
+        MessageEncoder messageEncoder = new MessageEncoder(secretKey);
+        String encryptStr = messageEncoder.encrypt(msg);
+
+        String result = send(routingKey, encryptStr);
+        return messageEncoder.decrypt(result);
     }
 
     public void encryptSendWithoutResponse(String routingKey,String msg) {
