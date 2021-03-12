@@ -147,11 +147,16 @@
 				          				         confirmButtonText: '确定',
 				          				       });
 				          			}
-				          			else if(res.data.ret == 2){
-				          				this.$alert('系统错误', '提示', {
+				          			else if(res.data.message == "BIND_FAILED_1"){
+				          				this.$alert('已加入该网络,若需更换节点,请先解绑自身', '提示', {
 				          				         confirmButtonText: '确定',
 				          				       });
 				          			}
+									else if(res.data.message == "BIND_FAILED_2"){
+										this.$alert('已提交过绑定申请，请勿重复请求', '提示', {
+										         confirmButtonText: '确定',
+										       });
+									}
 				          			else{
 				          				this.$alert('不允许绑定自身', '提示', {
 				          				         confirmButtonText: '确定',
@@ -212,6 +217,7 @@
 					          			this.$alert('解绑成功', '提示', {
 					          			         confirmButtonText: '确定',
 					          			       });
+										window.location.reload();
 					          		}
 					          		else if(res.data.ret == 2){
 					          			this.$alert('解绑失败（自身未绑定）', '提示', {
