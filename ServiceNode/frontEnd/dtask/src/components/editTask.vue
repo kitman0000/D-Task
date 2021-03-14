@@ -1,48 +1,66 @@
 <template>
 	<div>
-		<el-form>
-			<el-form-item label="子任务名称:">
-				<el-input v-model="name" style="width: 300px;"></el-input>
-			</el-form-item>
+		<el-form :label-position="labelPosition">
+			<el-card>
+				<div slot="header" class="clearfix">
+					<span>基本信息</span>
+				</div>
+				<el-form-item label="子任务名称:">
+					<el-input v-model="name" style="width: 300px;"></el-input>
+				</el-form-item>
+
+				<el-form-item label="开始时间选择:">
+					<el-date-picker v-model="startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item label="截止时间选择:">
+					<el-date-picker v-model="deadline" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
+					</el-date-picker>
+				</el-form-item>
+			</el-card>
+
+			<el-card>
+				<div slot="header" class="clearfix">
+					<span>更多信息</span>
+				</div>
+				<el-form-item label="级别:">
+					<el-select v-model="level" placeholder="请选择">
+						<el-option v-for="item in options1" :key="item.value" :label="item.value" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="状态:">
+					<el-select v-model="status" placeholder="请选择">
+						<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="标签:">
+					<el-tag :key="tag" v-for="tag in tag" closable :disable-transitions="false" @close="handleClose(tag)">
+						{{tag}}
+					</el-tag>
+					<el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
+					@keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm" style="width: 100px;">
+					</el-input>
+					<el-button v-else class="button-new-tag" size="small" @click="showInput">+添加新标签</el-button>
+				</el-form-item>
+				<el-form-item label="星级:">
+					<el-select v-model="star" placeholder="请选择">
+						<el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+			</el-card>
+
+			<el-card>
+				<div slot="header" class="clearfix">
+					<span>详细内容</span>
+				</div>
 			<el-form-item label="子任务内容:">
-				<el-input v-model="content" type="textarea"></el-input>
-				</el-select>
+				<br/>
+				<el-input style="width:90%" rows="5" v-model="content" type="textarea"></el-input>
 			</el-form-item>
-			<el-form-item label="开始时间选择:">
-				<el-date-picker v-model="startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
-				</el-date-picker>
-			</el-form-item>
-			<el-form-item label="截止时间选择:">
-				<el-date-picker v-model="deadline" value-format="yyyy-MM-dd" type="date" placeholder="选择日期">
-				</el-date-picker>
-			</el-form-item>
-			<el-form-item label="级别:">
-				<el-select v-model="level" placeholder="请选择">
-					<el-option v-for="item in options1" :key="item.value" :label="item.value" :value="item.value">
-					</el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="状态:">
-				<el-select v-model="status" placeholder="请选择">
-					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-					</el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="标签:">
-				<el-tag :key="tag" v-for="tag in tag" closable :disable-transitions="false" @close="handleClose(tag)">
-					{{tag}}
-				</el-tag>
-				<el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
-				 @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm" style="width: 100px;">
-				</el-input>
-				<el-button v-else class="button-new-tag" size="small" @click="showInput">+添加新标签</el-button>
-			</el-form-item>
-			<el-form-item label="星级:">
-				<el-select v-model="star" placeholder="请选择">
-					<el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-					</el-option>
-				</el-select>
-			</el-form-item>
+			</el-card>
 		</el-form>
 		<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;" icon="el-icon-check"
 		 @click="subTaskUpload()">确认上传</el-button>
@@ -55,6 +73,7 @@
 	export default {
 		data() {
 			return {
+				labelPosition:"left",
 				tableData: [],
 				multipleSelection: [],
 				selectedDataTemp: [],
@@ -243,5 +262,9 @@
 		width: 90px;
 		margin-left: 10px;
 		vertical-align: bottom;
+	}
+
+	.el-card{
+		margin-top: 10px;
 	}
 </style>

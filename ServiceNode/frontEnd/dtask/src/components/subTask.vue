@@ -2,89 +2,111 @@
 	<div>
 		<el-container>
 			<el-main>
+				<el-card class="box-card" >
 				<el-button type="primary" style="float: right;margin-top: 15px;background: #24375E;border: 0px ;" icon="el-icon-delete"
 				 v-if="role != 3" @click="deleteTasks()">删除所选子任务</el-button>
 				<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
 				 icon="el-icon-plus" v-if="role != 3" @click="addTask()">添加子任务</el-button>
-				<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="name" label="子任务名称" width="150px">
-					</el-table-column>
-					<el-table-column prop="startTime" label="开始时间">
-					</el-table-column>
-					<el-table-column prop="deadline" label="截止时间">
-					</el-table-column>
-					<el-table-column prop="level" label="级别" width="50px">
-					</el-table-column>
-					<el-table-column prop="status" label="状态" width="100px">
-						<template slot-scope="scope">
-							<p v-if="scope.row.status == 0" style="color: #3399FF;"><img class="icon" src="../assets/计划.png" /> 计划中</p>
-							<p v-if="scope.row.status == 1" style="color: #FF6600;"><img class="icon" src="../assets/执行.png" /> 执行中</p>
-							<p v-if="scope.row.status == 2" style="color: #009933;"><img class="icon" src="../assets/完成.png" /> 已完成</p>
-							<p v-if="scope.row.status == 3" style="color: #C0C0C0;"><img class="icon" src="../assets/取消.png" /> 已取消</p>
-						</template>
-					</el-table-column>
-					<el-table-column prop="star" label="星级" width="150px">
-						<template slot-scope="scope">
-							<span class='el-icon-star-on' v-if="scope.row.star == 0" style="color: blue;">一般</span>
-							<span class='el-icon-star-on' v-if="scope.row.star == 1" style="color: darkgreen;">较重要</span>
-							<span class='el-icon-star-on' v-if="scope.row.star == 2" style="color: orange;">重要</span>
-							<span class='el-icon-star-on' v-if="scope.row.star == 3" style="color: red;">特别重要</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="操作">
-						<template slot-scope="scope">
-							<el-button type="text" size="small" v-if="role != 3" @click="deleteTask(scope.row)">删除子任务</el-button>
-							<el-button type="text" size="small" @click="TaskDetail(scope.row)">查看子任务详情</el-button>
-							<el-dialog title="子任务详情" :visible.sync="dialogVisible" width="30%">
-								<p>子任务名：{{name}}</p>
-								<p>子任务内容：{{content}}</p>
-								<p>开始时间：{{startTime}}</p>
-								<p>截止时间：{{deadline}}</p>
-								<p>等级：{{level}}</p>
-								<p>状态：<span v-if="scope.row.status == 0 && !stateOperation">计划中</span>
-									<span v-if="scope.row.status == 1 && !stateOperation">执行中</span>
-									<span v-if="scope.row.status == 2 && !stateOperation">已完成</span>
-									<span v-if="scope.row.status == 3 && !stateOperation">已取消</span>
-									<el-select v-model="value" placeholder="请选择状态" v-if="stateOperation">
-									    <el-option
-									      v-for="item in options"
-									      :key="item.value"
-									      :label="item.label"
-									      :value="item.value">
-									    </el-option>
-									  </el-select>
-									
-									</p>
-								<p>标签：</p>
-								<el-tag :key="tag" v-for="tag in tag" :disable-transitions="false">
-									{{tag}}
-								</el-tag>
-								<p>星级：<span class='el-icon-star-on' v-if="star == 0" style="color: blue;">一般</span>
-									<span class='el-icon-star-on' v-if="star == 1" style="color: darkgreen;">较重要</span>
-									<span class='el-icon-star-on' v-if="star == 2" style="color: orange;">重要</span>
-									<span class='el-icon-star-on' v-if="star == 3" style="color: red;">特别重要</span></p>
-								<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-								v-if="role != 3" @click="editTask()">编辑子任务详情</el-button>
-								<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-								v-if="stateOperation" icon="el-icon-check" @click="editTaskState()">确定修改</el-button>
-							</el-dialog>
-						</template>
-					</el-table-column>
-				</el-table>
-				<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper"
-				 :total="page">
-				</el-pagination>
+
+					<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+						<el-table-column type="selection" width="55"></el-table-column>
+						<el-table-column prop="name" label="子任务名称" width="150px">
+						</el-table-column>
+						<el-table-column prop="startTime" label="开始时间">
+						</el-table-column>
+						<el-table-column prop="deadline" label="截止时间">
+						</el-table-column>
+						<el-table-column prop="level" label="级别" width="50px">
+						</el-table-column>
+						<el-table-column prop="status" label="状态" width="100px">
+							<template slot-scope="scope">
+								<p v-if="scope.row.status == 0" style="color: #3399FF;"><img class="icon" src="../assets/计划.png" /> 计划中</p>
+								<p v-if="scope.row.status == 1" style="color: #FF6600;"><img class="icon" src="../assets/执行.png" /> 执行中</p>
+								<p v-if="scope.row.status == 2" style="color: #009933;"><img class="icon" src="../assets/完成.png" /> 已完成</p>
+								<p v-if="scope.row.status == 3" style="color: #C0C0C0;"><img class="icon" src="../assets/取消.png" /> 已取消</p>
+							</template>
+						</el-table-column>
+						<el-table-column prop="star" label="星级" width="150px">
+							<template slot-scope="scope">
+								<span class='el-icon-star-on' v-if="scope.row.star == 0" style="color: blue;">一般</span>
+								<span class='el-icon-star-on' v-if="scope.row.star == 1" style="color: darkgreen;">较重要</span>
+								<span class='el-icon-star-on' v-if="scope.row.star == 2" style="color: orange;">重要</span>
+								<span class='el-icon-star-on' v-if="scope.row.star == 3" style="color: red;">特别重要</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作">
+							<template slot-scope="scope">
+								<el-button type="text" size="small" v-if="role != 3" @click="deleteTask(scope.row)">删除子任务</el-button>
+								<el-button type="text" size="small" @click="TaskDetail(scope.row)">查看子任务详情</el-button>
+								<el-dialog title="子任务详情" :visible.sync="dialogVisible" width="30%">
+									<p>子任务名：{{name}}</p>
+									<p>子任务内容：{{content}}</p>
+									<p>开始时间：{{startTime}}</p>
+									<p>截止时间：{{deadline}}</p>
+									<p>等级：{{level}}</p>
+									<p>状态：<span v-if="scope.row.status == 0 && !stateOperation">计划中</span>
+										<span v-if="scope.row.status == 1 && !stateOperation">执行中</span>
+										<span v-if="scope.row.status == 2 && !stateOperation">已完成</span>
+										<span v-if="scope.row.status == 3 && !stateOperation">已取消</span>
+										<el-select v-model="value" placeholder="请选择状态" v-if="stateOperation">
+											<el-option
+											v-for="item in options"
+											:key="item.value"
+											:label="item.label"
+											:value="item.value">
+											</el-option>
+										</el-select>
+										
+										</p>
+									<p>标签：</p>
+									<el-tag :key="tag" v-for="tag in tag" :disable-transitions="false">
+										{{tag}}
+									</el-tag>
+									<p>星级：<span class='el-icon-star-on' v-if="star == 0" style="color: blue;">一般</span>
+										<span class='el-icon-star-on' v-if="star == 1" style="color: darkgreen;">较重要</span>
+										<span class='el-icon-star-on' v-if="star == 2" style="color: orange;">重要</span>
+										<span class='el-icon-star-on' v-if="star == 3" style="color: red;">特别重要</span></p>
+									<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+									v-if="role != 3" @click="editTask()">编辑子任务详情</el-button>
+									<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+									v-if="stateOperation" icon="el-icon-check" @click="editTaskState()">确定修改</el-button>
+								</el-dialog>
+							</template>
+						</el-table-column>
+
+						
+					</el-table>
+					<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper"
+					:total="page">
+					</el-pagination>
+				</el-card>
 			</el-main>
-			<el-aside width="200px">
-				<b>拥有者：</b>
-				<p>{{creator}}</p>
-				<b>管理者：</b>
-				<p v-for="manager in managers">{{manager}}</p>
-				<b>参与者：</b>
-				<p v-for="employee in employees">{{employee}}</p>
-				<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-				v-if="role != 3" icon="el-icon-edit" @click="editParticipator()">任务人员编辑</el-button>
+			
+			<el-aside width="350px" style="margin-top:20px">
+				<el-card class="box-card" >
+					<div id="statusChart" style="height:150px"></div>
+					<div id="starChart" style="height:150px"></div>
+					<div id="levelChart" style="height:150px"></div>
+					<div style="margin-top: 20px">
+						<el-radio-group v-model="dayName" @change="getSubTaskEchartsAmount()" size="mini">
+						<el-radio-button label="一周"></el-radio-button>
+						<el-radio-button label="30天"></el-radio-button>
+						<el-radio-button label="半年"></el-radio-button>
+						<el-radio-button label="一年"></el-radio-button>
+						</el-radio-group>
+					</div>
+				</el-card>
+				</br>
+				<el-card class="box-card" >
+					<b>拥有者：</b>
+					<p>{{creator}}</p>
+					<b>管理者：</b>
+					<p v-for="manager in managers">{{manager}}</p>
+					<b>参与者：</b>
+					<p v-for="employee in employees">{{employee}}</p>
+					<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+					v-if="role != 3" icon="el-icon-edit" @click="editParticipator()">任务人员编辑</el-button>
+				</el-card>
 			</el-aside>
 		</el-container>
 	</div>
@@ -93,6 +115,10 @@
 <script>
 	import axios from 'axios';
 	import qs from 'qs';
+	var echarts = require("echarts/lib/echarts")
+	require('echarts/lib/component/tooltip')
+	require('echarts/lib/component/title')
+	require('echarts/lib/chart/pie')
 	export default {
 		data() {
 			return {
@@ -138,10 +164,278 @@
 				managers:[],
 				employees:[],
 				urlManagers:[],
-				urlEmployees:[]
+				urlEmployees:[],
+				dayName:"一周",
+				day:0,
+				planningStatusAmount:0,
+				doingStatusAmount:0,
+				completedStatusAmount:0,
+				cancelledStatusAmount:0,
+				normalStarAmount:0,
+				relativelyImportantStarAmount:0,
+				importantStarAmount:0,
+				particularlyImportantStarAmount:0,
+				level0Amount:0,
+				level1Amount:0,
+				level2Amount:0,
+				level3Amount:0
 			}
 		},
+		mounted(){
+			this.getSubTaskEchartsAmount();
+		},
 		methods: {
+			subTaskStateEcharts(){
+				var statusChart = echarts.init(document.getElementById('statusChart'));
+				statusChart.setOption({
+					title:{
+						 text: '任务状态统计',
+						 left: 'center',
+						 textStyle: {
+							 fontSize:17
+						 }
+					},
+					tooltip: {
+						trigger: 'item'
+					},
+					legend: {
+						top: '17%',
+						left: 'center',
+						itemWidth: 17,   
+            			itemHeight: 8,
+						textStyle: {
+							 fontSize:9.5
+						}
+					},
+					color:['#3399FF','#FF6600','#009933','#C0C0C0'],
+					series: [
+						{
+							name: '状态',
+							type: 'pie',
+							radius: ['55%','65%'],
+							center: ['50%','65%'],
+							avoidLabelOverlap: false,
+							label: {
+								show: false,
+								position: 'center',
+							},
+							emphasis: {
+								label: {
+									show: true,
+									fontSize: '8',
+									fontWeight: 'bold'
+								}
+							},
+							labelLine: {
+								show: false
+							},
+							data: [
+								{value:this.planningStatusAmount, name: '计划中'},
+								{value:this.doingStatusAmount, name: '执行中'},
+								{value:this.completedStatusAmount, name: '已完成'},
+								{value:this.cancelledStatusAmount, name: '已取消'}
+							]
+						}
+					]
+				});
+				var starChart = echarts.init(document.getElementById('starChart'));
+				starChart.setOption({
+					title:{
+						 text: '任务星级统计',
+						 left: 'center',
+						 textStyle: {
+							 fontSize:17
+						 }
+					},
+					tooltip: {
+						trigger: 'item'
+					},
+					legend: {
+						top: '17%',
+						left: 'center',
+						itemWidth: 17,   
+            			itemHeight: 8,
+						textStyle: {
+							 fontSize:9.5
+						}
+					},
+					color:['blue','darkgreen','orange','red'],
+					series: [
+						{
+							name: '星级',
+							type: 'pie',
+							radius: ['55%','65%'],
+							center: ['50%','65%'],
+							avoidLabelOverlap: false,
+							label: {
+								show: false,
+								position: 'center',
+							},
+							emphasis: {
+								label: {
+									show: true,
+									fontSize: '8',
+									fontWeight: 'bold'
+								}
+							},
+							labelLine: {
+								show: false
+							},
+							data: [
+								{value:this.normalStarAmount, name: '一般'},
+								{value:this.relativelyImportantStarAmount, name: '较重要'},
+								{value:this.importantStarAmount, name: '重要'},
+								{value:this.particularlyImportantStarAmount, name: '特别重要'}
+							]
+						}
+					]
+				});
+				var levelChart = echarts.init(document.getElementById('levelChart'));
+				levelChart.setOption({
+					title:{
+						 text: '任务级别统计',
+						 left: 'center',
+						 textStyle: {
+							 fontSize:17
+						 }
+					},
+					tooltip: {
+						trigger: 'item'
+					},
+					legend: {
+						top: '17%',
+						left: 'center',
+						itemWidth: 17,   
+            			itemHeight: 8,
+						textStyle: {
+							 fontSize:9.5
+						}
+					},
+					series: [
+						{
+							name: '级别',
+							type: 'pie',
+							radius: ['55%','65%'],
+							center: ['50%','65%'],
+							avoidLabelOverlap: false,
+							label: {
+								show: false,
+								position: 'center',
+							},
+							emphasis: {
+								label: {
+									show: true,
+									fontSize: '8',
+									fontWeight: 'bold'
+								}
+							},
+							labelLine: {
+								show: false
+							},
+							data: [
+								{value:this.level0Amount, name: '等级0'},
+								{value:this.level1Amount, name: '等级1'},
+								{value:this.level2Amount, name: '等级2'},
+								{value:this.level3Amount, name: '等级3'}
+							]
+						}
+					]
+				});
+			},
+			getSubTaskEchartsAmount(){
+				switch(this.dayName){
+					case '一周':
+						this.day=7;
+						break;
+					case '30天':
+						this.day=30;
+						break;
+					case '半年':
+						this.day=183;
+						break;
+					case '一年':
+						this.day=365;
+						break;
+				}
+
+				axios.get('/api/localTask/localSubTaskChart', {
+						params: {
+							'day':this.day,
+							'taskID': localStorage.getItem('taskID')
+							
+						},
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {
+						this.level0Amount=0;
+						this.level1Amount=0;
+						this.level2Amount=0;
+						this.level3Amount=0;
+						this.planningStatusAmount=0;
+						this.doingStatusAmount=0;
+						this.completedStatusAmount=0;
+						this.cancelledStatusAmount=0;
+						this.normalStarAmount=0;
+						this.relativelyImportantStarAmount=0;
+						this.importantStarAmount=0;
+						this.particularlyImportantStarAmount=0;
+						var response = res.data.data;
+						var a = eval(response);
+						var i=0;
+						for(i=0;i<a.chartLevelBo.length;i++){
+							switch(a.chartLevelBo[i].level){
+								case 0:
+									this.level0Amount=a.chartLevelBo[i].levelAmount;
+									break;
+								case 1:
+									this.level1Amount=a.chartLevelBo[i].levelAmount;
+									break;
+								case 2:
+									this.level2Amount=a.chartLevelBo[i].levelAmount;
+									break;
+								case 3:
+									this.level3Amount=a.chartLevelBo[i].levelAmount;	
+									break;
+							}
+						};
+						for(i=0;i<a.chartStarBo.length;i++){
+							switch(a.chartStarBo[i].star){
+								case 0:
+									this.normalStarAmount=a.chartStarBo[i].starAmount;
+									break;
+								case 1:
+									this.relativelyImportantStarAmount=a.chartStarBo[i].starAmount;
+									break;
+								case 2:
+									this.importantStarAmount=a.chartStarBo[i].starAmount;
+									break;
+								case 3:
+									this.particularlyImportantStarAmount=a.chartStarBo[i].starAmount;	
+									break;
+							}
+						};
+						for(i=0;i<a.chartStatusBo.length;i++){
+							switch(a.chartStatusBo[i].status){
+								case 0:
+									this.planningStatusAmount=a.chartStatusBo[i].statusAmount;
+									break;
+								case 1:
+									this.doingStatusAmount=a.chartStatusBo[i].statusAmount;
+									break;
+								case 2:
+									this.completedStatusAmount=a.chartStatusBo[i].statusAmount;
+									break;
+								case 3:
+									this.cancelledStatusAmount=a.chartStatusBo[i].statusAmount;	
+									break;
+							}
+						};
+						this.subTaskStateEcharts();
+					})
+
+			},
 			handleSelectionChange(val) {
 				let that_ = this;
 				that_.multipleSelection = val;
@@ -436,7 +730,6 @@
 			localStorage.removeItem('taskDetail');
 			localStorage.removeItem('add');
 			this.getDefaultSubTask();
-			
 			const h = this.$createElement;
 			this.$notify({
 				title: '提示',

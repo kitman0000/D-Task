@@ -95,7 +95,9 @@
 
     <!-- 获取用户任务数量列表 -->
     <select id="getUserRemoteTaskList" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskBo">
-        SELECT tb_remote_task.id,name as taskName,creator as creatorID,nickname as creatorName,creatorNode FROM tb_remote_task
+        SELECT tb_remote_task.id,name as taskName,creator as creatorID,nickname as creatorName,creatorNode,
+        planning,working,finish,cancel
+        FROM tb_remote_task
         LEFT JOIN tb_user_info ON creator = tb_user_info.id AND creatorNode = tb_user_info.nodeID
         <where>
             <include refid="remoteTaskSearchCondition"/>

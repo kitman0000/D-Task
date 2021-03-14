@@ -1,7 +1,7 @@
 package com.dtask.DTask.userModule.dao;
 
-import com.dtask.DTask.userModule.bo.ChildMenuBo;
-import com.dtask.DTask.userModule.bo.ParentMenuBo;
+import com.dtask.pluginsdk.userModule.bo.ChildMenuBo;
+import com.dtask.pluginsdk.userModule.bo.ParentMenuBo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

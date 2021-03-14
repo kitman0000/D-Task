@@ -5,6 +5,8 @@ import com.dtask.common.ResponseData;
 import com.dtask.common.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Created by zhong on 2020-6-14.
  */
-
+@EnableScheduling
 @RestController
 public class BindingCl {
     @Autowired
@@ -51,5 +53,10 @@ public class BindingCl {
     @RequestMapping(value = "/api/bindingCl/nodeID",method = RequestMethod.GET)
     public ResponseData apiGetNodeID(){
         return binding.apiGetNodeID();
+    }
+
+    @Scheduled(cron = "0/30 * * * * ? ")
+    public void sendKeepAlive(){
+        binding.sendKeepAlive();
     }
 }

@@ -19,7 +19,8 @@ import Node from '../components/node.vue'
 import nodeOperation from '../components/nodeOperation.vue'
 import websiteSetting from "../components/websiteSetting.vue"
 import userSetting from "../components/userSetting.vue"
-import SubTask from '../components/subTask.vue'
+import localSubTask from '../components/localSubTask.vue'
+import subTask from '../components/subTask.vue'
 import EditTask from '../components/editTask.vue'
 import editParticipator from '../components/editParticipator.vue'
 import localTask from "../components/localTask.vue"
@@ -34,7 +35,7 @@ import jointTask from '../components/jointTask.vue'
 import addJointTask from '../components/addJointTask.vue'
 import changeJointTask from '../components/changeJointTask.vue'
 import userManual from '../components/userManual.vue'
-
+import pluginPage from '../components/pluginPage.vue'
 
 Vue.use(VueRouter)
 
@@ -88,9 +89,14 @@ const routes = [{
 			component: EditTask
 		},
 		{
-			path: '/SubTask',
-			name: 'SubTask',
-			component: SubTask
+			path: '/localSubTask',
+			name: 'localSubTask',
+			component: localSubTask
+		},
+		{
+			path: '/subTask',
+			name: 'subTask',
+			component: subTask
 		},
 		{
 			path: '/SendMail',
@@ -212,6 +218,11 @@ const routes = [{
 			name:'userManual',
 			component:userManual
 		},
+		{
+			path:'/pluginPage',
+			name:'pluginPage',
+			component:pluginPage
+		}
 		]}
 	]
 	

@@ -13,4 +13,6 @@ public interface ISetting {
 
     ResponseData shutDown();
 
+    String getNodeName();
+
 }

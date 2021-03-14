@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 public class RemoteTaskImpl implements IRemoteTask {
-    private final int COUNT_ONE_PAGE = 10;
+    private final int COUNT_ONE_PAGE = 16;
 
     @Autowired
     private RemoteTaskDao remoteTaskDao;

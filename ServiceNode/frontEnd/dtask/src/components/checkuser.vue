@@ -1,15 +1,27 @@
 <template>
 	<el-container>
 		<el-main>
-			<p>用户名:{{username}}</p>
-			<p>密码:{{pwd}}</p>
-			<p>昵称:{{nickname}}</p>
-			<p>手机号:{{phone}}</p>
-			<p>邮箱:{{email}}</p>
-			<p>入职日期:{{onboardDate}}</p>
-			<p>出生日期:{{birthday}}</p>
-			<p>角色:{{role}}</p>
-			<p>部门:{{department}}</p>
+			
+			<el-card>
+				<div slot="header" class="clearfix">
+					<span>基本信息</span>
+				</div>
+				<p>用户名:{{username}}</p>
+				<!-- <p>密码:{{pwd}}</p> -->
+				<p>昵称:{{nickname}}</p>
+				<p>手机号:{{phone}}</p>
+				<p>邮箱:{{email}}</p>
+				<p>入职日期:{{onboardDate}}</p>
+				<p>出生日期:{{birthday}}</p>
+			</el-card>
+
+			<el-card>
+				<div slot="header" class="clearfix">
+					<span>系统信息</span>
+				</div>
+				<p>角色:{{role}}</p>
+				<p>部门:{{department}}</p>
+			</el-card>
 		</el-main>
 	</el-container>
 </template>

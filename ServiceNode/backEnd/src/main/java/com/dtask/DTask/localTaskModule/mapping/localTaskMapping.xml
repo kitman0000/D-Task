@@ -77,7 +77,7 @@
 
     <!-- 获取用户的任务列表 -->
     <select id="getUserLocalTaskList" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskBo">
-        SELECT tb_local_task.id,name,creator,username as creatorName FROM tb_local_task
+        SELECT tb_local_task.id,name,creator,username as creatorName,planning,working,finish,cancel FROM tb_local_task
         LEFT JOIN tb_user ON creator = tb_user.id
         <where>
             <include refid="localTaskSearchCondition"/>
@@ -172,9 +172,6 @@
     <sql id="localTaskSearchCondition">
         <if test="localTaskSearchEntity.taskName != ''">
             name LIKE '%${localTaskSearchEntity.taskName}%'
-        </if>
-        <if test="localTaskSearchEntity.taskCreatorID != -1">
-            creator LIKE '%${localTaskSearchEntity.taskCreatorID}%'
         </if>
     </sql>
 </mapper>

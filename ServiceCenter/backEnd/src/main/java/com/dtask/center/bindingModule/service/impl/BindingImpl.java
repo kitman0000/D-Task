@@ -20,7 +20,8 @@ public class BindingImpl implements IBinding {
     @Autowired
     private BindingDao bindingDao;
 
-    private static HashMap<Integer, Date> nodeAliveCache; // 节点心跳包缓存，记录上次心跳包发送时间
+    private static HashMap<Integer, Date> nodeAliveCache = new HashMap<>(); // 节点心跳包缓存，记录上次心跳包发送时间
+
 
     @Override
     public String askBanding(AskBindingEntity askBindingEntity) {
@@ -66,13 +67,15 @@ public class BindingImpl implements IBinding {
     @Override
     public List<NodeBo> getAllNodes() {
         List<NodeBo> nodeList = bindingDao.getAllNodes();
+        Date defaultDate = new Date(0);
+
 
         // 获取是否在线
         for (NodeBo node : nodeList) {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MINUTE, -2);
-
-            node.setOnline(BindingImpl.nodeAliveCache.get(node.getId()).after(calendar.getTime()));
+          
+            node.setOnline(BindingImpl.nodeAliveCache.getOrDefault(node.getId(),defaultDate).after(calendar.getTime()));
         }
 
         return nodeList;

@@ -6,12 +6,14 @@ import com.dtask.DTask.settingModule.dao.SettingDao;
 import com.dtask.DTask.settingModule.entity.SettingEntity;
 import com.dtask.DTask.settingModule.service.ISetting;
 import com.dtask.common.ResponseData;
+import com.dtask.common.UserCommon;
 import com.dtask.common.config.WebsiteConfig;
 import com.dtask.common.util.CacheUtil;
 import org.apache.catalina.core.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
@@ -30,6 +32,9 @@ public class SettingImpl implements ISetting ,ApplicationRunner{
 
     @Autowired
     private CacheUtil cacheUtil;
+
+    @Value("${nodeName}")
+    private String nodeName;
 
     Logger logger = LoggerFactory.getLogger(SettingImpl.class);
 
@@ -68,6 +73,11 @@ public class SettingImpl implements ISetting ,ApplicationRunner{
     public ResponseData shutDown() {
         System.exit(0);
         return null;
+    }
+
+    @Override
+    public String getNodeName() {
+        return nodeName.replace("\"","");
     }
 
     /**

@@ -1,0 +1,45 @@
+Manifest-Version: 1.0
+Class-Path: spring-amqp-2.1.8.RELEASE.jar aspectjweaver-1.8.0.jar slf4
+ j-api-1.7.28.jar netty-common-4.1.39.Final.jar tomcat-embed-el-9.0.24
+ .jar spring-boot-autoconfigure-2.1.8.RELEASE.jar spring-boot-starter-
+ data-redis-2.1.8.RELEASE.jar ehcache-2.10.6.jar log4j-api-2.11.2.jar 
+ shiro-cache-1.4.1.jar spring-jdbc-5.1.9.RELEASE.jar spring-boot-2.1.8
+ .RELEASE.jar commons-collections-3.2.2.jar spring-messaging-5.1.9.REL
+ EASE.jar spring-context-5.1.9.RELEASE.jar netty-transport-4.1.39.Fina
+ l.jar spring-boot-starter-json-2.1.8.RELEASE.jar spring-tx-5.1.9.RELE
+ ASE.jar spring-boot-starter-aop-2.1.8.RELEASE.jar spring-boot-starter
+ -2.1.8.RELEASE.jar spring-context-support-5.1.9.RELEASE.jar jackson-d
+ atabind-2.9.9.3.jar lettuce-core-5.1.8.RELEASE.jar spring-rabbit-2.1.
+ 8.RELEASE.jar reactor-core-3.2.12.RELEASE.jar jackson-annotations-2.9
+ .0.jar jackson-module-parameter-names-2.9.9.jar netty-resolver-4.1.39
+ .Final.jar spring-core-5.1.9.RELEASE.jar mybatis-spring-boot-autoconf
+ igure-2.0.0.jar logback-classic-1.2.3.jar spring-data-commons-2.1.10.
+ RELEASE.jar commons-pool2-2.6.2.jar amqp-client-5.4.3.jar jul-to-slf4
+ j-1.7.28.jar shiro-core-1.4.1.jar logback-core-1.2.3.jar tomcat-embed
+ -websocket-9.0.24.jar classmate-1.4.0.jar jackson-datatype-jdk8-2.9.9
+ .jar jboss-logging-3.3.3.Final.jar mysql-connector-java-8.0.11.jar sp
+ ring-retry-1.2.4.RELEASE.jar MQClouder.jar spring-boot-starter-web-2.
+ 1.8.RELEASE.jar netty-codec-4.1.39.Final.jar spring-boot-starter-cach
+ e-2.1.8.RELEASE.jar log4j-core-2.13.1.jar spring-data-redis-2.1.10.RE
+ LEASE.jar mybatis-3.5.0.jar spring-boot-starter-jdbc-2.1.8.RELEASE.ja
+ r jackson-datatype-jsr310-2.9.9.jar hibernate-validator-6.0.17.Final.
+ jar netty-buffer-4.1.39.Final.jar jackson-core-2.9.8.jar commons-bean
+ utils-1.9.3.jar HikariCP-3.2.0.jar spring-jcl-5.1.9.RELEASE.jar shiro
+ -config-ogdl-1.4.1.jar log4j-to-slf4j-2.11.2.jar shiro-crypto-hash-1.
+ 4.1.jar shiro-crypto-core-1.4.1.jar spring-beans-5.1.9.RELEASE.jar ne
+ tty-handler-4.1.39.Final.jar tomcat-embed-core-9.0.24.jar shiro-sprin
+ g-1.4.1.jar reactive-streams-1.0.3.jar shiro-web-1.4.1.jar spring-boo
+ t-starter-tomcat-2.1.8.RELEASE.jar shiro-lang-1.4.1.jar spring-oxm-5.
+ 1.9.RELEASE.jar spring-data-keyvalue-2.1.10.RELEASE.jar mybatis-sprin
+ g-2.0.0.jar spring-web-5.1.9.RELEASE.jar shiro-event-1.4.1.jar spring
+ -boot-starter-amqp-2.1.8.RELEASE.jar spring-expression-5.1.9.RELEASE.
+ jar snakeyaml-1.23.jar spring-aop-5.1.9.RELEASE.jar mybatis-spring-bo
+ ot-starter-2.0.0.jar javax.annotation-api-1.3.2.jar spring-webmvc-5.1
+ .9.RELEASE.jar shiro-config-core-1.4.1.jar validation-api-2.0.1.Final
+ .jar spring-boot-starter-logging-2.1.8.RELEASE.jar bcprov-jdk16-1.46.
+ jar shiro-crypto-cipher-1.4.1.jar liveMeetingCenter.jar spring-boot-s
+ tarter-websocket-2.1.8.RELEASE.jar tomcat-embed-websocket-9.0.24.jar
+ attoparser-2.0.5.RELEASE.jar spring-websocket-5.1.9.RELEASE.jar agora
+ -authentication.jar commons-codec-1.11.jar hamcrest-core-1.3.jar
+Main-Class: com.dtask.ServiceCenterApplication
+

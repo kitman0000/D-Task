@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dtask.center.remoteTaskModule.dao.RemoteSubTaskChartDao">
+    <select id="getChartStatusCount" resultType="com.dtask.center.remoteTaskModule.bo.ChartStatusBo">
+        SELECT COUNT(id) as statusAmount,status FROM tb_remote_sub_task
+        <where>
+            DATEDIFF(deadline,CURDATE()) &lt;= #{day}
+            and DATEDIFF(deadline,CURDATE()) >= 0
+            and taskID=#{taskID}
+        </where>
+        GROUP by status
+    </select>
+
+    <select id="getChartStarCount" resultType="com.dtask.center.remoteTaskModule.bo.ChartStarBo">
+        SELECT COUNT(id) as starAmount,star FROM tb_remote_sub_task
+        <where>
+            DATEDIFF(deadline,CURDATE()) &lt;= #{day}
+            and DATEDIFF(deadline,CURDATE()) >= 0
+            and taskID=#{taskID}
+        </where>
+        GROUP by star
+    </select>
+
+    <select id="getChartLevelCount" resultType="com.dtask.center.remoteTaskModule.bo.ChartLevelBo">
+        SELECT COUNT(id) as levelAmount,level FROM tb_remote_sub_task
+        <where>
+            DATEDIFF(deadline,CURDATE()) &lt;= #{day}
+            and DATEDIFF(deadline,CURDATE()) >= 0
+            and taskID=#{taskID}
+        </where>
+        GROUP by level
+    </select>
+
+
+
+
+
+</mapper>

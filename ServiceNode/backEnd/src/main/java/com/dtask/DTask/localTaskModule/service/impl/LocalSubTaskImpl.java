@@ -4,16 +4,19 @@ import com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo;
 import com.dtask.DTask.localTaskModule.dao.LocalSubTaskDao;
 import com.dtask.DTask.localTaskModule.entity.LocalSubTaskEntity;
 import com.dtask.DTask.localTaskModule.service.ILocalSubTask;
+import com.dtask.common.ApplicationContextAwareCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.config.ShiroConfig;
 import com.dtask.common.util.PageDivideUtil;
+import com.dtask.pluginsdk.localTaskModule.ILocalSubTaskEvent;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhong on 2020-5-3.
@@ -21,10 +24,13 @@ import java.util.List;
 @Service
 public class LocalSubTaskImpl implements ILocalSubTask{
 
-    private final int COUNT_ONE_PAGE = 10;
+    private final int COUNT_ONE_PAGE = 20;
 
     @Autowired
     private LocalSubTaskDao localSubTaskDao;
+
+    @Autowired
+    private ApplicationContextAwareCommon applicationContextAware;
 
     @Override
     public ResponseData addLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
@@ -33,6 +39,18 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         }
 
         localSubTaskDao.addLocalSubTask(localSubTaskEntity);
+
+        Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.addLocalSubTask(localSubTaskEntity.getTaskID(),localSubTaskEntity.getName(),
+                        localSubTaskEntity.getContent(),localSubTaskEntity.getDeadline(),
+                        localSubTaskEntity.getStatus(),localSubTaskEntity.getStartTime(),
+                        localSubTaskEntity.getLevel(),localSubTaskEntity.getTag(),localSubTaskEntity.getStar());
+            });
+        }
+
         return new ResponseData(1,"添加成功",null);
     }
 
@@ -47,6 +65,17 @@ public class LocalSubTaskImpl implements ILocalSubTask{
 
         if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
             return new ResponseData(2,"权限不足",null);
+        }
+
+        Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.editLocalSubTask(localSubTaskEntity.getTaskID(),localSubTaskEntity.getTaskID(),localSubTaskEntity.getName(),
+                        localSubTaskEntity.getContent(),localSubTaskEntity.getDeadline(),
+                        localSubTaskEntity.getStatus(),localSubTaskEntity.getStartTime(),
+                        localSubTaskEntity.getLevel(),localSubTaskEntity.getTag(),localSubTaskEntity.getStar());
+            });
         }
 
         localSubTaskDao.updateLocalSubTask(localSubTaskEntity);
@@ -64,6 +93,15 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         }
 
         localSubTaskDao.deleteLocalSubTask(id);
+
+        Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.deleteLocalSubTask(taskID,id);
+            });
+        }
+
         return new ResponseData(1,"删除成功",null);
     }
 
@@ -145,6 +183,14 @@ public class LocalSubTaskImpl implements ILocalSubTask{
             return new ResponseData(2,"权限不足",null);
         }
 
+        Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.editLocalSubTaskStatus(localSubTaskEntity.getTaskID(),localSubTaskEntity.getTaskID(),
+                        localSubTaskEntity.getStatus());
+            });
+        }
 
         localSubTaskDao.updateLocalSubTaskStatus(localSubTaskEntity);
 

@@ -1,91 +1,90 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header>
-        <h1>网站管理</h1>
-      </el-header>
       <el-main>
         <!--      网站管理部分      -->
-        <el-form label-width="100px">
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>网站管理</span>
+          </div>
+          <el-form label-width="100px">
 
-          <el-form-item label="网站名称:">
-            <el-input
-              v-model="websiteName"
-              placeholder="请输入内容"
-              class="tx">
-            </el-input>
-          </el-form-item>
+            <el-form-item label="网站名称:">
+              <el-input
+                v-model="websiteName"
+                placeholder="请输入内容"
+                class="tx">
+              </el-input>
+            </el-form-item>
 
-          <el-form-item label="缓存设置:">
-            <el-select
-              v-model="cache"
-              placeholder="请选择"
-              class="tx">
-              <el-option
-                v-for="item in options"
-                :key="item.key"
-                :label="item.label"
-                :value="item.value">
-              </el-option></el-select>
-          </el-form-item>
+            <el-form-item label="缓存设置:">
+              <el-select
+                v-model="cache"
+                placeholder="请选择"
+                class="tx">
+                <el-option
+                  v-for="item in options"
+                  :key="item.key"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option></el-select>
+            </el-form-item>
 
-          <el-form-item label="最大登录次数:">
-            <el-input-number
-              v-model="maxLogin"
-              :min="1" :max="10"
-              label="最大登陆次数"
-              class="tx">
-            </el-input-number>
-          </el-form-item>
+            <el-form-item label="最大登录次数:">
+              <el-input-number
+                v-model="maxLogin"
+                :min="1" :max="10"
+                label="最大登陆次数"
+                class="tx">
+              </el-input-number>
+            </el-form-item>
 
-          <el-form-item label="任务日志开关:">
-            <el-switch
-              v-model="taskLog"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="开"
-              inactive-text="关">
-            </el-switch>
-          </el-form-item>
+            <el-form-item label="任务日志开关:">
+              <el-switch
+                v-model="taskLog"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="开"
+                inactive-text="关">
+              </el-switch>
+            </el-form-item>
 
-          <el-form-item label="用户操作日志:">
-            <el-switch
-              v-model="userLog"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="开"
-              inactive-text="关">
-            </el-switch>
-          </el-form-item>
+            <el-form-item label="用户操作日志:">
+              <el-switch
+                v-model="userLog"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="开"
+                inactive-text="关">
+              </el-switch>
+            </el-form-item>
 
-          <el-button type="primary"
-                     @click="changeWebInfo()"
-                     icon="el-icon-check"
-                     style="background: #24375E;
-                     border: 0px;
-                     position: relative; left:100px">
-            确认提交</el-button>
+            <el-button type="primary"
+                      @click="changeWebInfo()"
+                      icon="el-icon-check"
+                      style="background: #24375E;
+                      border: 0px;
+                      position: relative; left:100px">
+              确认提交</el-button>
 
-        </el-form>
-
-      </el-main>
-
-      <el-header>
-        <h1>状态管理</h1>
-      </el-header>
-      <el-main>
+          </el-form>
+        </el-card>
         <!--      状态管理部分      -->
-        <el-form label-width="100px">
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>状态管理</span>
+          </div>
+          <el-form label-width="100px">
 
-          <el-form-item label="网站开关:">
-            <el-button
-              type="danger"
-              @click="webChange()"
-              icon="el-icon-switch-button">
-              关闭网站</el-button>
-          </el-form-item>
-
-        </el-form>
+            <el-form-item label="网站开关:">
+              <el-button
+                type="danger"
+                @click="webChange()"
+                icon="el-icon-switch-button">
+                关闭网站</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
 
       </el-main>
 

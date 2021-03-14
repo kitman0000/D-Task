@@ -75,7 +75,16 @@
                      icon="el-icon-check"
                      style="background: #24375E;
                      border: 0px;
-                     position: relative; left:120px">确认提交</el-button></div>
+                     position: relative; left:10px">确认提交</el-button>
+		
+			<el-button type="primary"
+                     @click="logout"
+                     icon="el-icon-close"
+                     style="background: rgb(159, 7, 7);
+                     border: 0px;
+                     position: relative; left:10px">登出账号</el-button>
+		</div>
+
       </el-main>
     </el-container>
 </template>
@@ -164,7 +173,7 @@
 					}
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			}
 			
@@ -188,8 +197,21 @@
 				this.onboardDate = userObj.onboardDate;
 			})
 			.catch(err => {
-				alert("请求异常");
+				// alert("请求异常");
 			});
+		},
+		logout(){
+			axios.post("/api/account/localLogout",null,{
+				headers:{
+					token:localStorage.getItem("token"),
+				}
+			})
+			.then(res=>{
+				localStorage.setItem("token","");
+				this.$router.push({
+								path:'/',
+							});
+			})
 		},
 	},
 	beforeMount:function() {

@@ -54,13 +54,14 @@
 							"token": localStorage.getItem("token"),
 						}
 					})
-					.then(function(response) {
-						this.$alert('请求成功', '提示', {
+					.then(res=> {
+						this.$alert('处理成功', '提示', {
 						         confirmButtonText: '确定',
 						       });
+						window.location.reload();
 					})
-					.catch(function(error) {
-						this.$alert('请求失败', '提示', {
+					.catch(err=> {
+						this.$alert('处理失败', '提示', {
 						         confirmButtonText: '确定',
 						       });
 					});

@@ -1,20 +1,21 @@
 package com.dtask.DTask.userModule.service.impl;
 
 import com.dtask.DTask.accountModule.dao.AccountDao;
-import com.dtask.DTask.userModule.bo.ChildMenuBo;
-import com.dtask.DTask.userModule.bo.ParentMenuBo;
 import com.dtask.DTask.userModule.bo.RoleBo;
 import com.dtask.DTask.userModule.dao.MenuDao;
 import com.dtask.DTask.userModule.dao.RoleDao;
 import com.dtask.DTask.userModule.service.IMenu;
+import com.dtask.common.ApplicationContextAwareCommon;
 import com.dtask.common.ResponseData;
+import com.dtask.pluginsdk.userModule.IMenuEvent;
+import com.dtask.pluginsdk.userModule.bo.ChildMenuBo;
+import com.dtask.pluginsdk.userModule.bo.ParentMenuBo;
 import org.apache.shiro.SecurityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhong on 2020-3-20.
@@ -27,6 +28,9 @@ public class MenuImpl implements IMenu{
     private RoleDao roleDao;
     @Autowired
     private MenuDao menuDao;
+
+    @Autowired
+    private ApplicationContextAwareCommon applicationContextAware;
 
     @Override
     public ResponseData getUserMenu() {
@@ -44,8 +48,15 @@ public class MenuImpl implements IMenu{
             parentMenuBo.setChildMenuBoList(childMenuBo);
         }
 
-        return new ResponseData(1,"查询成功",parentMenuBoList);
+        Map<String,IMenuEvent> interfaceMap = applicationContextAware.getImplementsMap(IMenuEvent.class);
 
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.getUserMenu(parentMenuBoList);
+            });
+        }
+
+        return new ResponseData(1,"查询成功",parentMenuBoList);
     }
 
     @Override

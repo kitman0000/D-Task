@@ -5,13 +5,17 @@ import com.dtask.DTask.localTaskModule.bo.LocalTaskMemberBo;
 import com.dtask.DTask.localTaskModule.dao.LocalTaskDao;
 import com.dtask.DTask.localTaskModule.entity.LocalTaskSearchEntity;
 import com.dtask.DTask.localTaskModule.service.ILocalTask;
+import com.dtask.common.ApplicationContextAwareCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.util.PageDivideUtil;
+import com.dtask.pluginsdk.localTaskModule.ILocalSubTaskEvent;
+import com.dtask.pluginsdk.localTaskModule.ILocalTaskEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhong on 2020-5-3.
@@ -19,10 +23,13 @@ import java.util.List;
 
 @Service
 public class LocalTaskImpl implements ILocalTask {
-    private final int COUNT_ONE_PAGE = 10;
+    private final int COUNT_ONE_PAGE = 16;
 
     @Autowired
     private LocalTaskDao localTaskDao;
+
+    @Autowired
+    private ApplicationContextAwareCommon applicationContextAware;
 
     @Override
     public ResponseData addLocalTask(String name) {
@@ -33,6 +40,15 @@ public class LocalTaskImpl implements ILocalTask {
         localTaskDao.addTaskMember(taskID,userID);
         // 将拥有者设为管理员
         localTaskDao.setLocalTaskAdmin(taskID,userID,true);
+
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.addLocalTask(name);
+            });
+        }
+
         return new ResponseData(1,"添加成功",null);
     }
 
@@ -55,14 +71,31 @@ public class LocalTaskImpl implements ILocalTask {
             localTaskDao.addTaskMember(id,creator);
         }
 
-
         localTaskDao.setLocalTaskAdmin(id,creator,true);
+
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.editLocalTask(id,name,creator,allowedMemberChangeStatus);
+            });
+        }
+
         return new ResponseData(1,"修改成功",null);
     }
 
     @Override
     public ResponseData deleteLocalTask(int id) {
         localTaskDao.deleteLocalTask(id);
+
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.deleteLocalTask(id);
+            });
+        }
+
         return new ResponseData(1,"删除成功",null);
     }
 
@@ -115,6 +148,15 @@ public class LocalTaskImpl implements ILocalTask {
         }
 
         localTaskDao.addTaskMember(taskID,userID);
+
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.addLocalTaskMember(taskID,userID);
+            });
+        }
+
         return new ResponseData(1,"添加成功",null);
     }
 
@@ -135,6 +177,14 @@ public class LocalTaskImpl implements ILocalTask {
         }
 
         localTaskDao.removeTaskMember(taskID,userID);
+
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.removeLocalTaskMember(taskID,userID);
+            });
+        }
 
         return new ResponseData(1,"删除成功",null);
 
@@ -164,6 +214,14 @@ public class LocalTaskImpl implements ILocalTask {
         }
 
         localTaskDao.setLocalTaskAdmin(taskID,userID,isAdmin);
+
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.toggleTaskAdmin(taskID,userID,isAdmin);
+            });
+        }
 
         return new ResponseData(1,"修改成功",null);
     }
