@@ -176,7 +176,7 @@
 					this.userList = eval(response);
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			test(){
@@ -244,7 +244,7 @@
 					this.userList = userObj;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			getUserNumber(){
@@ -307,7 +307,7 @@
 					this.userNumber = userNumberObj*10;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			getRole(){

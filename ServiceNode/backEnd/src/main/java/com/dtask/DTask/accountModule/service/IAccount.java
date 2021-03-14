@@ -13,7 +13,7 @@ public interface IAccount {
 
     boolean changePwd(String password, String oldPassword);
 
-    ResponseData logout();
+    void logout();
 
     void addAccount(String username, String pwd) throws Exception;
 

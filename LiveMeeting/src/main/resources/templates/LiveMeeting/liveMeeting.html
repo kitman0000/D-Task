@@ -72,7 +72,7 @@
 	<button type="button" class="btn-lg btn-block" style="padding-top: 4px;margin-top: 10px;color: rgb(202, 56, 56);background-color: transparent;border: 1px solid rgb(202, 56, 56);" onclick="leaveMeeting()">离开会议</button>
 </div>
 <!--纪录区域 默认只显示不可操作的区域-->
-<div style="min-width: 600px; max-width: 350px;margin-right: 10px;float: right;display: none;height: 100%;" id="editor">
+<div style="min-width: 550px; max-width: 350px;margin-right: 10px;float: right;display: none;height: 100%;" id="editor">
 	<span class="title">会议纪要</span>
     <div id="toolbar-container"  class="toolbar" style="display: none;"></div>
     <div id="text-container" class="text" style="display: none;"></div>
@@ -195,7 +195,7 @@
 	var _userList = null;
 	var _hostName = null; // 主持人用户名
 	
-	const wsUrl = "ws://localhost:8090/";
+	const wsUrl = "wss://node1.taskingcenter.com:8091/";
 	const agoraAppID = "cee3803e2d9d4c66aede61a3ff82c6ae";
 	var cameraOn = true; // 摄像头是否打开
 	

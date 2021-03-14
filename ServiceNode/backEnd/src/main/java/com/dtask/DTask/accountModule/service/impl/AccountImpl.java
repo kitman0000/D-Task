@@ -4,7 +4,6 @@ import com.MQClouder.EncryptRabbitSender;
 import com.dtask.DTask.accountModule.dao.AccountDao;
 import com.dtask.DTask.accountModule.entity.RemoteLoginEntity;
 import com.dtask.DTask.accountModule.service.IAccount;
-import com.dtask.DTask.accountModule.service.ITestInterface;
 import com.dtask.DTask.accountModule.type.LoginType;
 import com.dtask.DTask.accountModule.bo.AccountBo;
 import com.dtask.DTask.userModule.bo.PermissionBo;
@@ -17,10 +16,7 @@ import com.dtask.pluginsdk.accountModule.IAccountEvent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -132,8 +128,9 @@ public class AccountImpl implements IAccount {
     }
 
     @Override
-    public ResponseData logout() {
-        return null;
+    public void logout() {
+        String username = UserCommon.getUserBo().getUsername();
+        cacheUtil.write("token:" + username,"");
     }
 
     @Override

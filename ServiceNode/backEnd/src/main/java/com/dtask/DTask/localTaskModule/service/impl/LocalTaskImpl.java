@@ -10,6 +10,7 @@ import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.util.PageDivideUtil;
 import com.dtask.pluginsdk.localTaskModule.ILocalSubTaskEvent;
+import com.dtask.pluginsdk.localTaskModule.ILocalTaskEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ import java.util.Map;
 
 @Service
 public class LocalTaskImpl implements ILocalTask {
-    private final int COUNT_ONE_PAGE = 10;
+    private final int COUNT_ONE_PAGE = 16;
 
     @Autowired
     private LocalTaskDao localTaskDao;
@@ -40,7 +41,7 @@ public class LocalTaskImpl implements ILocalTask {
         // 将拥有者设为管理员
         localTaskDao.setLocalTaskAdmin(taskID,userID,true);
 
-        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTask.class);
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
 
         if (interfaceMap != null){
             interfaceMap.forEach((K,V)->{
@@ -72,7 +73,7 @@ public class LocalTaskImpl implements ILocalTask {
 
         localTaskDao.setLocalTaskAdmin(id,creator,true);
 
-        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTask.class);
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
 
         if (interfaceMap != null){
             interfaceMap.forEach((K,V)->{
@@ -87,7 +88,7 @@ public class LocalTaskImpl implements ILocalTask {
     public ResponseData deleteLocalTask(int id) {
         localTaskDao.deleteLocalTask(id);
 
-        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTask.class);
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
 
         if (interfaceMap != null){
             interfaceMap.forEach((K,V)->{
@@ -148,7 +149,7 @@ public class LocalTaskImpl implements ILocalTask {
 
         localTaskDao.addTaskMember(taskID,userID);
 
-        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTask.class);
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
 
         if (interfaceMap != null){
             interfaceMap.forEach((K,V)->{
@@ -177,7 +178,7 @@ public class LocalTaskImpl implements ILocalTask {
 
         localTaskDao.removeTaskMember(taskID,userID);
 
-        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTask.class);
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
 
         if (interfaceMap != null){
             interfaceMap.forEach((K,V)->{
@@ -214,7 +215,7 @@ public class LocalTaskImpl implements ILocalTask {
 
         localTaskDao.setLocalTaskAdmin(taskID,userID,isAdmin);
 
-        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTask.class);
+        Map<String,ILocalTask> interfaceMap = applicationContextAware.getImplementsMap(ILocalTaskEvent.class);
 
         if (interfaceMap != null){
             interfaceMap.forEach((K,V)->{

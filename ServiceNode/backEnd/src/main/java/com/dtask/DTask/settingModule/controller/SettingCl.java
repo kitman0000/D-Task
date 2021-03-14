@@ -31,4 +31,10 @@ public class SettingCl{
         return setting.shutDown();
     }
 
+    @RequestMapping(value = "/api/webSiteSettings/nodeName",method = RequestMethod.GET)
+    public ResponseData getNodeName(){
+        String nodeName = setting.getNodeName();
+        return new ResponseData(1,"查询成功",nodeName);
+    }
+
 }

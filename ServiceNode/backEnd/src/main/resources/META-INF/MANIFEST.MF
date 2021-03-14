@@ -41,6 +41,6 @@ Class-Path: shiro-crypto-hash-1.4.1.jar aspectjweaver-1.8.0.jar jul-to
  beans-5.1.9.RELEASE.jar shiro-config-core-1.4.1.jar spring-rabbit-2.1
  .8.RELEASE.jar spring-jcl-5.1.9.RELEASE.jar spring-boot-starter-thyme
  leaf-2.1.8.RELEASE.jar netty-buffer-4.1.39.Final.jar MQClouder.jar pl
- ugin-sdk.jar LiveMeeting.jar
+ ugin-sdk.jar liveMeeting.jar
 Main-Class: com.dtask.DTask.DTaskApplication
 

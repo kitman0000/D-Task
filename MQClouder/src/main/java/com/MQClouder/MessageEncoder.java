@@ -22,6 +22,10 @@ public class MessageEncoder {
 
     public String decrypt(String msg){
         byte[] bytes = EncodeUtil.decodeBase64ToByte(msg);
+
+        if(bytes == null)
+            return null;
+
         try {
             return new String(AESUtil.decryptAES(bytes, secretKey),"utf-8");
         } catch (UnsupportedEncodingException e) {

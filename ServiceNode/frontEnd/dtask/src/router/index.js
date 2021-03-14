@@ -20,6 +20,7 @@ import nodeOperation from '../components/nodeOperation.vue'
 import websiteSetting from "../components/websiteSetting.vue"
 import userSetting from "../components/userSetting.vue"
 import localSubTask from '../components/localSubTask.vue'
+import subTask from '../components/subTask.vue'
 import EditTask from '../components/editTask.vue'
 import editParticipator from '../components/editParticipator.vue'
 import localTask from "../components/localTask.vue"
@@ -91,6 +92,11 @@ const routes = [{
 			path: '/localSubTask',
 			name: 'localSubTask',
 			component: localSubTask
+		},
+		{
+			path: '/subTask',
+			name: 'subTask',
+			component: subTask
 		},
 		{
 			path: '/SendMail',

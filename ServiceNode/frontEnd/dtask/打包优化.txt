@@ -1,0 +1,8 @@
+var load=document.getElementById("loading");
+load.parentNode.removeChild(load);
+
+
+
+<div id="loading" style="width:100%;height:500px;line-height: 500px;" align="center" >
+<img src="img/loading.gif"/>
+</div>

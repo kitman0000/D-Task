@@ -1,6 +1,7 @@
 package com.dtask.DTask.remoteTaskModule.controller;
 
 
+import com.dtask.DTask.remoteTaskModule.entity.RemoteChartEntity;
 import com.dtask.DTask.remoteTaskModule.service.IRemoteSubTaskChart;
 import com.dtask.common.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class RemoteSubTaskChartCl {
 
     @RequestMapping(value = "/api/remoteTask/remoteSubTaskChart",method = RequestMethod.GET)
     public ResponseData getRemoteSubTaskChart(int day, int taskID){
-        return RemoteSubTaskChart.getRemoteSubTaskChart(day,taskID);
+
+        RemoteChartEntity remoteChartEntity = new RemoteChartEntity();
+        remoteChartEntity.setDay(day).setTaskID(taskID);
+
+        return RemoteSubTaskChart.getRemoteSubTaskChart(remoteChartEntity);
     }
 }

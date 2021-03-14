@@ -76,7 +76,7 @@
 					this.taskList = taskObj;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			test(){
@@ -101,7 +101,7 @@
 					this.taskList = taskObj;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			getTaskNumber(){
@@ -121,7 +121,7 @@
 					this.taskNumber = taskNumberObj*10;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			addTask(){

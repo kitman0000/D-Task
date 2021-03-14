@@ -173,8 +173,5 @@
         <if test="localTaskSearchEntity.taskName != ''">
             name LIKE '%${localTaskSearchEntity.taskName}%'
         </if>
-        <if test="localTaskSearchEntity.taskCreatorID != -1">
-            creator LIKE '%${localTaskSearchEntity.taskCreatorID}%'
-        </if>
     </sql>
 </mapper>

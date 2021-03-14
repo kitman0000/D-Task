@@ -75,7 +75,7 @@
 					this.taskList = taskObj;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			test(){
@@ -100,7 +100,7 @@
 					this.taskList = taskObj;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			getTaskNumber(){
@@ -120,7 +120,7 @@
 					this.taskNumber = taskNumberObj*10;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			addTask(){
@@ -169,7 +169,7 @@
 				this.isShow = !this.isShow;
 			},
 			userTaskDetail(row,event){
-				this.$router.push({path:"/SubTask?taskID="+row.id+"&creator="+row.creator});
+				this.$router.push({path:"/localSubTask?taskID="+row.id+"&creator="+row.creator});
 			},
 		},
 		beforeMount() {

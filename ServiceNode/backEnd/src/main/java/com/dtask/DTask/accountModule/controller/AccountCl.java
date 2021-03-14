@@ -34,7 +34,8 @@ public class AccountCl {
     @RequestMapping(value = "/api/account/localLogout",method = RequestMethod.POST)
     public ResponseData localLogout()
     {
-        return account.logout();
+        account.logout();
+        return new ResponseData(1,"注销成功",null);
     }
 
     @RequestMapping(value = "/api/account/remoteLogin",method = RequestMethod.POST)

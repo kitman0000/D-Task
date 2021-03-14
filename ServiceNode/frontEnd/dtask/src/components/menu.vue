@@ -28,6 +28,9 @@
 			  <div class="welcomeLabel" @click="toUserSetting()">
 			  	你好！<span>{{userName}}</span>
 			  </div>
+			  <div class="nodeName">
+			   	<span style="margin-left:10px">你的位置： {{nodeName}}</span>
+			  </div>
 			 <router-view>
 			 </router-view>
 		  </el-main>
@@ -50,6 +53,7 @@
 				theSelectedSubMenu:'',
 				isShow:true,
 				routerLink:'',
+				nodeName:'',
 			}
 		},
 		methods:{
@@ -66,7 +70,10 @@
 					this.menus = menuList;
 				})
 				.catch(err => {
-					alert("请求异常");
+					this.$alert('尚未登录，正在回到主页面', '提示', {
+						         confirmButtonText: '确定',
+						       });
+					this.$router.push({path:"/"});
 				});
 			},
 			test(e){
@@ -79,10 +86,30 @@
 			},
 			toUserSetting(){
 				this.$router.push("userSetting");
+			},
+			getUserNodeName(){
+				// 获取节点名称
+				axios.get('/api/webSiteSettings/nodeName', {
+					headers: {
+						"token": localStorage.getItem("token"),
+					}
+				})
+				.then(res => {
+					var response = res.data;
+					this.nodeName = response.data;
+				})
 			}
 		},
 		beforeMount:function() {
+			if(localStorage.getItem("token") == null || localStorage.getItem("token") == ""){
+				this.$alert('尚未登录，正在回到主页面', '提示', {
+						         confirmButtonText: '确定',
+						       });
+					this.$router.push({path:"/"});
+			}
+
 			this.getUserMenu();
+			this.getUserNodeName();
 		}
 		}
 </script>
@@ -102,6 +129,18 @@
 		cursor: pointer;
 		padding-top: 3px;
 		padding-bottom: 3px;
+	}
+
+	.nodeName{
+		color:#77a6e7;
+
+		margin-top: 5px; 
+		position: absolute; 
+		left:10%; 
+		top: 15px;
+		background: transparent;
+		padding-left: 10px;
+		padding-right: 10px;
 	}
 
 	.welcomeLabel:hover{

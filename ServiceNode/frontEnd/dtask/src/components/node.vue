@@ -61,7 +61,7 @@
 						this.TreeData.label = this.data[0].nodeName;
 						// 设置在线状态
 						if(this.data[0].online){
-							newNode.swtich = "online";
+							this.TreeData.swtich = "online";
 						}
 						this.TreeData.children = [];
 						var tmp = 1;

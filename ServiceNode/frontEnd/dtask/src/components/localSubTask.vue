@@ -88,12 +88,18 @@
 					<el-radio-button label="一年"></el-radio-button>
 					</el-radio-group>
 				</div>
-				<b>拥有者：</b>
-				<p>{{creator}}</p>
-				<b>管理者：</b>
-				<p v-for="manager in managers">{{manager}}</p>
-				<b>参与者：</b>
-				<p v-for="employee in employees">{{employee}}</p>
+				<p>
+					<b>拥有者：</b>
+					<p>{{creator}}</p>
+				</p>
+				<p>
+					<b>管理者：</b>
+					<p v-for="manager in managers">{{manager}}</p>
+				</p>
+				<p>
+					<b>参与者：</b>
+					<p v-for="employee in employees">{{employee}}</p>
+				</p>
 				<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
 				v-if="role != 3" icon="el-icon-edit" @click="editParticipator()">任务人员编辑</el-button>
 			</el-aside>
@@ -130,6 +136,7 @@
 				tag: [],
 				star: null,
 				currentPage3: 1,
+				showChart:true,
 				stateOperation: null,
 				options:[
 					{
@@ -421,6 +428,7 @@
 									break;
 							}
 						};
+
 						this.subTaskStateEcharts();
 					})
 

@@ -73,25 +73,37 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
                 // 向前端返回token过期
                 PrintWriter printWriter = httpServletResponse.getWriter();
                 printWriter.print("NO_TOKEN_IN_HEADER");
+                ((HttpServletResponse) response).sendRedirect("/");
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return false;
         }
 
-        String json = EncodeUtil.decodeBase64(base64Token);
-        TokenBo tokenBo = (TokenBo) JsonUtil.jsonToObject(json,TokenBo.class);
+        String username = null;
+        String pwd = null;
 
-        // 从缓存中获取pwd
-        String pwd = userPwdMap.get(tokenBo.getUsername());
+        try {
+            String json = EncodeUtil.decodeBase64(base64Token);
+            TokenBo tokenBo = (TokenBo) JsonUtil.jsonToObject(json,TokenBo.class);
+            username = tokenBo.getUsername();
 
-        if(pwd == null){
+            // 从缓存中获取pwd
+            pwd = userPwdMap.get(tokenBo.getUsername());
+
+            if(pwd == null){
+                throw new Exception("token过期或不存在");
+            }
+
+        }catch (Exception ex){
             // token过期或不存在
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             try {
                 // 向前端返回token过期
                 PrintWriter printWriter = httpServletResponse.getWriter();
                 printWriter.print("NO_TOKEN_FOUND");
+                ((HttpServletResponse) response).sendRedirect("/#/");
+                ((HttpServletResponse) response).setHeader("Access-Control-Allow-Origin","*");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -99,7 +111,7 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         }
 
         // 尝试登录，校验token信息正确
-        UsernamePasswordToken token = new UsernamePasswordToken(tokenBo.getUsername(),pwd);
+        UsernamePasswordToken token = new UsernamePasswordToken(username,pwd);
         SecurityUtils.getSubject().login(token);
 
         RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();

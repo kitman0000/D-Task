@@ -88,12 +88,18 @@
 					<el-radio-button label="一年"></el-radio-button>
 					</el-radio-group>
 				</div>
-				<b>拥有者：</b>
-				<p>{{creator}}</p>
-				<b>管理者：</b>
-				<p v-for="manager in managers">{{manager}}</p>
-				<b>参与者：</b>
-				<p v-for="employee in employees">{{employee}}</p>
+				<p>
+					<b>拥有者：</b>
+					<p>{{creator}}</p>
+				</p>
+				<p>
+					<b>管理者：</b>
+					<p v-for="manager in managers">{{manager}}</p>
+				</p>
+				<p>
+					<b>参与者：</b>
+					<p v-for="employee in employees">{{employee}}</p>
+				</p>
 				<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
 				v-if="role != 3" icon="el-icon-edit" @click="editParticipator()">任务人员编辑</el-button>
 			</el-aside>
@@ -367,7 +373,7 @@
 						this.importantStarAmount=0;
 						this.particularlyImportantStarAmount=0;
 						var response = res.data.data;
-						var a = eval(response);
+						var a = eval("("+response + ")");
 						var i=0;
 						for(i=0;i<a.chartLevelBo.length;i++){
 							switch(a.chartLevelBo[i].level){
@@ -703,6 +709,7 @@
 		},
 		beforeMount: function() {
 			this.getDefaultSubTask();
+			this.getSubTaskEchartsAmount();
 		}
 	}
 </script>

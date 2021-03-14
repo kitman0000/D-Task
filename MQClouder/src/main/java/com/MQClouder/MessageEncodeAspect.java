@@ -46,7 +46,7 @@ public class MessageEncodeAspect {
             // 加密返回
             return messageEncoder.encrypt(result);
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
+            //throwable.printStackTrace();
             return null;
         }
     }

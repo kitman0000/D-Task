@@ -18,6 +18,7 @@
         <mapper resource="com/dtask/center/syncModule/mapping/SyncUserMapping.xml"/>
         <mapper resource="com/dtask/center/remoteTaskModule/mapping/remoteSubTaskMapping.xml"/>
         <mapper resource="com/dtask/center/remoteTaskModule/mapping/remoteTaskMapping.xml"/>
+        <mapper resource="com/dtask/center/remoteTaskModule/mapping/remoteSubTaskChartMapping.xml"/>
         <mapper resource="com/dtask/liveMeetingCenter/liveMeetingModule/mapping/meetingRoomMapper.xml"/>
         <mapper resource="com/dtask/liveMeetingCenter/liveMeetingModule/mapping/liveMeetingMapper.xml"/>
     </mappers>

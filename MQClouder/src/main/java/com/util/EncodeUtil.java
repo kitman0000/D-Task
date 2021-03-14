@@ -61,7 +61,7 @@ public class EncodeUtil {
             byte[] cipherTextBytes = base64Decoder.decodeBuffer(cipherText);
             return cipherTextBytes;
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         // 解密错误返回 null
         return null;

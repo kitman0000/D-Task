@@ -19,7 +19,7 @@
 						<div v-if="task.planning + task.working + task.finish + task.cancel != 0">
 							<div style="height:250px"  v-bind:id="task.id"></div>
 						</div>
-						<div style="margin-top:90px;width:100%;" align="center">
+						<div v-else style="margin-top:90px;width:100%;" align="center">
 							<span style="color:#ccc;font-size:20px">
 								暂无数据
 							</span>
@@ -131,9 +131,24 @@
 					var taskObj = eval(response.data);
 					console.log(taskObj);
 					this.taskList = taskObj;
+
+					var _this = this;
+
+
+					this.$nextTick(function(){
+						for(var i=0;i<=taskObj.length;i++){
+
+							if(taskObj[i].planning + taskObj[i].working + taskObj[i].finish + taskObj[i].cancel == 0){
+								continue;
+							}
+
+							_this.locakTaskStateEcharts(taskObj[i].id,taskObj[i].planning,taskObj[i].working,
+							taskObj[i].finish,taskObj[i].cancel);
+						}
+					});
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			test(){
@@ -157,13 +172,18 @@
 					console.log(taskObj);
 					this.taskList = taskObj;
 					var _this = this;
+
+
 					this.$nextTick(function(){
-						for(var i=1;i<=taskObj.length;i++){
-						if(i=taskObj[i-1].id){
-							_this.locakTaskStateEcharts(taskObj[i-1].id,taskObj[i-1].planning,taskObj[i-1].working,
-							taskObj[i-1].finish,taskObj[i-1].cancel);
+						for(var i=0;i<=taskObj.length;i++){
+
+							if(taskObj[i].planning + taskObj[i].working + taskObj[i].finish + taskObj[i].cancel == 0){
+								continue;
+							}
+
+							_this.locakTaskStateEcharts(taskObj[i].id,taskObj[i].planning,taskObj[i].working,
+							taskObj[i].finish,taskObj[i].cancel);
 						}
-					}
 					});
 					
 				});
@@ -185,7 +205,7 @@
 					this.taskNumber = taskNumberObj*10;
 				})
 				.catch(err => {
-					alert("请求异常");
+					// alert("请求异常");
 				});
 			},
 			userTaskDetail(id,creator){
@@ -206,7 +226,7 @@
 			// 		}
 			// 	})
 			// 	.catch(err => {
-			// 		alert("请求异常");
+			// 		// alert("请求异常");
 			// 	});
 			// },
 			// changeTask(taskID){

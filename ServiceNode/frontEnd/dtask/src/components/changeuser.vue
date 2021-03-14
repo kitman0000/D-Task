@@ -8,10 +8,10 @@
 				</div>
 				<div class="demo-input-suffix" style="height: 60px;">
 					<div style="float: left; line-height: 35px; width: 100px;">用户名</div>
-				<el-input placeholder="用户名" v-model="username" style="width: 300px;"></el-input>
+				<el-input placeholder="用户名" v-model="username" style="width: 300px;" readonly="readonly" :disabled="true"></el-input>
 				</div>
 				<div class="demo-input-suffix" style="height: 60px;">
-					<div style="float: left; line-height: 35px; width: 100px;">密码</div>
+					<div style="float: left; line-height: 35px; width: 100px;">重置密码</div>
 				<el-input placeholder="密码" v-model="pwd" style="width: 300px;"></el-input>
 				</div>
 				<div class="demo-input-suffix" style="height: 60px;">

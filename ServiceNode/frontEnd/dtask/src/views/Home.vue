@@ -1,11 +1,11 @@
 <template>
 	<div class="home">
 		<div style="left: 35%;position: absolute;border:rgb(36, 55, 94) 1px solid; width: 500px;margin-top: 100px;padding-bottom: 50px;">
-			<div style="margin-top: 50px;width: 100%; height:40px;background: #24375E;color: #fff;">
-				<div style="padding-top: 7px;padding-left: 75px;font-size: 18px;">登录</div>
+			<div style="margin-top: 50px;width: 100%; height:50px;background: #24375E;color: #fff;">
+				<div style="padding-top: 11px;padding-left: 75px;font-size: 20px;">登录</div>
 			</div>
-			<div style="padding-left: 50px;padding-right: 50px;">
-				<img src="../assets/logo.png" />
+			<div style="padding-left: 50px;padding-right: 50px;padding-top:70px">
+				<img src="../assets/IndexTaskingLogo.png" style="height:150px" />
 				<div style="margin-left: 25%;margin-top: 50px;">
 					<a :class="{'theChosenOne':isNormalUser}" style="cursor: pointer;padding: 10px;" @click="login_changeToNormalUser()">本系统用户</a>
 					<a :class="{'theChosenOne':isPrimelUser}" style="margin-left: 15px;cursor:pointer;padding: 10px;" @click="login_changeToPrimeUser()">上级系统用户</a>
@@ -20,7 +20,7 @@
 				</el-form>
 				<el-form label-width="80px" style="margin-top: 50px;" v-if="isPrimelUser == true">
 					<el-form-item label="父节点:">
-					<el-select v-model="value" placeholder="请先选择节点">
+					<el-select style="width:100%" v-model="value" placeholder="请先选择节点">
 						<el-option v-for="item in options" :key="item.id" :label="item.nodeName" :value="item.id">
 						</el-option>
 					</el-select>
