@@ -1,8 +1,8 @@
-# D-Task分布式任务管理系统
+# D-Task/Tasking分布式任务管理系统
 ## 1. 项目简介
-普通的团队任务管理软件，通常部署在一台服务器上，整个团队使用一个系统。但这样一旦系统需要更新，迁移，甚至发生崩溃，就会导致整个团队无法使用。D-Task将让每个部门拥有自己独立的任务管理服务，每个服务称之为节点，或者系统。节点与节点之间可以互相连接，（例如一个公司有北京总部，上海分部，广州分部，则上海分部和广州分部可以连接至北京总部），组建一个强大的任务管理网络。D-Task的D为Distributed 的简写，表示采用分布式部署。
+普通的团队任务管理软件，通常部署在一台服务器上，整个团队使用一个系统。但这样一旦系统需要更新，迁移，甚至发生崩溃，就会导致整个团队无法使用。D-Task（后改名为Tasking）将让每个部门拥有自己独立的任务管理服务，每个服务称之为节点，或者系统。节点与节点之间可以互相连接，（例如一个公司有北京总部，上海分部，广州分部，则上海分部和广州分部可以连接至北京总部），组建一个强大的任务管理网络。本项目支持插件化开发，提高了系统的开放性与可扩展性。
 ## 2. 功能说明
-账号管理：账号登录/改密
+账号管理：账号登录/改密，上级用户登录。
 
 用户管理：添加/删除用户，储存用户基本信息（例如生日，入职日期等）
 
@@ -19,6 +19,8 @@
 系统绑定：将本系统绑定到其他一个中心调配服务中，与其他节点连接。
 
 网站设置：网站基础参数设置。
+
+视频会议：使用插件SDK开发的视频会议插件。包含会议室管理，视频会议，会议纪要等功能。
 
 ## 3. 技术栈
 前端:VueJS + ElementUI + axios
@@ -79,26 +81,45 @@
 2、在消息队列接收层加入`@MessageReceiver`注解
 
 ```java
-	@MessageReceiver
-	@RabbitListener(bindings = @QueueBinding(
-		value = @Queue("dtask.account.login." + "#{${nodeName}}"),
-		exchange = @Exchange(value = "topicExchange",type = "topic"),
-		key = "dtask.account.login." + "#{${nodeName}}"
-	))
-	public String mqRemoteLogin(String msg){
-		try {
-			RemoteLoginEntity remoteLoginEntity = (RemoteLoginEntity) 
-			JsonUtil.jsonToObject(msg,RemoteLoginEntity.class);
-			return account.mqRemoteLogin(remoteLoginEntity.getUsername(),remoteLoginEntity.getPwd());
-		}catch (Exception ex){
-			ex.printStackTrace();
-			return "SYS_FAILED";
-		}
+@MessageReceiver
+@RabbitListener(bindings = @QueueBinding(
+	value = @Queue("dtask.account.login." + "#{${nodeName}}"),
+	exchange = @Exchange(value = "topicExchange",type = "topic"),
+	key = "dtask.account.login." + "#{${nodeName}}"
+))
+public String mqRemoteLogin(String msg){
+	try {
+		RemoteLoginEntity remoteLoginEntity = (RemoteLoginEntity) 
+		JsonUtil.jsonToObject(msg,RemoteLoginEntity.class);
+		return account.mqRemoteLogin(remoteLoginEntity.getUsername(),remoteLoginEntity.getPwd());
+	}catch (Exception ex){
+		ex.printStackTrace();
+		return "SYS_FAILED";
 	}
+}
 ```
 **注意：这只是目前初代版本的方式，后续版本更新后可能有很多变化**
 
-## 7. 其他文档链接
+## 7.插件开发
+为了提升平台的可扩展性，本项目支持插件化开发。节点与中心服务都可以开发插件。具体开发步骤如下：
+
+ 1. 下载插件模板： `https://github.com/kitman0000/D-Task/tree/master/pluginTemplate`并导入到IDE中
+ 2. 如果你需要显示页面
+    (1)请在controller层注册。[查看示例][1]
+    (2)请在resources文件下编写页面。[查看示例][2]
+    (3)如果需要获取用户token，请从url参数中获取。
+ 3. 如果你需要监听用户操作事件
+    (1)请导入插件SDK：`https://github.com/kitman0000/D-Task/blob/master/jar/plugin-sdk.jar`.
+    (2)我们提供了14个模块的事件监听接口，在你的代码中实现该接口，并使用`@Component`即可响应事件。
+ 4. 如果你需要添加新的菜单，请先完成第\[3\]步后，监听菜单事件。[查看示例][3]
+ 5. 将插件打包为Jar包，并和其他打包结果放在同一文件夹下。
+ 6. 修改Dtask.jar中的`META-INF/MANIFEST.MF`文件，在文件最后加上你插件的jar文件名。
+ 7. 启动Dtask.jar，插件即可生效。
+ 
+ 更多细节可以查看我们的插件示例：[Agora视频会议插件][4] [Agora视频会议中心服务插件][5]
+
+
+## 8. 其他文档链接
 设计文档：https://docs.qq.com/doc/DSUNMaWZKZGdUb1ZF
 
 API文档：https://docs.qq.com/sheet/DSUdGbnBRTUhqTVll?tab=BB08J2
@@ -108,10 +129,26 @@ API文档：https://docs.qq.com/sheet/DSUdGbnBRTUhqTVll?tab=BB08J2
 
 **注意：以上文档都在更新中，都不是最终版本**
 
-## 8. 未来开发计划
+## 9. 未来开发计划
 1.任务内部的子任务数据可视化，整体任务可视化
 
 2.使用Agora平台的API，添加远程视频会议功能
 
-## 9. 界面截图
-(todo)
+## 10. 界面截图
+![任务菜单][6]
+
+
+![子任务菜单][7]
+
+
+![节点拓扑图][8]
+
+
+  [1]: https://github.com/kitman0000/D-Task/blob/master/pluginTemplate/src/main/java/com/dtask/template/templateModule/controller/PageController.java
+  [2]: https://github.com/kitman0000/D-Task/tree/master/LiveMeeting/src/main/resources/templates/LiveMeeting
+  [3]: https://github.com/kitman0000/D-Task/blob/master/LiveMeeting/src/main/java/com/dtask/liveMeeting/liveMeetingModule/service/MenuEventImpl.java
+  [4]: https://github.com/kitman0000/D-Task/tree/master/LiveMeeting
+  [5]: https://github.com/kitman0000/D-Task/tree/master/LiveMeetingCenter
+  [6]: https://raw.githubusercontent.com/kitman0000/D-Task/master/screenshot/%E6%88%AA%E5%9B%BE1.png
+  [7]: https://raw.githubusercontent.com/kitman0000/D-Task/master/screenshot/%E6%88%AA%E5%9B%BE3.png
+  [8]: https://raw.githubusercontent.com/kitman0000/D-Task/master/screenshot/%E6%88%AA%E5%9B%BE2.png
