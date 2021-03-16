@@ -105,6 +105,7 @@ public String mqRemoteLogin(String msg){
 
  1. 下载插件模板： `https://github.com/kitman0000/D-Task/tree/master/pluginTemplate`并导入到IDE中
  2. 如果你需要显示页面
+    
     (1)请在controller层注册。[查看示例][1]
     
     (2)请在resources文件下编写页面。[查看示例][2]
@@ -112,6 +113,7 @@ public String mqRemoteLogin(String msg){
     (3)如果需要获取用户token，请从url参数中获取。
     
  3. 如果你需要监听用户操作事件
+    
     (1)请导入插件SDK：`https://github.com/kitman0000/D-Task/blob/master/jar/plugin-sdk.jar`.
     
     (2)我们提供了14个模块的事件监听接口，在你的代码中实现该接口，并使用`@Component`即可响应事件。
