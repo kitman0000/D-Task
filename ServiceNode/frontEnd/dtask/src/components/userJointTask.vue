@@ -9,7 +9,7 @@
 				<el-button type="primary" @click="getTaskNumber(),handleTaskList()" icon="el-icon-search" style="margin-left: 10px;background: #24375E;border: 0px ;">搜索</el-button>
 				<el-row :gutter="20">
 					<el-col :span="5"  v-for="task in taskList" :key="task" >
-					<el-card  class="box-card taskCard" @click.native="userTaskDetail(task.id,task.creator)">
+					<el-card  class="box-card taskCard" @click.native="userTaskDetail(task.id,task.creatorID,task.creatorNode)">
 						任务名：{{task.taskName}}<br/>
 						创建者:{{task.creatorName}}
 
@@ -177,8 +177,8 @@
 					// alert("请求异常");
 				});
 			},
-			userTaskDetail(id,creator){
-				this.$router.push({path:"/jointSubTask?taskID="+id+"&creator="+creator});
+			userTaskDetail(id,creatorID,creatorNode){
+				this.$router.push({path:"/jointSubTask?taskID="+id+"&creator="+creatorID+"&nodeID="+creatorNode});
 			},
 			// addTask(){
 			// 	this.$router.push({

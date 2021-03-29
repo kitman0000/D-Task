@@ -149,7 +149,7 @@
 
     <!-- 获取任务拥有者ID -->
     <select id="getTaskCreator" resultType="com.dtask.center.remoteTaskModule.bo.RemoteTaskMemberBo">
-        SELECT creator,creatorNode as nodeID FROM tb_remote_task
+        SELECT creator as userID,creatorNode as nodeID FROM tb_remote_task
         <where>
             id = #{taskID}
         </where>
