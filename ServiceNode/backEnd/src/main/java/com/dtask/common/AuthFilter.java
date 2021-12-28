@@ -5,6 +5,7 @@ import com.dtask.common.config.MyShiroRealm;
 import com.dtask.common.util.CacheUtil;
 import com.dtask.common.util.EncodeUtil;
 import com.dtask.common.util.JsonUtil;
+import com.dtask.common.util.RequestUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.RealmSecurityManager;
@@ -37,46 +38,37 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+
+        String uri = httpServletRequest.getRequestURI();
 
         // 如果是登录页面，不拦截
-        if(httpServletRequest.getRequestURI().equals( "/api/account/localLogin")){
+        if(uri.equals( "/api/account/localLogin")){
             return true;
         }
 
         // 如果是插件页面，不拦截
-        if (httpServletRequest.getRequestURI().startsWith("/pluginPage")){
+        if (uri.startsWith("/pluginPage")){
             return true;
         }
 
         // 如果是登出，不拦截
-        if(httpServletRequest.getRequestURI().equals( "/api/account/logout")){
+        if(uri.equals( "/api/account/logout")){
             return true;
         }
 
         // 如果是远程登录，不拦截
-        if(httpServletRequest.getRequestURI().equals( "/api/account/remoteLogin")){
+        if(uri.equals( "/api/account/remoteLogin")){
             return true;
         }
 
-        if(httpServletRequest.getRequestURI().equals( "/api/account/parentNodes")){
+        if(uri.equals( "/api/account/parentNodes")){
             return true;
         }
 
-        // 获取用户信息
-        String base64Token = httpServletRequest.getHeader("token");
-
-        if(base64Token == null)
-        {
-            // token不在header里
-            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-            try {
-                // 向前端返回token过期
-                PrintWriter printWriter = httpServletResponse.getWriter();
-                printWriter.print("NO_TOKEN_IN_HEADER");
-                ((HttpServletResponse) response).sendRedirect("/");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        // 解析Token
+        String json = decodeTokenFromBase64(httpServletRequest,httpServletResponse);
+        if (json == null){
             return false;
         }
 
@@ -84,7 +76,6 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         String pwd = null;
 
         try {
-            String json = EncodeUtil.decodeBase64(base64Token);
             TokenBo tokenBo = (TokenBo) JsonUtil.jsonToObject(json,TokenBo.class);
             username = tokenBo.getUsername();
 
@@ -97,16 +88,7 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
 
         }catch (Exception ex){
             // token过期或不存在
-            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-            try {
-                // 向前端返回token过期
-                PrintWriter printWriter = httpServletResponse.getWriter();
-                printWriter.print("NO_TOKEN_FOUND");
-                ((HttpServletResponse) response).sendRedirect("/#/");
-                ((HttpServletResponse) response).setHeader("Access-Control-Allow-Origin","*");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            RequestUtil.refuseRequest(httpServletResponse);
             return false;
         }
 
@@ -118,5 +100,24 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         MyShiroRealm myShiroRealm = (MyShiroRealm) rsm.getRealms().iterator().next();
 
         return true;
+
+
+    }
+
+    /**
+     * Get token from headers and decode it from base64, header key is 'token'
+     * @param request Request
+     * @param response Response
+     * @return Decoded content
+     */
+    private String decodeTokenFromBase64(HttpServletRequest request, HttpServletResponse response){
+        String base64Token = request.getHeader("token");
+
+        if(base64Token == null)
+        {
+            RequestUtil.refuseRequest(response);
+            return null;
+        }
+        return EncodeUtil.decodeBase64(base64Token);
     }
 }

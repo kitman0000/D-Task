@@ -1,5 +1,6 @@
 package com.dtask.common.config;
 
+import com.dtask.common.ApplicationFilter;
 import com.dtask.common.AuthFilter;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
@@ -52,13 +53,16 @@ public class ShiroConfig {
 		// filterMap用于加入自定义拦截器
 		Map<String, Filter> filterMap = new HashMap<>(16);
 		filterMap.put("authFilter", new AuthFilter());
+		filterMap.put("applicationFilter", new ApplicationFilter());
 		shiroFilterFactoryBean.setFilters(filterMap);
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 
 		// filterRuleMap用于定义拦截器要拦截的URL
 		Map<String, String> filterRuleMap = new HashMap<>(16);
-		// 所有URL要被authFilter拦截
-		filterRuleMap.put("/**", "authFilter");
+		// 所有内部URL要被authFilter拦截
+		filterRuleMap.put("/api/**", "authFilter");
+		// 所有外部URL要被applicationFilter拦截
+		filterRuleMap.put("/externalApi/**", "applicationFilter");
 
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterRuleMap);
 
