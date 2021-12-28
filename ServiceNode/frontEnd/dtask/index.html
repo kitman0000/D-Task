@@ -1,0 +1,324 @@
+<!--
+    THIS EXAMPLE WAS DOWNLOADED FROM https://echarts.apache.org/examples/zh/editor.html?c=map-polygon
+-->
+<!DOCTYPE html>
+<html style="height: 100%">
+    <head>
+        <meta charset="utf-8">
+		<style>
+			
+			
+			.map-ui-font{
+				color: #fff;
+			}
+			
+			.map-ui-label{
+				line-height: 450%;
+				height: 15%;
+				width: 90%;
+				background: #0293c8;
+				opacity: 90%;
+				cursor: pointer;
+			}
+			
+			.map-ui-label:hover{
+				background: #b3ebff;
+			}
+			
+			
+		</style>
+    </head>
+    <body style="height: 100%; margin: 0">
+        <div id="container" style="height: 100%"></div>
+		
+		<div style="position:absolute;top: 15%;left:70%;width: 25%;height: 50%; border: 1px solid #029fd4;padding: 10px 10px 130px 10px;background: #272835; opacity: 80%;" align="center">
+		
+			<h1 class="title map-ui-font" style="margin-bottom: 100px;">Tasking节点导航</h1>
+
+			
+			<div class="map-ui-label" align="center" onclick="go('https://node2.taskingcenter.com')">
+				<h1 class="title map-ui-font">节点1</h1>
+			</div>
+			
+			<div class="map-ui-label" align="center" onclick="go('https://node4.taskingcenter.com')">
+				<h1 class="title map-ui-font">节点2</h1>
+			</div>
+			
+			<div class="map-ui-label" align="center" onclick="go('https://node3.taskingcenter.com')">
+				<h1 class="title map-ui-font">深圳节点</h1>
+			</div>
+			
+			<div class="map-ui-label" align="center" onclick="go('https://node1.taskingcenter.com')">
+				<h1 class="title map-ui-font">上海节点</h1>
+			</div>
+		
+		</div>
+		
+
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/dataTool.min.js"></script>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/china.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/world.js"></script>
+
+        <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=WA3O5s1nmfFY23NKf80tFpdcw0VNBCI5"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/bmap.min.js"></script>
+
+
+        <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+
+var option;
+
+
+
+var data = [
+    {name: '上海节点', value: "www.baidu.com",link:'www.baidu.com'},
+	{name: '深圳节点', value: "在线"},
+	{name: '节点1', value: "在线"},
+	{name: '节点2', value: "在线"}
+];
+
+var geoCoordMap = {
+
+    '上海节点':[121.48,31.22],
+    '节点2':[111.39,30.52],
+    '深圳节点':[114.07,22.62],
+    '节点1':[121.62,40.92],
+};
+
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+
+option = {
+    backgroundColor: 'transparent',
+    title: {
+        text: '',
+        left: 'center',
+        textStyle: {
+            color: '#005F',
+			fontSize:'40px',
+			marginTop:'10px'
+        }
+    },
+    tooltip : {
+        trigger: 'item'
+    },
+    bmap: {
+        center: [120.114129, 37.550339],
+        zoom: 5.8,
+        roam: false,
+        mapStyle: {
+            styleJson: [
+                    {
+                        "featureType": "water",
+                        "elementType": "all",
+                        "stylers": {
+                            "color": "#000020"
+                        }
+                    },
+                    {
+                        "featureType": "land",
+                        "elementType": "all",
+                        "stylers": {
+                            "color": "#003050"
+                        }
+                    },
+                    {
+                        "featureType": "boundary",
+                        "elementType": "geometry",
+                        "stylers": {
+                            "color": "#000000"
+                        }
+                    },
+                    {
+                        "featureType": "railway",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "highway",
+                        "elementType": "geometry",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "highway",
+                        "elementType": "geometry.fill",
+                        "stylers": {
+                            "color": "#005b96",
+                            "lightness": 1
+                        }
+                    },
+                    {
+                        "featureType": "highway",
+                        "elementType": "labels",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "arterial",
+                        "elementType": "geometry",
+                        "stylers": {
+                            "color": "#004981"
+                        }
+                    },
+                    {
+                        "featureType": "arterial",
+                        "elementType": "geometry.fill",
+                        "stylers": {
+                            "color": "#00508b"
+                        }
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "green",
+                        "elementType": "all",
+                        "stylers": {
+                            "color": "#056197",
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "subway",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "manmade",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "local",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "arterial",
+                        "elementType": "labels",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "boundary",
+                        "elementType": "geometry.fill",
+                        "stylers": {
+                            "color": "#029fd4"
+                        }
+                    },
+                    {
+                        "featureType": "building",
+                        "elementType": "all",
+                        "stylers": {
+                            "color": "#1a5787"
+                        }
+                    },
+                    {
+                        "featureType": "label",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    }
+            ]
+        }
+    },
+    series : [
+        {
+            name: '节点信息',
+            type: 'effectScatter',
+            coordinateSystem: 'bmap',
+            data: convertData(data.sort(function (a, b) {
+                return b.value - a.value;
+            }).slice(0, 6)),
+            encode: {
+                value: 2
+            },
+            symbolSize: function (val) {
+                return val[2] / 10;
+            },
+            showEffectOn: 'emphasis',
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+                formatter: '{b}',
+                position: 'right',
+                show: true,
+				fontSize:'20px'
+            },
+            itemStyle: {
+                color: '#f4e925',
+                shadowBlur: 1,
+                shadowColor: '#333'
+            },
+            zlevel: 1
+        }
+    ],
+	 darkMode:'true'
+};
+
+myChart.setOption(option);
+
+myChart.on('click', function (params) {
+    var name = params.name;
+	
+	switch(name){
+		case "上海节点":go("https://node1.taskingcenter.com");break;
+		case "节点1":go("https://node2.taskingcenter.com");break;
+		case "深圳节点":go("https://node3.taskingcenter.com");break;
+		case "节点2":go("https://node4.taskingcenter.com");break;
+	}
+});
+
+
+function go(url){
+	window.location.href = url;
+}
+
+
+        </script>
+    </body>
+</html>
+    

@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<el-container>
-			</el-aside>
 			<el-main>
 				<div>
 					<span class="demonstration">用户名：</span>
@@ -52,10 +51,11 @@
 							:value="item.id">
 						</el-option>
 						</el-select>
-					<el-button type="primary" @click="getUserNumber(),handleUserList()" icon="el-icon-search" style="margin-left: 10px;background: #24375E;border: 0px ;">搜索</el-button>
+					<el-button type="primary" @click="getUserNumber(),handleUserList()" icon="el-icon-search" style="margin-left: 10px;background: #24375E;border: 0px ;"></el-button>
+					<el-button type="primary" style="background: #24375E;border: 0px ;" icon="el-icon-delete" @click="deleteUsers()"></el-button>
 				</div>
-				<el-table style="width: 100%;" :data="userList">
-					<el-table-column prop="id" label="用户id" width="180">
+				<el-table style="width: 100%;" :data="userList" @selection-change="handleSelectionChange">
+					<el-table-column type="selection" width="55">
 					</el-table-column>
 					<el-table-column label="用户名" prop="username" width="180">
 					</el-table-column>
@@ -87,7 +87,9 @@
 
 <script>
 	import axios from 'axios';
+	import qs from 'qs';
 	export default {
+		inject: ['reload'],
 		
 		data() {			
 			return {
@@ -108,9 +110,20 @@
 				userList:[
 				],
 				isShow: true,
+				multipleSelection:[],
 			}
 		},
 		methods: {
+			handleSelectionChange(val) {
+				console.log(val);
+				let that_ = this;
+				that_.multipleSelection = val;
+				// let a = true;
+				// that_.selectedDataTemp = that_.multipleSelection;
+				// that_.selectedDataTemp = that_.multipleSelection.filter(item => {
+				// 	return !item.a
+				// });
+			},
 			handleSizeChange(size){
 				this.pagesize = size;
 				console.log(this.pagesize);
@@ -294,6 +307,7 @@
 				params.append("departmentID",departmentID);
 				params.append("birthdayStart",birthdayStart);
 				params.append("birthdayEnd",birthdayEnd);
+
 				axios.get("/api/user/userNumber",{
 					params:params,
 					headers:{
@@ -352,6 +366,58 @@
 				this.$router.push({
 					path:'/changeuser',
 				})
+			},
+			//删除多个用户
+			deleteUsers() {
+				var selectedArray = new Array();
+
+				console.log(this.multipleSelection.length);
+
+				for (var i = 0; i < this.multipleSelection.length; i++) {
+					selectedArray.push(this.multipleSelection[i].id);
+					console.log(this.multipleSelection[i]);
+				}
+
+				var _this = this;
+
+				this.$confirm('删除这些用户, 是否确定?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					axios.delete('/api/user/user', {
+							params: {
+								userID: selectedArray,
+							},
+							paramsSerializer: params => {
+								return qs.stringify(params, {
+									indices: false
+								})
+							},
+							headers: {
+								"token": localStorage.getItem("token"),
+							}
+						})
+						.then(function(response) {
+
+							if (response.data.ret == 1) {
+								_this.$alert('删除成功', '提示', {
+									confirmButtonText: '确定',
+								});
+								_this.handleUserList();
+							} else {
+								_this.$alert('删除失败', '提示', {
+									confirmButtonText: '确定',
+								});
+							}
+
+						})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
 			},
 			showList() {
 				this.isShow = !this.isShow;

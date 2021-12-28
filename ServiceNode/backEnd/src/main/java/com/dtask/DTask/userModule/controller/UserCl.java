@@ -7,6 +7,7 @@ import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.ResponseData;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableScheduling
 @RestController
 public class UserCl {
+
+    @Value("${useSync}")
+    private String useSync;
 
     @Autowired
     IUser user;
@@ -105,11 +109,13 @@ public class UserCl {
         return user.getRemoteUser(nodeID);
     }
 
-    //@Scheduled(cron = "0 0/30 * * * ? ")
-    @Scheduled(cron = "0/60 * * * * ? ") // 30秒一次同步
+    @Scheduled(cron = "0/60 * * * * ? ")
     public void syncUserInfo() {
-        user.syncUserInfo();
+        if (useSync.equals("true")){
+            user.syncUserInfo();
+        }
     }
+
 
 
 }
