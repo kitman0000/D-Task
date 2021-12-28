@@ -16,6 +16,7 @@ import com.dtask.common.util.DateUtil;
 import com.dtask.common.util.JsonUtil;
 import com.dtask.common.util.PageDivideUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
  */
 @Service
 public class UserImpl implements IUser {
+
     private static final int ROWS_ONE_PAGE = 10;
     @Autowired
     private UserDao userDao;
@@ -104,6 +106,11 @@ public class UserImpl implements IUser {
 
     @Override
     public boolean syncUserInfo() {
+        int nodeID = nodeCommon.getNodeID();
+        if(nodeID == -1){
+            return false;
+        }
+
         Object lastUpdateTime = cacheUtil.read("userInfo.lastUpdateTime");
         String lastUpdateTimeStr = "";
         if(lastUpdateTime == null){
@@ -120,10 +127,7 @@ public class UserImpl implements IUser {
         if(userList.isEmpty()){
             return false;
         }
-        int nodeID = nodeCommon.getNodeID();
-        if(nodeID == -1){
-            return false;
-        }
+
         syncUserInfoBo.setNodeID(nodeID);
         syncUserInfoBo.setUserListBo(userList);
         String msg = JsonUtil.objectToJson(syncUserInfoBo);
