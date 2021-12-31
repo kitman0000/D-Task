@@ -77,7 +77,7 @@
     <select id="getUnsyncUserList" resultType="com.dtask.DTask.userModule.bo.UserListBo">
         SELECT * FROM tb_user_info
         <where>
-            lastUpdateTime > #{lastUpdateTime}
+            lastUpdateTime > #{lastSyncTime}
         </where>
     </select>
 

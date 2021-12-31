@@ -116,6 +116,8 @@ public class UserCl {
         }
     }
 
-
-
+    @Scheduled(cron = "0/60 * * * * ? ")
+    public void syncUserInfoToArc() {
+        user.syncUserInfoToArc();
+    }
 }

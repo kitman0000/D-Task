@@ -26,5 +26,7 @@ public interface IUser {
 
     boolean syncUserInfo();
 
+    void  syncUserInfoToArc();
+
     ResponseData getRemoteUser(int nodeID);
 }

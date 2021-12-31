@@ -1,6 +1,7 @@
 package com.dtask.DTask.userModule.service.impl;
 
 import com.MQClouder.EncryptRabbitSender;
+import com.dtask.DTask.userModule.bo.DTaskUser;
 import com.dtask.DTask.userModule.bo.SyncUserInfoBo;
 import com.dtask.DTask.userModule.bo.UserDetailBo;
 import com.dtask.DTask.userModule.bo.UserListBo;
@@ -11,14 +12,14 @@ import com.dtask.DTask.userModule.service.IUser;
 import com.dtask.common.NodeCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
-import com.dtask.common.util.CacheUtil;
-import com.dtask.common.util.DateUtil;
-import com.dtask.common.util.JsonUtil;
-import com.dtask.common.util.PageDivideUtil;
+import com.dtask.common.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,6 +27,9 @@ import java.util.List;
  */
 @Service
 public class UserImpl implements IUser {
+
+    @Value("${arcAddress}")
+    private String arcAddress;
 
     private static final int ROWS_ONE_PAGE = 10;
     @Autowired
@@ -39,6 +43,9 @@ public class UserImpl implements IUser {
 
     @Autowired
     private NodeCommon nodeCommon;
+
+    @Autowired
+    private IntegrationUtil integrationUtil;
 
     @Override
     public ResponseData getUserOwnDetail() {
@@ -121,6 +128,7 @@ public class UserImpl implements IUser {
         }
 
         List<UserListBo> userList = userDao.getUnsyncUserList(lastUpdateTimeStr);
+        lastUpdateTimeStr = DateUtil.getTimestamp();
 
         // 发送数据到中心调配节点
         SyncUserInfoBo syncUserInfoBo = new SyncUserInfoBo();
@@ -133,9 +141,47 @@ public class UserImpl implements IUser {
         String msg = JsonUtil.objectToJson(syncUserInfoBo);
         rabbitSender.encryptSend("dtask.syncUserInfo",msg);
 
-        lastUpdateTimeStr = DateUtil.getTimestamp();
         cacheUtil.write("userInfo.lastUpdateTime",lastUpdateTimeStr);
         return true;
+    }
+
+    @Override
+    public void syncUserInfoToArc() {
+        Object lastUpdateTime = cacheUtil.read("userInfo.arc.lastUpdateTime");
+        String lastUpdateTimeStr = "";
+        if(lastUpdateTime == null){
+            // 如果之前没有保存，就从2020年1月1日开始
+            lastUpdateTimeStr = "2020-01-01 00:00:00";
+        }else {
+            lastUpdateTimeStr = String.valueOf(lastUpdateTime);
+        }
+
+        List<UserListBo> userList = userDao.getUnsyncUserList(lastUpdateTimeStr);
+        lastUpdateTimeStr = DateUtil.getTimestamp();
+
+        if (userList.isEmpty()){
+            return;
+        }
+
+        // Convert to DTask User list, because it's going to transport to external system.
+        List<DTaskUser> taskUserList = new LinkedList<>();
+        userList.forEach(user->{
+            DTaskUser taskUser = new DTaskUser();
+            taskUser.setUsername(user.getNickname());
+            taskUser.setDTaskID(user.getId());
+            taskUser.setAvailable(user.isAvailable());
+            taskUserList.add(taskUser);
+        });
+
+        IdentityHashMap<String,String> paramsMap = new IdentityHashMap<String,String>(){
+            {
+                put("users",JsonUtil.objectToJson(taskUserList));
+            }
+        };
+
+        integrationUtil.post(arcAddress + "/DTask/synchronizedUser",paramsMap,false);
+
+        cacheUtil.write("userInfo.arc.lastUpdateTime",lastUpdateTimeStr);
     }
 
     @Override

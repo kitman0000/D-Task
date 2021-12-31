@@ -40,5 +40,5 @@ public interface UserDao {
     void deleteUser(@Param("userID") int[] userID);
 
     // 获取未同步数据
-    List<UserListBo> getUnsyncUserList(@Param("lastUpdateTime") String lastUpdateTime);
+    List<UserListBo> getUnsyncUserList(@Param("lastSyncTime") String lastSyncTime);
 }
