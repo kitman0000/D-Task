@@ -7,7 +7,11 @@ import lombok.Data;
  */
 @Data
 public class LocalTaskMemberBo {
-    int userID;
-    String username;
-    boolean isAdmin;
+    private int userID;
+
+    private String username;
+
+    private boolean isAdmin;
+
+    private String nickname;
 }

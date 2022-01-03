@@ -19,6 +19,8 @@ public class LocalTaskBo {
 
     private boolean allowedMemberChangeStatus;
 
+    private boolean allowedMemberChangeAssignee;
+
     private int planning;
 
     private int working;

@@ -26,9 +26,15 @@ public interface LocalSubTaskDao {
 
     void updateLocalSubTaskStatus(@Param("localSubTaskEntity") LocalSubTaskEntity localSubTaskEntity);
 
+    void updateLocalSubTaskAssignee(@Param("localSubTaskEntity") LocalSubTaskEntity localSubTaskEntity);
+
+    void clearLocalSubTaskAssignee(@Param("localSubTaskEntity") LocalSubTaskEntity localSubTaskEntity);
+
     boolean isUserAdmin(@Param("userID") int userID, @Param("taskID") int taskID);
 
     boolean isAllowUserChangeState(int taskID);
+
+    boolean isAllowUserChangeAssignee(int taskID);
 
     // 通过子任务ID获取任务ID
     List<Integer> getTaskIDsBySubTask(@Param("subTaskID") int[] subTaskID);

@@ -20,10 +20,33 @@
         </where>
     </update>
 
+    <!-- Update subTask's status -->
     <update id="updateLocalSubTaskStatus">
         UPDATE tb_local_sub_task
         <set>
             status = #{localSubTaskEntity.status}
+        </set>
+        <where>
+            id = #{localSubTaskEntity.id}
+        </where>
+    </update>
+
+    <!-- Update subTask's assignee -->
+    <update id="updateLocalSubTaskAssignee">
+        UPDATE tb_local_sub_task
+        <set>
+            assignee = #{localSubTaskEntity.assignee}
+        </set>
+        <where>
+            id = #{localSubTaskEntity.id}
+        </where>
+    </update>
+
+    <!-- Clear subTask's assignee -->
+    <update id="clearLocalSubTaskAssignee">
+        UPDATE tb_local_sub_task
+        <set>
+            assignee = NULL
         </set>
         <where>
             id = #{localSubTaskEntity.id}
@@ -46,12 +69,14 @@
     </select>
 
     <select id="getLocalSubTaskList" resultType="com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo">
-        SELECT * FROM tb_local_sub_task
+        SELECT tb_local_sub_task.*,tb_user_info.nickname as assigneeName
+        FROM tb_local_sub_task
+        LEFT JOIN tb_user_info ON tb_local_sub_task.assignee = tb_user_info.id
         <where>
             taskID = #{taskID}
 
             <!-- 分页的条件 -->
-            AND id Not In (Select * from (Select id From tb_local_sub_task
+            AND tb_local_sub_task.id Not In (Select * from (Select id From tb_local_sub_task
             <where>
                 taskID = #{taskID}
             </where>
@@ -76,9 +101,18 @@
     <select id="isAllowUserChangeState" resultType="java.lang.Boolean">
         SELECT allowedMemberChangeStatus FROM tb_local_task
         <where>
-            tb_local_task.id = #{taskID}
+            id = #{taskID}
         </where>
     </select>
+
+    <!-- 判断任务是否允许用户修改分配 -->
+    <select id="isAllowUserChangeAssignee" resultType="java.lang.Boolean">
+        SELECT allowedMemberChangeAssignee FROM tb_local_task
+        <where>
+            id = #{taskID}
+        </where>
+    </select>
+
 
     <!-- 通过子任务ID来获取任务ID -->
     <select id="getTaskIDsBySubTask" resultType="java.lang.Integer">

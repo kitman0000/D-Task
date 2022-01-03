@@ -1,5 +1,6 @@
 package com.dtask.DTask.localTaskModule.service;
 
+import com.dtask.DTask.localTaskModule.bo.PublicEditPermissionBo;
 import com.dtask.DTask.localTaskModule.entity.LocalTaskSearchEntity;
 import com.dtask.common.ResponseData;
 import com.sun.org.apache.regexp.internal.RE;
@@ -12,7 +13,11 @@ public interface ILocalTask {
 
     ResponseData getTaskDetail(int taskID);
 
-    ResponseData editLocalTask(int id, String name, int creator, boolean allowedMemberChangeStatus);
+    ResponseData editLocalTask(int id,
+                               String name,
+                               int creator,
+                               boolean allowedMemberChangeStatus,
+                               boolean allowedMemberChangeAssignee);
 
     ResponseData deleteLocalTask(int id);
 
@@ -34,5 +39,5 @@ public interface ILocalTask {
 
     ResponseData getTaskUserRole(int taskID);
 
-    ResponseData getAllowUserChangeStatus(int taskID);
+    PublicEditPermissionBo getPublicEditPermission(int taskID);
 }

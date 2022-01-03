@@ -24,6 +24,7 @@
         <mapper resource="com/dtask/DTask/localTaskModule/mapping/localSubTaskMapping.xml"/>
         <mapper resource="com/dtask/DTask/settingModule/mapping/settingsMapping.xml"/>
         <mapper resource="com/dtask/DTask/localTaskModule/mapping/localSubTaskChartMapping.xml"/>
+        <mapper resource="com/dtask/DTask/externalModule/mapping/externalApplicationMapping.xml"/>
     </mappers>
 
 </configuration>

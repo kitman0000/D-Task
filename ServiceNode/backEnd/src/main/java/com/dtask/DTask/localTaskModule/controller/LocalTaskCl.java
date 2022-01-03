@@ -1,5 +1,6 @@
 package com.dtask.DTask.localTaskModule.controller;
 
+import com.dtask.DTask.localTaskModule.bo.PublicEditPermissionBo;
 import com.dtask.DTask.localTaskModule.entity.LocalTaskSearchEntity;
 import com.dtask.DTask.localTaskModule.service.ILocalTask;
 import com.dtask.common.ResponseData;
@@ -28,8 +29,12 @@ public class LocalTaskCl {
     }
 
     @RequestMapping(value = "/api/localTask/localTask",method = RequestMethod.PUT)
-    public ResponseData editLocalTask(int id,String name,int creator,boolean allowedMemberChangeStatus){
-        return localTask.editLocalTask(id, name, creator, allowedMemberChangeStatus);
+    public ResponseData editLocalTask(int id,
+                                      String name,
+                                      int creator,
+                                      boolean allowedMemberChangeStatus,
+                                      boolean allowedMemberChangeAssignee){
+        return localTask.editLocalTask(id, name, creator, allowedMemberChangeStatus,allowedMemberChangeAssignee);
     }
 
     @RequestMapping(value = "/api/localTask/localTask",method = RequestMethod.DELETE)
@@ -82,9 +87,9 @@ public class LocalTaskCl {
         return localTask.getTaskUserRole(taskID);
     }
 
-    @RequestMapping(value = "/api/localTask/allowUserChangeStatus",method = RequestMethod.GET)
-    public ResponseData getAllowUserChangeStatus(int taskID){
-        return localTask.getAllowUserChangeStatus(taskID);
+    @RequestMapping(value = "/api/localTask/publicEditPermission",method = RequestMethod.GET)
+    public ResponseData getPublicEditPermission(int taskID){
+        return new ResponseData(1,"查询成功", localTask.getPublicEditPermission(taskID));
     }
 
 

@@ -11,7 +11,8 @@
         <set>
             name = #{name},
             creator = #{creator},
-            allowedMemberChangeStatus = #{allowedMemberChangeStatus}
+            allowedMemberChangeStatus = #{allowedMemberChangeStatus},
+            allowedMemberChangeAssignee= #{allowedMemberChangeAssignee}
         </set>
         <where>
             id = #{id}
@@ -141,7 +142,7 @@
 
     <!-- 获取用户列表 -->
     <select id="getTaskUser" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskMemberBo">
-        SELECT userID,isAdmin,username FROM tb_local_task_user LEFT JOIN tb_user ON tb_local_task_user.userID = tb_user.id
+        SELECT userID,isAdmin,nickname FROM tb_local_task_user LEFT JOIN tb_user_info ON tb_local_task_user.userID = tb_user_info.id
         <where>
             taskID = #{taskID}
         </where>
@@ -160,9 +161,18 @@
         </where>
     </select>
 
+    <!-- 获取是否允许用户修改子任务分配 -->
+    <select id="getAllowUserChangeAssignee" resultType="java.lang.Boolean">
+        SELECT allowedMemberChangeAssignee FROM tb_local_task
+        <where>
+            id = #{taskID}
+        </where>
+    </select>
+
+
     <!-- 获取任务详情 -->
     <select id="getLocalTaskDetail" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskBo">
-        SELECT tb_local_task.id as id ,name,creator,tb_user.username as creatorName,allowedMemberChangeStatus,departmentID
+        SELECT tb_local_task.id as id ,name,creator,tb_user.username as creatorName,allowedMemberChangeStatus, allowedMemberChangeAssignee,departmentID
         FROM tb_local_task LEFT JOIN tb_user ON creator = tb_user.id LEFT JOIN tb_user_info ON tb_user.id = tb_user_info.id
           <where>
             tb_local_task.id = #{taskID}

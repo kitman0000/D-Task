@@ -24,7 +24,7 @@
 		<el-table :data="urlManagers" tooltip-effect="dark" style="width: 100%">
 			<el-table-column prop="userID" label="管理员ID" width="150">
 			</el-table-column>
-			<el-table-column prop="username" label="管理员姓名">
+			<el-table-column prop="nickname" label="管理员姓名">
 			</el-table-column>
 			<el-table-column label="操作" v-if="role == 1">
 				<template slot-scope="scope">
@@ -37,7 +37,7 @@
 		<el-table :data="urlEmployees" tooltip-effect="dark" style="width: 100%">
 			<el-table-column prop="userID" label="参与人ID" width="150">
 			</el-table-column>
-			<el-table-column prop="username" label="参与人姓名">
+			<el-table-column prop="nickname" label="参与人姓名">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
@@ -208,7 +208,7 @@
 						a.forEach((res) => {
 							this.options.push({
 								value: res.id,
-								label: res.username
+								label: res.nickname
 							});
 						})
 

@@ -20,9 +20,16 @@
 					</br>
 					<span style="color: #f00;font-size: 12px;" >修改此项后，原拥有者将会成为管理员</span>
 				</el-form-item>
-				<el-form-item label="是否允许用户修改:">
+				<el-form-item label="是否允许用户修改状态:">
 					<el-switch style="margin-bottom: 10px !important;"
 					  v-model="allowedMemberChangeStatus"
+					  active-color="#13ce66"
+					  inactive-color="#ff4949">
+					</el-switch>
+				</el-form-item>
+				<el-form-item label="是否允许用户修改分配:">
+					<el-switch style="margin-bottom: 10px !important;"
+					  v-model="allowedMemberChangeAssignee"
 					  active-color="#13ce66"
 					  inactive-color="#ff4949">
 					</el-switch>
@@ -44,6 +51,7 @@
 				department:"",
 				name:"",
 				allowedMemberChangeStatus:"",
+				allowedMemberChangeAssignee:"",
 				creator:"",
 				creatorID:"",
 				message:"",
@@ -66,8 +74,9 @@
 					params.append("id",taskID);
 					params.append("name",this.name);
 					console.log(this.creator)
-					params.append("creator",this.creator);
+					params.append("creator",this.creatorID);
 					params.append("allowedMemberChangeStatus",this.allowedMemberChangeStatus);
+					params.append("allowedMemberChangeAssignee",this.allowedMemberChangeAssignee);
 					axios.put("/api/localTask/localTask",
 					params,
 					{
@@ -103,6 +112,7 @@
 					this.creatorID = taskObj.creator;
 					this.creator = taskObj.creatorName;
 					this.allowedMemberChangeStatus = taskObj.allowedMemberChangeStatus;
+					this.allowedMemberChangeAssignee = taskObj.allowedMemberChangeAssignee;
 					this.getDepartment();
 					this.getUser();
 				})

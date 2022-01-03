@@ -21,6 +21,8 @@ public class LocalSubTaskEntity {
 
     private int status;
 
+    private int assignee;
+
     private String startTime;
 
     private int level;

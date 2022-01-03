@@ -36,7 +36,7 @@ public class LocalTaskTest {
 
     @Test
     public void editTask(){
-        localTask.editLocalTask(1,"调试任务1", 1001,false);
+        //localTask.editLocalTask(1,"调试任务1", 1001,false);
     }
 
     @Test

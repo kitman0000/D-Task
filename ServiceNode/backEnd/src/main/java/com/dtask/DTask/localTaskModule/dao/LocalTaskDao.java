@@ -20,7 +20,8 @@ public interface LocalTaskDao {
     LocalTaskBo getLocalTaskDetail(int taskID);
 
     void updateLocalTask(@Param("id") int id, @Param("name") String name,
-                         @Param("creator") int creator, @Param("allowedMemberChangeStatus") boolean allowedMemberChangeStatus);
+                         @Param("creator") int creator, @Param("allowedMemberChangeStatus") boolean allowedMemberChangeStatus,
+                         @Param("allowedMemberChangeAssignee") boolean allowedMemberChangeAssignee);
 
     void deleteLocalTask(int id);
 
@@ -49,4 +50,6 @@ public interface LocalTaskDao {
     void setLocalTaskAdmin(@Param("taskID") int taskID, @Param("userID") int userID, @Param("isAdmin") boolean isAdmin);
 
     boolean getAllowUserChangeStatus(int taskID);
+
+    boolean getAllowUserChangeAssignee(int taskID);
 }

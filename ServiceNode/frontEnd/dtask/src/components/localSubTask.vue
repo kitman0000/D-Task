@@ -8,11 +8,13 @@
 				 icon="el-icon-plus" v-if="role != 3" @click="addTask()">添加子任务</el-button>
 				<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
 					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="name" label="子任务名称" width="150px">
+					<el-table-column prop="name" label="子任务名称" width="450px">
 					</el-table-column>
-					<el-table-column prop="startTime" label="开始时间">
+					<el-table-column prop="assigneeName" label="分配">
 					</el-table-column>
-					<el-table-column prop="deadline" label="截止时间">
+					<el-table-column prop="startTime" label="开始时间" width="100px">
+					</el-table-column>
+					<el-table-column prop="deadline" label="截止时间" width="100px">
 					</el-table-column>
 					<el-table-column prop="level" label="级别" width="50px">
 					</el-table-column>
@@ -36,16 +38,18 @@
 						<template slot-scope="scope">
 							<el-button type="text" size="small" v-if="role != 3" @click="deleteTask(scope.row)">删除子任务</el-button>
 							<el-button type="text" size="small" @click="TaskDetail(scope.row)">查看子任务详情</el-button>
+
+							<!-- 子任务详情对话框开始 -->
 							<el-dialog title="子任务详情" :visible.sync="dialogVisible" width="30%">
 								<p>子任务名：{{name}}</p>
 								<p>子任务内容：{{content}}</p>
 								<p>开始时间：{{startTime}}</p>
 								<p>截止时间：{{deadline}}</p>
 								<p>等级：{{level}}</p>
-								<p>状态：<span v-if="scope.row.status == 0 && !stateOperation">计划中</span>
-									<span v-if="scope.row.status == 1 && !stateOperation">执行中</span>
-									<span v-if="scope.row.status == 2 && !stateOperation">已完成</span>
-									<span v-if="scope.row.status == 3 && !stateOperation">已取消</span>
+								<p>状态：
+									<span v-if="!stateOperation && value != null">
+										{{options[value].label}}
+									</span>
 									<el-select v-model="value" placeholder="请选择状态" v-if="stateOperation">
 									    <el-option
 									      v-for="item in options"
@@ -56,6 +60,22 @@
 									  </el-select>
 									
 									</p>
+								<p>分配：
+									<span v-if="!assigneeOperation">
+										{{assigneeName}}
+									</span>
+									<el-select v-model="assignee" placeholder="请选择成员" v-if="assigneeOperation">
+									    <el-option
+									      v-for="user in allUsers"
+									      :key="user.userID"
+									      :label="user.nickname"
+									      :value="user.userID">
+									    </el-option>
+									</el-select>
+
+									<el-button  v-if="assigneeOperation" type="primary" style="margin-left: 10px;background: #24375E;border: 0px ;"
+									 icon="el-icon-delete" @click="clearAssignee()"></el-button>
+								</p>
 								<p>标签：</p>
 								<el-tag :key="tag" v-for="tag in tag" :disable-transitions="false">
 									{{tag}}
@@ -67,8 +87,10 @@
 								<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
 								v-if="role != 3" @click="editTask()">编辑子任务详情</el-button>
 								<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-								v-if="stateOperation" icon="el-icon-check" @click="editTaskState()">确定修改</el-button>
+								v-if="stateOperation || assigneeOperation" icon="el-icon-check" @click="editTaskPublic()">确定修改</el-button>
 							</el-dialog>
+							<!-- 子任务详情对话框结束 -->
+
 						</template>
 					</el-table-column>
 				</el-table>
@@ -129,6 +151,8 @@
 				content: null,
 				deadline: null,
 				status: null,
+				assignee:null,
+				assigneeName:null,
 				startTime: null,
 				level: null,
 				creator:null,
@@ -138,6 +162,7 @@
 				currentPage3: 1,
 				showChart:true,
 				stateOperation: null,
+				assigneeOperation:null,
 				options:[
 					{
 						value:0,
@@ -157,6 +182,7 @@
 					},
 				],
 				value:null,
+				allUsers:[],
 				managers:[],
 				employees:[],
 				urlManagers:[],
@@ -174,7 +200,10 @@
 				level0Amount:0,
 				level1Amount:0,
 				level2Amount:0,
-				level3Amount:0
+				level3Amount:0,
+				// Cache some values after open the detail window, if no change has been made, don't post data.
+				cacheStatus:0,
+				cacheAssignee:0
 			}
 		},
 		mounted(){
@@ -536,12 +565,17 @@
 					.then(res => {
 						var response = res.data.data;
 						this.role = response;
+						// Users are still allowed to change to public options if they are admin or owner.
+						if(this.role == 1 || this.role == 2){
+							this.stateOperation = true;
+							this.assigneeOperation = true;
+						}
 					})
 					.catch(function(error) {
 						console.log(error);
 					});
 
-				axios.get('/api/localTask/allowUserChangeStatus', {
+				axios.get('/api/localTask/publicEditPermission', {
 						params: {
 							/* 测试用子任务ID */
 							'taskID': localStorage.getItem('taskID'),
@@ -552,7 +586,13 @@
 					})
 					.then(res => {
 						var response = res.data.data;
-						this.stateOperation = response;
+						// If the operation has been overided by permission, don't change it
+						if(this.stateOperation == null){
+							this.stateOperation = response.allowChangeStatus;
+						}
+						if(this.assigneeOperation == null){
+							this.assigneeOperation = response.allowChangeAssignee;
+						}
 					})
 					.catch(function(error) {
 						console.log(error);
@@ -570,17 +610,18 @@
 						.then(res => {
 							var response = res.data.data;
 							console.log(response);
+							this.allUsers = response;
 							for(var i =0;i<response.length;i++){
 								if(response[i].userID == this.creatorID){
-									this.creator = response[i].username;
+									this.creator = response[i].nickname;
 									continue;
 								}
 								if(response[i].admin){
-									this.managers.push(response[i].username);
+									this.managers.push(response[i].nickname);
 									this.urlManagers.push(response[i]);
 								}
 								else{
-									this.employees.push(response[i].username);
+									this.employees.push(response[i].nickname);
 									this.urlEmployees.push(response[i]);
 								}
 							}
@@ -678,17 +719,48 @@
 				this.content = detail.content;
 				this.deadline = detail.deadline;
 				this.status = detail.status;
+				this.assignee = detail.assignee;
+				this.assigneeName = detail.assigneeName;
 				this.value = detail.status;
 				this.startTime = detail.startTime;
 				this.level = detail.level;
 				this.tag = detail.tag.replace('{', '').replace('}', '').split(',');
 				this.star = detail.star;
 				this.dialogVisible = true;
+
+				// Cache data
+				this.cacheStatus = detail.status;
+				this.cacheAssignee = detail.assignee
 			},
-			editTaskState(){
+			clearAssignee(){
+				this.assignee = null;
+			},
+			// Post changes which can be edit by non-admin users.
+			editTaskPublic(){
+				// Check if any change has been made.
+				var isEditState = this.cacheStatus != this.value;
+				var isEditAssignee = this.cacheAssignee != this.assignee;
+
+				// use -1 for no assignee.
+				if(this.assignee == null){
+					this.assignee = -1;
+				}
+
+				if(!isEditState && !isEditAssignee){
+					// No change has been made
+					return;
+				}
+
+				if(isEditState){
+					this.editTaskState(isEditAssignee);
+				}else{
+					this.editAssignee();
+				}
+
+			},
+			editTaskState(isEditAssignee){
 				var a = new URLSearchParams();
 				a.append("status",this.value);
-				/* 测试用子任务ID */
 				a.append("taskID", localStorage.getItem('taskID'));
 				a.append("id",this.id);
 				axios.put('/api/localTask/localSubTaskStatus', a, {
@@ -698,12 +770,33 @@
 						})
 						.then(res=> {
 							if (res.data.ret == 1) {
-								this.$alert('修改成功', '提示', {
+								if(isEditAssignee){
+									this.editAssignee();
+								}else{
+									window.location.reload();
+								}
+							} else{
+								this.$alert('权限不足', '提示', {
 								         confirmButtonText: '确定',
-										 callback: action => {
-										             window.location.reload();
-										           }
 								       });
+									   window.location.reload();
+							}
+						});
+			},
+			editAssignee(){
+				// todo: post edit assignee
+				var a = new URLSearchParams();
+				a.append("assignee",this.assignee);
+				a.append("taskID", localStorage.getItem('taskID'));
+				a.append("id",this.id);
+				axios.put('/api/localTask/localSubTaskAssignee', a, {
+							headers: {
+								"token": localStorage.getItem("token"),
+							}
+						})
+						.then(res=> {
+							if (res.data.ret == 1) {
+									window.location.reload();
 							} else{
 								this.$alert('权限不足', '提示', {
 								         confirmButtonText: '确定',

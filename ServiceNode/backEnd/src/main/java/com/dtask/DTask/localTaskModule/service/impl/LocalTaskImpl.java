@@ -2,6 +2,7 @@ package com.dtask.DTask.localTaskModule.service.impl;
 
 import com.dtask.DTask.localTaskModule.bo.LocalTaskBo;
 import com.dtask.DTask.localTaskModule.bo.LocalTaskMemberBo;
+import com.dtask.DTask.localTaskModule.bo.PublicEditPermissionBo;
 import com.dtask.DTask.localTaskModule.dao.LocalTaskDao;
 import com.dtask.DTask.localTaskModule.entity.LocalTaskSearchEntity;
 import com.dtask.DTask.localTaskModule.service.ILocalTask;
@@ -61,8 +62,9 @@ public class LocalTaskImpl implements ILocalTask {
 
 
     @Override
-    public ResponseData editLocalTask(int id, String name, int creator, boolean allowedMemberChangeStatus) {
-        localTaskDao.updateLocalTask(id,name,creator,allowedMemberChangeStatus);
+    public ResponseData editLocalTask(int id, String name, int creator,
+                                      boolean allowedMemberChangeStatus,boolean allowedMemberChangeAssignee) {
+        localTaskDao.updateLocalTask(id,name,creator,allowedMemberChangeStatus,allowedMemberChangeAssignee);
 
         // 如果不在本任务中，会报错，先将该用户添加到任务中
         try {
@@ -77,7 +79,7 @@ public class LocalTaskImpl implements ILocalTask {
 
         if (interfaceMap != null){
             interfaceMap.forEach((K,V)->{
-                V.editLocalTask(id,name,creator,allowedMemberChangeStatus);
+                V.editLocalTask(id,name,creator,allowedMemberChangeStatus,allowedMemberChangeAssignee);
             });
         }
 
@@ -252,9 +254,16 @@ public class LocalTaskImpl implements ILocalTask {
      * 判断是否允许用户修改子任务状态
      */
     @Override
-    public ResponseData getAllowUserChangeStatus(int taskID) {
+    public PublicEditPermissionBo getPublicEditPermission(int taskID) {
         boolean isAllowUserChangeStatus = localTaskDao.getAllowUserChangeStatus(taskID);
-        return new ResponseData(1,"查询成功",isAllowUserChangeStatus);
+        boolean isAllowUserChangeAssignee = localTaskDao.getAllowUserChangeAssignee(taskID);
+
+        return new PublicEditPermissionBo(){
+            {
+                setAllowChangeStatus(isAllowUserChangeStatus);
+                setAllowChangeAssignee(isAllowUserChangeAssignee);
+            }
+        };
     }
 
     /**

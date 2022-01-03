@@ -33,9 +33,9 @@ public class LocalSubTaskImpl implements ILocalSubTask{
     private ApplicationContextAwareCommon applicationContextAware;
 
     @Override
-    public ResponseData addLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
+    public boolean addLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
         if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
-            return new ResponseData(2,"权限不足",null);
+            return false;
         }
 
         localSubTaskDao.addLocalSubTask(localSubTaskEntity);
@@ -51,20 +51,20 @@ public class LocalSubTaskImpl implements ILocalSubTask{
             });
         }
 
-        return new ResponseData(1,"添加成功",null);
+        return true;
     }
 
     @Override
-    public ResponseData editLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
+    public boolean editLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
 
         // 检查所申请操作的subTaskID是否属于taskID
         int[] subTaskID = {localSubTaskEntity.getId()};
         if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskID)){
-            return new ResponseData(2,"权限不足",null);
+            return false;
         }
 
         if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
-            return new ResponseData(2,"权限不足",null);
+            return false;
         }
 
         Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
@@ -79,17 +79,17 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         }
 
         localSubTaskDao.updateLocalSubTask(localSubTaskEntity);
-        return new ResponseData(1,"修改成功",null);
+        return true;
     }
 
     @Override
-    public ResponseData deleteLocalSubTask(int taskID, int[] id) {
+    public boolean deleteLocalSubTask(int taskID, int[] id) {
         // 检查所申请操作的subTaskID是否属于taskID
         if(!checkSubTask(taskID,id)){
-            return new ResponseData(2,"权限不足",null);
+            return false;
         }
         if(!checkIsAdmin(taskID)){
-            return new ResponseData(2,"权限不足",null);
+            return false;
         }
 
         localSubTaskDao.deleteLocalSubTask(id);
@@ -102,18 +102,18 @@ public class LocalSubTaskImpl implements ILocalSubTask{
             });
         }
 
-        return new ResponseData(1,"删除成功",null);
+        return true;
     }
 
     @Override
-    public ResponseData getLocalSubTaskNumber(LocalSubTaskEntity localSubTaskEntity) {
+    public int getLocalSubTaskNumber(LocalSubTaskEntity localSubTaskEntity) {
         int count = localSubTaskDao.getLocalSubTaskNumber(localSubTaskEntity.getTaskID());
         int page = PageDivideUtil.getCountOfPages(count,COUNT_ONE_PAGE);
-        return new ResponseData(1,"查询成功",page);
+        return page;
     }
 
     @Override
-    public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page) {
+    public List<LocalSubTaskBo> getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page) {
 
         // 判断用户是否属于此任务
         if (!SecurityUtils.getSubject().isPermitted("task:localTaskMange:manage")){
@@ -123,7 +123,7 @@ public class LocalSubTaskImpl implements ILocalSubTask{
             try {
                 localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID());
             }catch (Exception ex){
-                return new ResponseData(2,"查询失败",null);
+                return null;
             }
         }
 
@@ -159,29 +159,33 @@ public class LocalSubTaskImpl implements ILocalSubTask{
             }
         }
 
-        return new ResponseData(1,"查询成功",localSubTaskBoList);
+        return localSubTaskBoList;
     }
 
 
     @Override
-    public ResponseData editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity) {
+    public boolean editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity) {
         // 检查所申请操作的subTaskID是否属于taskID
         int[] subTaskIDArray = {localSubTaskEntity.getId()};
         if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskIDArray)){
-            return new ResponseData(2,"权限不足",null);
+            return false;
         }
 
         int userID = UserCommon.getUserBo().getUserID();
         int subTaskID = localSubTaskEntity.getId();
+        int taskID = localSubTaskEntity.getTaskID();
 
-        // 判断是否是管理员
+        // 判断是否是管理员，或者管理员允许修改SubTask状态
         try {
-            if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeState(subTaskID)){
-                return new ResponseData(2,"权限不足",null);
+            if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeState(taskID)){
+                return false;
             }
         } catch (Exception ex){
-            return new ResponseData(2,"权限不足",null);
+            return false;
         }
+
+        localSubTaskDao.updateLocalSubTaskStatus(localSubTaskEntity);
+
 
         Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
 
@@ -192,10 +196,37 @@ public class LocalSubTaskImpl implements ILocalSubTask{
             });
         }
 
-        localSubTaskDao.updateLocalSubTaskStatus(localSubTaskEntity);
+        return true;
+    }
 
-        return new ResponseData(1,"修改成功",null);
+    @Override
+    public boolean editLocalSubTaskAssignee(LocalSubTaskEntity localSubTaskEntity) {
+        // 检查所申请操作的subTaskID是否属于taskID
+        int[] subTaskIDArray = {localSubTaskEntity.getId()};
+        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskIDArray)){
+            return false;
+        }
 
+        int userID = UserCommon.getUserBo().getUserID();
+        int subTaskID = localSubTaskEntity.getId();
+        int taskID = localSubTaskEntity.getTaskID();
+
+        // 判断是否是管理员，或者管理员允许修改SubTask分配
+        try {
+            if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeAssignee(taskID)){
+                return false;
+            }
+        } catch (Exception ex){
+            return false;
+        }
+
+        if (localSubTaskEntity.getAssignee() != 0){
+            localSubTaskDao.updateLocalSubTaskAssignee(localSubTaskEntity);
+        }else {
+            localSubTaskDao.clearLocalSubTaskAssignee(localSubTaskEntity);
+        }
+
+        return true;
     }
 
     private boolean checkIsAdmin(int taskID){

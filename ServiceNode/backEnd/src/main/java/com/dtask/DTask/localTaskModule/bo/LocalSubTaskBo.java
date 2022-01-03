@@ -28,4 +28,8 @@ public class LocalSubTaskBo {
     private String tag;
 
     private int star;
+
+    private int assignee;
+
+    private String assigneeName;
 }
