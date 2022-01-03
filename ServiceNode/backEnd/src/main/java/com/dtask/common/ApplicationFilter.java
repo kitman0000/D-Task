@@ -1,11 +1,13 @@
 package com.dtask.common;
 
+import com.dtask.DTask.externalModule.bo.ExternalUrlBo;
 import com.dtask.common.entity.ApplicationToken;
 import com.dtask.common.util.AESUtil;
 import com.dtask.common.util.EncodeUtil;
 import com.dtask.common.util.JsonUtil;
 import com.dtask.common.util.RequestUtil;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -20,14 +22,16 @@ import java.util.Calendar;
  * Created by zhong on 2021-12-28.
  */
 public class ApplicationFilter extends BasicHttpAuthenticationFilter {
+
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         HttpServletRequest httpServletRequest = (HttpServletRequest)request;
         HttpServletResponse httpServletResponse = (HttpServletResponse)response;
         String uri = httpServletRequest.getRequestURI();
+        String method = httpServletRequest.getMethod().toLowerCase();
 
         // Don't filter if it is the login interface
-        if(uri.equals( "/externalApi/system/login")){
+        if(uri.equals( "/externalApi/application/login")){
             return true;
         }
 
@@ -43,7 +47,13 @@ public class ApplicationFilter extends BasicHttpAuthenticationFilter {
             return false;
         }
 
-        return applicationToken.getApiList().contains(uri);
+        for (ExternalUrlBo externalUrlBo : applicationToken.getApiList()) {
+            if (externalUrlBo.getUrl().equals(uri) && externalUrlBo.getMethod().toLowerCase().equals(method)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -64,7 +74,7 @@ public class ApplicationFilter extends BasicHttpAuthenticationFilter {
 
         // todo: Remove the hard code here
         try {
-            return new String(AESUtil.decryptAES(bytes,"12345"),"utf-8");
+            return new String(AESUtil.decryptAES(bytes,""),"utf-8");
         } catch (UnsupportedEncodingException e) {
             //e.printStackTrace();
             return null;
@@ -79,7 +89,7 @@ public class ApplicationFilter extends BasicHttpAuthenticationFilter {
     private boolean isTokenExpired(ApplicationToken token){
         // No token's createTime must be earlier than this
         Calendar latestCalender = Calendar.getInstance();
-        latestCalender.add(Calendar.HOUR,2);
+        latestCalender.add(Calendar.HOUR,-2);
 
         return token.getTimestamp().before(latestCalender.getTime());
     }

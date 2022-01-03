@@ -1,5 +1,6 @@
 package com.dtask.common.entity;
 
+import com.dtask.DTask.externalModule.bo.ExternalUrlBo;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.List;
 public class ApplicationToken {
     private Date timestamp;
 
-    private List<String> apiList;
+    private List<ExternalUrlBo> apiList;
 
-    private String applicationID;
+    private int applicationID;
 }
