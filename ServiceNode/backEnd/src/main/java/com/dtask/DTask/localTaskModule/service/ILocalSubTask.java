@@ -12,6 +12,8 @@ import java.util.List;
 public interface ILocalSubTask {
     boolean addLocalSubTask(LocalSubTaskEntity localSubTaskEntity);
 
+    boolean addLocalSubTaskByUser(LocalSubTaskEntity localSubTaskEntity);
+
     boolean editLocalSubTask(LocalSubTaskEntity localSubTaskEntity);
 
     boolean deleteLocalSubTask(int taskID, int[] id);

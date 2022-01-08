@@ -10,7 +10,6 @@ import com.dtask.common.ApplicationContextAwareCommon;
 import com.dtask.common.ResponseData;
 import com.dtask.common.UserCommon;
 import com.dtask.common.util.PageDivideUtil;
-import com.dtask.pluginsdk.localTaskModule.ILocalSubTaskEvent;
 import com.dtask.pluginsdk.localTaskModule.ILocalTaskEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class LocalTaskImpl implements ILocalTask {
         int userID = UserCommon.getUserBo().getUserID();
         localTaskDao.insertLocalTask(userID,name);
 
-        int taskID = localTaskDao.getCurrentTaskID();
+        int taskID = localTaskDao.getLastCreatedTaskID();
         localTaskDao.addTaskMember(taskID,userID);
         // 将拥有者设为管理员
         localTaskDao.setLocalTaskAdmin(taskID,userID,true);

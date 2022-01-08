@@ -32,12 +32,14 @@ public class LocalSubTaskImpl implements ILocalSubTask{
     @Autowired
     private ApplicationContextAwareCommon applicationContextAware;
 
+    /**
+     * This method can be call by both user operation and external API.
+     * When called by user operation, it should execute by {@link #addLocalSubTaskByUser}
+     * @param localSubTaskEntity
+     * @return
+     */
     @Override
     public boolean addLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
-        if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
-            return false;
-        }
-
         localSubTaskDao.addLocalSubTask(localSubTaskEntity);
 
         Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
@@ -52,6 +54,14 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         }
 
         return true;
+    }
+
+    @Override
+    public boolean addLocalSubTaskByUser(LocalSubTaskEntity localSubTaskEntity) {
+        if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
+            return false;
+        }
+        return addLocalSubTask(localSubTaskEntity);
     }
 
     @Override

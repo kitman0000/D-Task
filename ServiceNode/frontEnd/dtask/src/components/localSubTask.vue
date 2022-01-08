@@ -631,6 +631,8 @@
 						});
 			},
 			deleteTask(index) {
+				var _this = this;
+
 				this.$confirm('删除该子任务, 是否确定?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
@@ -639,6 +641,7 @@
 					axios.delete('/api/localTask/localSubTask', {
 							params: {
 								'id': index.id,
+								'taskID':localStorage.getItem('taskID')
 							},
 
 							headers: {
@@ -646,10 +649,7 @@
 							}
 						})
 						.then(function(response) {
-							this.$alert('删除成功', '提示', {
-								confirmButtonText: '确定',
-							});
-							window.location.reload();
+							_this.handleCurrentChange();
 						})
 						.catch(function(error) {
 							console.log(error);
@@ -662,6 +662,8 @@
 				});
 			},
 			deleteTasks() {
+				var _this = this;
+
 				var selectedArray = new Array();
 				for (var i = 0; i < this.multipleSelection.length; i++) {
 					selectedArray.push(this.multipleSelection[i].id);
@@ -677,7 +679,6 @@
 							params: {
 								
 								'id': selectedArray,
-								/* 测试用子任务ID */
 								'taskID':localStorage.getItem('taskID')
 							},
 							paramsSerializer: params => {
@@ -692,11 +693,9 @@
 						.then(function(response) {
 
 							if (response.data.ret == 1) {
-								 this.$alert('删除成功', '提示', {
-								          confirmButtonText: '确定',
-								        });
+								_this.handleCurrentChange();
 							} else {
-								this.$alert('删除失败', '提示', {
+								_this.$alert('删除失败', '提示', {
 								         confirmButtonText: '确定',
 								       });
 							}

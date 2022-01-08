@@ -1,5 +1,6 @@
 package com.dtask.DTask.localTaskModule.dao;
 
+import com.dtask.DTask.localTaskModule.bo.LocalTaskAssigneeCount;
 import com.dtask.DTask.localTaskModule.bo.LocalTaskBo;
 import com.dtask.DTask.localTaskModule.bo.LocalTaskMemberBo;
 import com.dtask.DTask.localTaskModule.entity.LocalTaskSearchEntity;
@@ -45,11 +46,13 @@ public interface LocalTaskDao {
 
     List<LocalTaskMemberBo> getTaskUser(int taskID);
 
-    int getCurrentTaskID();
+    int getLastCreatedTaskID();
 
     void setLocalTaskAdmin(@Param("taskID") int taskID, @Param("userID") int userID, @Param("isAdmin") boolean isAdmin);
 
     boolean getAllowUserChangeStatus(int taskID);
 
     boolean getAllowUserChangeAssignee(int taskID);
+
+    List<LocalTaskAssigneeCount> getTaskAssigneeCount(int taskID);
 }

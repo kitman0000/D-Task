@@ -22,7 +22,7 @@ public class LocalSubTaskCl{
 
     @RequestMapping(value = "/api/localTask/localSubTask",method = RequestMethod.POST)
     public ResponseData addLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
-        boolean result = localSubTask.addLocalSubTask(localSubTaskEntity);
+        boolean result = localSubTask.addLocalSubTaskByUser(localSubTaskEntity);
         if (result){
             return new ResponseData(1,"添加成功",null);
         }else {

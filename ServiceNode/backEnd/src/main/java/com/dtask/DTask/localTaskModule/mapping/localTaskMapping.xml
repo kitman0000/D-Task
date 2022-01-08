@@ -149,7 +149,7 @@
     </select>
 
     <!-- 用于刚创建好的任务 -->
-    <select id="getCurrentTaskID" resultType="java.lang.Integer">
+    <select id="getLastCreatedTaskID" resultType="java.lang.Integer">
         SELECT @@IDENTITY
     </select>
 
@@ -177,6 +177,16 @@
           <where>
             tb_local_task.id = #{taskID}
           </where>
+    </select>
+
+    <!-- Get every members' assigned and executing sub task -->
+    <select id="getTaskAssigneeCount" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskAssigneeCount">
+        SELECT count(assignee) as count,assignee as assigneeID FROM tb_local_sub_task
+        <where>
+            taskID = #{taskID}
+            and status = 1
+        </where>
+        GROUP BY assignee;
     </select>
 
     <sql id="localTaskSearchCondition">

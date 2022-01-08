@@ -122,6 +122,14 @@
         </foreach>
     </select>
 
+    <!-- Select the last created sub task -->
+    <select id="getLastCreatedSubTask" resultType="com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo">
+        SELECT * FROM tb_local_sub_task
+        <where>
+            id = (SELECT @@IDENTITY)
+        </where>
+    </select>
+
     <sql id="set_tb_local_sub_task">
         name = #{localSubTaskEntity.name},
         content = #{localSubTaskEntity.content},

@@ -38,4 +38,6 @@ public interface LocalSubTaskDao {
 
     // 通过子任务ID获取任务ID
     List<Integer> getTaskIDsBySubTask(@Param("subTaskID") int[] subTaskID);
+
+    LocalSubTaskBo getLastCreatedSubTask();
 }
