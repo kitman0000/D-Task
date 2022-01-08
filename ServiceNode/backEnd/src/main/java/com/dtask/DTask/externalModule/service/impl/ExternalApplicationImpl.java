@@ -30,6 +30,7 @@ public class ExternalApplicationImpl implements IExternalApplication {
 
     @Override
     public String login(String application, String password) {
+        password = EncodeUtil.encodeHmac256(password,"DTask5710");
         ApplicationBo applicationBo = externalApplicationDao.getAvailableApplication(application,password);
 
         // Login failed

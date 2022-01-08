@@ -24,7 +24,7 @@ public class ExternalApplicationCl {
         if (token == null){
             return new ResponseData(2,"Login failed",null);
         }
-        return new ResponseData(1,token,null);
+        return new ResponseData(1,"Login success",token);
     }
 
     @RequestMapping(value = "/test",method = RequestMethod.GET)
