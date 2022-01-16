@@ -30,6 +30,26 @@ public class ExternalLocalSubTaskCl {
     public ResponseData addSubTask(LocalSubTaskEntity subTaskEntity){
         subTask.addLocalSubTask(subTaskEntity);
         ExternalSubTaskAddBo externalSubTaskAddBo = externalSubTask.autoAssignSubTask();
-        return new ResponseData(1,"Add success",externalSubTaskAddBo);
+        return new ResponseData(1,"Add success",externalSubTaskAddBo,true);
+    }
+
+    @RequestMapping(value = "localSubTaskStatus",method = RequestMethod.PUT)
+    public ResponseData editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity){
+        boolean result = subTask.editLocalSubTaskStatus(localSubTaskEntity);
+        if (result){
+            return new ResponseData(1,"Edit success",null,true);
+        }else {
+            return new ResponseData(1,"Edit failed",null,true);
+        }
+    }
+
+    @RequestMapping(value = "localSubTaskAssignee",method = RequestMethod.PUT)
+    public ResponseData editLocalSubTaskAssignee(LocalSubTaskEntity localSubTaskEntity){
+        boolean result = subTask.editLocalSubTaskAssignee(localSubTaskEntity);
+        if (result){
+            return new ResponseData(1,"Edit success",null,true);
+        }else {
+            return new ResponseData(1,"Edit failed",null,true);
+        }
     }
 }

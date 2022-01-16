@@ -42,7 +42,7 @@
 					<el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
 					@keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm" style="width: 100px;">
 					</el-input>
-					<el-button v-else class="button-new-tag" size="small" @click="showInput">+添加新标签</el-button>
+					<el-button v-else class="button-new-tag" size="small" style="margin-left:10px" @click="showInput">+添加新标签</el-button>
 				</el-form-item>
 				<el-form-item label="星级:">
 					<el-select v-model="star" placeholder="请选择">

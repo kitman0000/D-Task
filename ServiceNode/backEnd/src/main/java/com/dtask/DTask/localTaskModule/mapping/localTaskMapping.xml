@@ -184,7 +184,8 @@
         SELECT count(assignee) as count,assignee as assigneeID FROM tb_local_sub_task
         <where>
             taskID = #{taskID}
-            and status = 1
+            AND status = 0
+            OR status = 1
         </where>
         GROUP BY assignee;
     </select>

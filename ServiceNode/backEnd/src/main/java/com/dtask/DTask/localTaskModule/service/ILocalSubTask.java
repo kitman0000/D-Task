@@ -22,7 +22,11 @@ public interface ILocalSubTask {
 
     List<LocalSubTaskBo> getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page);
 
+    boolean editLocalSubTaskStatusByUser(LocalSubTaskEntity localSubTaskEntity);
+
     boolean editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity);
+
+    boolean editLocalSubTaskAssigneeByUser(LocalSubTaskEntity localSubTaskEntity);
 
     boolean editLocalSubTaskAssignee(LocalSubTaskEntity localSubTaskEntity);
 

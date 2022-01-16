@@ -2,11 +2,13 @@
 	<div>
 		<el-container>
 			<el-main>
+
 				<el-button type="primary" style="float: right;margin-top: 15px;background: #24375E;border: 0px ;" icon="el-icon-delete"
 				 v-if="role != 3" @click="deleteTasks()">删除所选子任务</el-button>
 				<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
 				 icon="el-icon-plus" v-if="role != 3" @click="addTask()">添加子任务</el-button>
-				<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+				<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange"
+				 :row-style="taskRowStyle" :cell-style="taskCellStyle">
 					<el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="name" label="子任务名称" width="450px">
 					</el-table-column>
@@ -36,13 +38,16 @@
 					</el-table-column>
 					<el-table-column label="操作">
 						<template slot-scope="scope">
-							<el-button type="text" size="small" v-if="role != 3" @click="deleteTask(scope.row)">删除子任务</el-button>
-							<el-button type="text" size="small" @click="TaskDetail(scope.row)">查看子任务详情</el-button>
+							<span>
+								<i class="el-icon-tickets sideButton" @click="TaskDetail(scope.row)"></i>
+								<i v-if="role!=3" class="el-icon-delete sideButton" @click="deleteTask(scope.row)" style="margin-left:20px"></i>
+							</span>
 
 							<!-- 子任务详情对话框开始 -->
 							<el-dialog title="子任务详情" :visible.sync="dialogVisible" width="30%">
 								<p>子任务名：{{name}}</p>
-								<p>子任务内容：{{content}}</p>
+								<p>子任务内容：</p>
+								<el-input class="taskContent"  readonly="true" rows="5" v-model="content" type="textarea"></el-input>
 								<p>开始时间：{{startTime}}</p>
 								<p>截止时间：{{deadline}}</p>
 								<p>等级：{{level}}</p>
@@ -97,6 +102,10 @@
 				<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper"
 				 :total="page">
 				</el-pagination>
+
+				<span class="notice">
+					当子任务离任务截止日期小于5天且未完成时，“星级”会自动变为重要，当离截止日期小于2天或逾期且未完成时，“星级”会自动变为非常重要。
+				</span>
 			</el-main>
 			<el-aside width="250px">
 				<div id="statusChart" style="height:150px"></div>
@@ -203,7 +212,16 @@
 				level3Amount:0,
 				// Cache some values after open the detail window, if no change has been made, don't post data.
 				cacheStatus:0,
-				cacheAssignee:0
+				cacheAssignee:0,
+
+				// Page style configuration
+				taskRowStyle:{
+					Height:10+'px',
+					padding:"0px"
+				},
+				taskCellStyle:{
+					 padding:2+'px',
+				}
 			}
 		},
 		mounted(){
@@ -820,10 +838,6 @@
 			localStorage.removeItem('add');
 			this.getDefaultSubTask();
 			const h = this.$createElement;
-			this.$notify({
-				title: '提示',
-				message: h('i', { style: 'color: rgb(36, 55, 94)'}, '当一个子任务离任务截止日期小于5天且未完成时，“星级”会自动变为重要，当离截止日期小于2天或逾期且未完成时，“星级”会自动变为非常重要。')
-			});
 		}
 	}
 </script>
@@ -832,5 +846,22 @@
 	.icon{
 		height: 17px;
 		width: 17px;
+	}
+
+	.taskContent{
+		width:100%;
+		border: none;
+	}
+
+	.sideButton{
+		font-size: 18px;
+	}
+
+	.sideButton:hover{
+		color: rgb(103, 150, 252);
+	}
+
+	.notice{
+		font-size: 12px;
 	}
 </style>

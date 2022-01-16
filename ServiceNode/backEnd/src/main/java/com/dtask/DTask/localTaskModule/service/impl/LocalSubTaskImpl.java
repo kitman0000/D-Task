@@ -65,34 +65,6 @@ public class LocalSubTaskImpl implements ILocalSubTask{
     }
 
     @Override
-    public boolean editLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
-
-        // 检查所申请操作的subTaskID是否属于taskID
-        int[] subTaskID = {localSubTaskEntity.getId()};
-        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskID)){
-            return false;
-        }
-
-        if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
-            return false;
-        }
-
-        Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
-
-        if (interfaceMap != null){
-            interfaceMap.forEach((K,V)->{
-                V.editLocalSubTask(localSubTaskEntity.getTaskID(),localSubTaskEntity.getTaskID(),localSubTaskEntity.getName(),
-                        localSubTaskEntity.getContent(),localSubTaskEntity.getDeadline(),
-                        localSubTaskEntity.getStatus(),localSubTaskEntity.getStartTime(),
-                        localSubTaskEntity.getLevel(),localSubTaskEntity.getTag(),localSubTaskEntity.getStar());
-            });
-        }
-
-        localSubTaskDao.updateLocalSubTask(localSubTaskEntity);
-        return true;
-    }
-
-    @Override
     public boolean deleteLocalSubTask(int taskID, int[] id) {
         // 检查所申请操作的subTaskID是否属于taskID
         if(!checkSubTask(taskID,id)){
@@ -172,17 +144,36 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         return localSubTaskBoList;
     }
 
-
     @Override
-    public boolean editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity) {
+    public boolean editLocalSubTask(LocalSubTaskEntity localSubTaskEntity) {
         // 检查所申请操作的subTaskID是否属于taskID
-        int[] subTaskIDArray = {localSubTaskEntity.getId()};
-        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskIDArray)){
+        int[] subTaskID = {localSubTaskEntity.getId()};
+        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskID)){
             return false;
         }
 
+        if(!checkIsAdmin(localSubTaskEntity.getTaskID())){
+            return false;
+        }
+
+        Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
+
+        if (interfaceMap != null){
+            interfaceMap.forEach((K,V)->{
+                V.editLocalSubTask(localSubTaskEntity.getTaskID(),localSubTaskEntity.getTaskID(),localSubTaskEntity.getName(),
+                        localSubTaskEntity.getContent(),localSubTaskEntity.getDeadline(),
+                        localSubTaskEntity.getStatus(),localSubTaskEntity.getStartTime(),
+                        localSubTaskEntity.getLevel(),localSubTaskEntity.getTag(),localSubTaskEntity.getStar());
+            });
+        }
+
+        localSubTaskDao.updateLocalSubTask(localSubTaskEntity);
+        return true;
+    }
+
+    @Override
+    public boolean editLocalSubTaskStatusByUser(LocalSubTaskEntity localSubTaskEntity) {
         int userID = UserCommon.getUserBo().getUserID();
-        int subTaskID = localSubTaskEntity.getId();
         int taskID = localSubTaskEntity.getTaskID();
 
         // 判断是否是管理员，或者管理员允许修改SubTask状态
@@ -194,8 +185,19 @@ public class LocalSubTaskImpl implements ILocalSubTask{
             return false;
         }
 
-        localSubTaskDao.updateLocalSubTaskStatus(localSubTaskEntity);
+        return editLocalSubTaskStatus(localSubTaskEntity);
+    }
 
+
+    @Override
+    public boolean editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity) {
+        // 检查所申请操作的subTaskID是否属于taskID
+        int[] subTaskIDArray = {localSubTaskEntity.getId()};
+        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskIDArray)){
+            return false;
+        }
+
+        localSubTaskDao.updateLocalSubTaskStatus(localSubTaskEntity);
 
         Map<String,ILocalSubTaskEvent> interfaceMap = applicationContextAware.getImplementsMap(ILocalSubTaskEvent.class);
 
@@ -210,23 +212,27 @@ public class LocalSubTaskImpl implements ILocalSubTask{
     }
 
     @Override
-    public boolean editLocalSubTaskAssignee(LocalSubTaskEntity localSubTaskEntity) {
-        // 检查所申请操作的subTaskID是否属于taskID
-        int[] subTaskIDArray = {localSubTaskEntity.getId()};
-        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskIDArray)){
-            return false;
-        }
+    public boolean editLocalSubTaskAssigneeByUser(LocalSubTaskEntity localSubTaskEntity) {
+        // 判断是否是管理员，或者管理员允许修改SubTask分配
 
         int userID = UserCommon.getUserBo().getUserID();
-        int subTaskID = localSubTaskEntity.getId();
         int taskID = localSubTaskEntity.getTaskID();
-
-        // 判断是否是管理员，或者管理员允许修改SubTask分配
         try {
             if(!localSubTaskDao.isUserAdmin(userID,localSubTaskEntity.getTaskID()) && !localSubTaskDao.isAllowUserChangeAssignee(taskID)){
                 return false;
             }
         } catch (Exception ex){
+            return false;
+        }
+
+        return editLocalSubTaskAssignee(localSubTaskEntity);
+    }
+
+    @Override
+    public boolean editLocalSubTaskAssignee(LocalSubTaskEntity localSubTaskEntity) {
+        // 检查所申请操作的subTaskID是否属于taskID
+        int[] subTaskIDArray = {localSubTaskEntity.getId()};
+        if(!checkSubTask(localSubTaskEntity.getTaskID(),subTaskIDArray)){
             return false;
         }
 

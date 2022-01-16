@@ -22,4 +22,14 @@ public class RequestUtil {
             e.printStackTrace();
         }
     }
+
+    public static void refuseRequestForNoAuthApi(HttpServletResponse response){
+        try {
+            // 向前端返回token过期
+            PrintWriter printWriter = response.getWriter();
+            printWriter.print("No Auth API in token");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

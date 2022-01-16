@@ -64,7 +64,7 @@ public class LocalSubTaskCl{
 
     @RequestMapping(value = "/api/localTask/localSubTaskStatus",method = RequestMethod.PUT)
     public ResponseData editLocalSubTaskStatus(LocalSubTaskEntity localSubTaskEntity) {
-        boolean result =  localSubTask.editLocalSubTaskStatus(localSubTaskEntity);
+        boolean result =  localSubTask.editLocalSubTaskStatusByUser(localSubTaskEntity);
         if (result){
             return new ResponseData(1,"修改成功",null);
         }else {
@@ -77,7 +77,7 @@ public class LocalSubTaskCl{
      */
     @RequestMapping(value = "/api/localTask/localSubTaskAssignee",method = RequestMethod.PUT)
     public ResponseData editLocalSubTaskAssignee(LocalSubTaskEntity localSubTaskEntity){
-        boolean result =  localSubTask.editLocalSubTaskAssignee(localSubTaskEntity);
+        boolean result =  localSubTask.editLocalSubTaskAssigneeByUser(localSubTaskEntity);
         if (result){
             return new ResponseData(1,"修改成功",null);
         }else {

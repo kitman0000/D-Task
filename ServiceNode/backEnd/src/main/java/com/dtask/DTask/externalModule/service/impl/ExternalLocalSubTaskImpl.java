@@ -42,13 +42,13 @@ public class ExternalLocalSubTaskImpl implements IExternalLocalSubTask {
 
         // Get the member with the fewest sub tasks
         int fewestSubTaskMemberID = 0;
-        int assignedTaskNumber = 0;
+        int assignedTaskCount = -1;
         for (LocalTaskAssigneeCount member : taskAssigneeCount) {
             // Filter the non-assign value
             if (member.getAssigneeID() != null && member.getAssigneeID() != -1) {
-                if (assignedTaskNumber > member.getCount()) {
+                if (assignedTaskCount == -1 || assignedTaskCount > member.getCount()) {
                     fewestSubTaskMemberID = member.getAssigneeID();
-                    assignedTaskNumber = member.getCount();
+                    assignedTaskCount = member.getCount();
                 }
                 // Remove the member from list
                 taskUser.removeIf(memberInList-> memberInList.getUserID() == member.getAssigneeID());
@@ -59,6 +59,7 @@ public class ExternalLocalSubTaskImpl implements IExternalLocalSubTask {
         // Assign to the no sub task member first.
         LocalSubTaskEntity localSubTaskEntity = new LocalSubTaskEntity();
         localSubTaskEntity.setTaskID(localSubTaskBo.getTaskID());
+        localSubTaskEntity.setId(localSubTaskBo.getId());
 
         if (taskUser.isEmpty()){
             // Every member has their sub tasks
@@ -70,7 +71,7 @@ public class ExternalLocalSubTaskImpl implements IExternalLocalSubTask {
         localSubTaskDao.updateLocalSubTaskAssignee(localSubTaskEntity);
 
         ExternalSubTaskAddBo externalSubTaskAddBo = new ExternalSubTaskAddBo();
-        externalSubTaskAddBo.setSubTaskID(localSubTaskEntity.getTaskID());
+        externalSubTaskAddBo.setSubTaskID(localSubTaskEntity.getId());
         externalSubTaskAddBo.setAssignee(localSubTaskEntity.getAssignee());
         return externalSubTaskAddBo;
     }
