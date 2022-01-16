@@ -3,6 +3,7 @@ package com.dtask.DTask.localTaskModule.service.impl;
 import com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo;
 import com.dtask.DTask.localTaskModule.dao.LocalSubTaskDao;
 import com.dtask.DTask.localTaskModule.entity.LocalSubTaskEntity;
+import com.dtask.DTask.localTaskModule.entity.LocalSubTaskFilterEntity;
 import com.dtask.DTask.localTaskModule.service.ILocalSubTask;
 import com.dtask.common.ApplicationContextAwareCommon;
 import com.dtask.common.ResponseData;
@@ -24,7 +25,7 @@ import java.util.Map;
 @Service
 public class LocalSubTaskImpl implements ILocalSubTask{
 
-    private final int COUNT_ONE_PAGE = 20;
+    private final int COUNT_ONE_PAGE = 10;
 
     @Autowired
     private LocalSubTaskDao localSubTaskDao;
@@ -89,14 +90,23 @@ public class LocalSubTaskImpl implements ILocalSubTask{
 
     @Override
     public int getLocalSubTaskNumber(LocalSubTaskEntity localSubTaskEntity) {
-        int count = localSubTaskDao.getLocalSubTaskNumber(localSubTaskEntity.getTaskID());
+        return getLocalSubTaskNumberWithFilter(localSubTaskEntity,null);
+    }
+
+    @Override
+    public int getLocalSubTaskNumberWithFilter(LocalSubTaskEntity localSubTaskEntity, LocalSubTaskFilterEntity filterEntity) {
+        int count = localSubTaskDao.getLocalSubTaskNumber(localSubTaskEntity.getTaskID(),filterEntity);
         int page = PageDivideUtil.getCountOfPages(count,COUNT_ONE_PAGE);
         return page;
     }
 
     @Override
     public List<LocalSubTaskBo> getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page) {
+        return getLocalSubTaskListWithFilter(localSubTaskEntity,page,null);
+    }
 
+    @Override
+    public List<LocalSubTaskBo> getLocalSubTaskListWithFilter(LocalSubTaskEntity localSubTaskEntity, int page, LocalSubTaskFilterEntity filterEntity) {
         // 判断用户是否属于此任务
         if (!SecurityUtils.getSubject().isPermitted("task:localTaskMange:manage")){
             // 如果用户没有这个权限，则用户不是网站管理员
@@ -110,7 +120,7 @@ public class LocalSubTaskImpl implements ILocalSubTask{
         }
 
         int startRow = (page -1) * COUNT_ONE_PAGE;
-        List<LocalSubTaskBo> localSubTaskBoList = localSubTaskDao.getLocalSubTaskList(localSubTaskEntity.getTaskID(),startRow,COUNT_ONE_PAGE);
+        List<LocalSubTaskBo> localSubTaskBoList = localSubTaskDao.getLocalSubTaskList(localSubTaskEntity.getTaskID(),startRow,COUNT_ONE_PAGE,filterEntity);
 
         // 根据Deadline，调整星级
         // 5天以内自动变为重要 2天以内自动变为特别重要

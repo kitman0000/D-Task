@@ -2,6 +2,8 @@ package com.dtask.DTask.localTaskModule.dao;
 
 import com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo;
 import com.dtask.DTask.localTaskModule.entity.LocalSubTaskEntity;
+import com.dtask.DTask.localTaskModule.entity.LocalSubTaskFilterEntity;
+import com.dtask.DTask.localTaskModule.entity.LocalTaskSearchEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -20,9 +22,9 @@ public interface LocalSubTaskDao {
 
     void deleteLocalSubTask(@Param("id") int[] id);
 
-    int getLocalSubTaskNumber(int taskID);
+    int getLocalSubTaskNumber(@Param("taskID") int taskID, @Param("filterEntity") LocalSubTaskFilterEntity filterEntity);
 
-    List<LocalSubTaskBo> getLocalSubTaskList(@Param("taskID") int taskID, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage);
+    List<LocalSubTaskBo> getLocalSubTaskList(@Param("taskID") int taskID, @Param("startRow") int startRow, @Param("rowsOnePage") int rowsOnePage, @Param("filterEntity") LocalSubTaskFilterEntity filterEntity);
 
     void updateLocalSubTaskStatus(@Param("localSubTaskEntity") LocalSubTaskEntity localSubTaskEntity);
 

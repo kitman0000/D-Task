@@ -65,8 +65,35 @@
         SELECT count(id) FROM tb_local_sub_task
         <where>
             taskID = #{taskID}
+            <if test="filterEntity != null">
+                <include refid="searchSubLocalTaskCondition"/>
+            </if>
         </where>
     </select>
+
+    <sql id="searchSubLocalTaskCondition">
+        <if test="filterEntity.name != ''">
+            AND `name` LIKE '%${filterEntity.name}%'
+        </if>
+        <if test="filterEntity.timeStart != ''">
+            AND startTime >= #{filterEntity.timeStart}
+        </if>
+        <if test="filterEntity.timeEnd != ''">
+            AND deadline &lt;= #{filterEntity.timeEnd}
+        </if>
+        <if test="filterEntity.level != null">
+            AND level = #{filterEntity.level}
+        </if>
+        <if test="filterEntity.assignee != null">
+            AND assignee = #{filterEntity.assignee}
+        </if>
+        <if test="filterEntity.status != null">
+            AND status = #{filterEntity.status}
+        </if>
+        <if test="filterEntity.star != null">
+            AND star = #{filterEntity.star}
+        </if>
+    </sql>
 
     <select id="getLocalSubTaskList" resultType="com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo">
         SELECT tb_local_sub_task.*,tb_user_info.nickname as assigneeName
@@ -74,11 +101,17 @@
         LEFT JOIN tb_user_info ON tb_local_sub_task.assignee = tb_user_info.id
         <where>
             taskID = #{taskID}
+            <if test="filterEntity != null">
+                <include refid="searchSubLocalTaskCondition"/>
+            </if>
 
             <!-- 分页的条件 -->
             AND tb_local_sub_task.id Not In (Select * from (Select id From tb_local_sub_task
             <where>
                 taskID = #{taskID}
+                <if test="filterEntity != null">
+                    <include refid="searchSubLocalTaskCondition"/>
+                </if>
             </where>
             ORDER BY status,deadline DESC
             Limit #{startRow})as t)

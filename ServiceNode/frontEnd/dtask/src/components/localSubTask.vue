@@ -2,138 +2,201 @@
 	<div>
 		<el-container>
 			<el-main>
-
-				<el-button type="primary" style="float: right;margin-top: 15px;background: #24375E;border: 0px ;" icon="el-icon-delete"
-				 v-if="role != 3" @click="deleteTasks()">删除所选子任务</el-button>
-				<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+				<el-button type="primary" style="margin-right: 10px;background: #24375E;border: 0px ;"
 				 icon="el-icon-plus" v-if="role != 3" @click="addTask()">添加子任务</el-button>
-				<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange"
-				 :row-style="taskRowStyle" :cell-style="taskCellStyle">
-					<el-table-column type="selection" width="55"></el-table-column>
-					<el-table-column prop="name" label="子任务名称" width="450px">
-					</el-table-column>
-					<el-table-column prop="assigneeName" label="分配">
-					</el-table-column>
-					<el-table-column prop="startTime" label="开始时间" width="100px">
-					</el-table-column>
-					<el-table-column prop="deadline" label="截止时间" width="100px">
-					</el-table-column>
-					<el-table-column prop="level" label="级别" width="50px">
-					</el-table-column>
-					<el-table-column prop="status" label="状态" width="100px">
-						<template slot-scope="scope">
-							<p v-if="scope.row.status == 0" style="color: #3399FF;"><img class="icon" src="../assets/计划.png" /> 计划中</p>
-							<p v-if="scope.row.status == 1" style="color: #FF6600;"><img class="icon" src="../assets/执行.png" /> 执行中</p>
-							<p v-if="scope.row.status == 2" style="color: #009933;"><img class="icon" src="../assets/完成.png" /> 已完成</p>
-							<p v-if="scope.row.status == 3" style="color: #C0C0C0;"><img class="icon" src="../assets/取消.png" /> 已取消</p>
-						</template>
-					</el-table-column>
-					<el-table-column prop="star" label="星级" width="150px">
-						<template slot-scope="scope">
-							<span class='el-icon-star-on' v-if="scope.row.star == 0" style="color: blue;">一般</span>
-							<span class='el-icon-star-on' v-if="scope.row.star == 1" style="color: darkgreen;">较重要</span>
-							<span class='el-icon-star-on' v-if="scope.row.star == 2" style="color: orange;">重要</span>
-							<span class='el-icon-star-on' v-if="scope.row.star == 3" style="color: red;">特别重要</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="操作">
-						<template slot-scope="scope">
-							<span>
-								<i class="el-icon-tickets sideButton" @click="TaskDetail(scope.row)"></i>
-								<i v-if="role!=3" class="el-icon-delete sideButton" @click="deleteTask(scope.row)" style="margin-left:20px"></i>
-							</span>
+				<el-button type="primary" style="background: #24375E;border: 0px ;" icon="el-icon-delete"
+				 v-if="role != 3" @click="deleteTasks()">删除所选子任务</el-button>
+				<el-switch inactive-text="筛选器" v-model="useFilter" style="float:right">
+				</el-switch>
+				 <el-card v-if="useFilter" class="">
+					 <el-row style="margin-top:8px">
+						<el-col :span="8">
+							<label class="filterLabel">子任务名称:</label>
+							<el-input @change="getDefaultSubTask()" v-model="nameFilter" style="width: 300px;" placeholder="名称" clearable></el-input>
+						</el-col>
 
-							<!-- 子任务详情对话框开始 -->
-							<el-dialog title="子任务详情" :visible.sync="dialogVisible" width="30%">
-								<p>子任务名：{{name}}</p>
-								<p>子任务内容：</p>
-								<el-input class="taskContent"  readonly="true" rows="5" v-model="content" type="textarea"></el-input>
-								<p>开始时间：{{startTime}}</p>
-								<p>截止时间：{{deadline}}</p>
-								<p>等级：{{level}}</p>
-								<p>状态：
-									<span v-if="!stateOperation && value != null">
-										{{options[value].label}}
-									</span>
-									<el-select v-model="value" placeholder="请选择状态" v-if="stateOperation">
-									    <el-option
-									      v-for="item in options"
-									      :key="item.value"
-									      :label="item.label"
-									      :value="item.value">
-									    </el-option>
-									  </el-select>
-									
-									</p>
-								<p>分配：
-									<span v-if="!assigneeOperation">
-										{{assigneeName}}
-									</span>
-									<el-select v-model="assignee" placeholder="请选择成员" v-if="assigneeOperation">
-									    <el-option
-									      v-for="user in allUsers"
-									      :key="user.userID"
-									      :label="user.nickname"
-									      :value="user.userID">
-									    </el-option>
-									</el-select>
+						<el-col :span="8">
+							<label class="filterLabel">开始日期:</label>
+							<el-date-picker @change="getDefaultSubTask()" v-model="timeStartFilter" value-format="yyyy-MM-dd" type="date" placeholder="选择" clearable/>
+						</el-col>
 
-									<el-button  v-if="assigneeOperation" type="primary" style="margin-left: 10px;background: #24375E;border: 0px ;"
-									 icon="el-icon-delete" @click="clearAssignee()"></el-button>
-								</p>
-								<p>标签：</p>
-								<el-tag :key="tag" v-for="tag in tag" :disable-transitions="false">
-									{{tag}}
-								</el-tag>
-								<p>星级：<span class='el-icon-star-on' v-if="star == 0" style="color: blue;">一般</span>
-									<span class='el-icon-star-on' v-if="star == 1" style="color: darkgreen;">较重要</span>
-									<span class='el-icon-star-on' v-if="star == 2" style="color: orange;">重要</span>
-									<span class='el-icon-star-on' v-if="star == 3" style="color: red;">特别重要</span></p>
-								<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-								v-if="role != 3" @click="editTask()">编辑子任务详情</el-button>
-								<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-								v-if="stateOperation || assigneeOperation" icon="el-icon-check" @click="editTaskPublic()">确定修改</el-button>
-							</el-dialog>
-							<!-- 子任务详情对话框结束 -->
+						<el-col :span="8">
+							<label class="filterLabel">结束日期:</label>
+							<el-date-picker @change="getDefaultSubTask()" v-model="timeEndFilter" value-format="yyyy-MM-dd" type="date" placeholder="选择" clearable/>
+						</el-col>
+					 </el-row>
+					 <el-row style="margin-top:8px">
+						<el-col :span="6">
+							<label class="filterLabel">等级:</label>
+							<el-select @change="getDefaultSubTask()" v-model="levelFilter" clearable >
+								<el-option v-for="level in levelOptions" :key="level.value" :label="level.value" :value="level.value">
+								</el-option>
+							</el-select>
+						</el-col>
 
-						</template>
-					</el-table-column>
-				</el-table>
-				<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper"
+						<el-col :span="6">
+							<label class="filterLabel">状态:</label>
+							<el-select @change="getDefaultSubTask()" v-model="statusFilter" clearable >
+								<el-option v-for="status in statusOptions" :key="status.value" :label="status.label" :value="status.value">
+								</el-option>
+							</el-select>
+						</el-col>
+
+						<el-col :span="6">
+							<label class="filterLabel">星级:</label>
+							<el-select @change="getDefaultSubTask()" v-model="starFilter" clearable >
+								<el-option v-for="star in starOptions" :key="star.value" :label="star.label" :value="star.value">
+								</el-option>
+							</el-select>
+						</el-col>
+
+						<el-col :span="6">
+							<label class="filterLabel">分配:</label>
+							<el-select @change="getDefaultSubTask()" v-model="assigneeFilter" placeholder="请选择成员" clearable>
+								<el-option
+									v-for="user in allUsers"
+									:key="user.userID"
+									:label="user.nickname"
+									:value="user.userID">
+								</el-option>
+							</el-select>
+						</el-col>
+					 </el-row >
+				 </el-card>
+				 <el-card>
+					<el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange"
+				 	:row-style="taskRowStyle" :cell-style="taskCellStyle">
+						<el-table-column type="selection" width="55"></el-table-column>
+						<el-table-column prop="name" label="子任务名称" width="450px">
+						</el-table-column>
+						<el-table-column prop="assigneeName" label="分配">
+						</el-table-column>
+						<el-table-column prop="startTime" label="开始时间" width="100px">
+						</el-table-column>
+						<el-table-column prop="deadline" label="截止时间" width="100px">
+						</el-table-column>
+						<el-table-column prop="level" label="级别" width="50px">
+						</el-table-column>
+						<el-table-column prop="status" label="状态" width="100px">
+							<template slot-scope="scope">
+								<p v-if="scope.row.status == 0" style="color: #3399FF;"><img class="icon" src="../assets/计划.png" /> 计划中</p>
+								<p v-if="scope.row.status == 1" style="color: #FF6600;"><img class="icon" src="../assets/执行.png" /> 执行中</p>
+								<p v-if="scope.row.status == 2" style="color: #009933;"><img class="icon" src="../assets/完成.png" /> 已完成</p>
+								<p v-if="scope.row.status == 3" style="color: #C0C0C0;"><img class="icon" src="../assets/取消.png" /> 已取消</p>
+							</template>
+						</el-table-column>
+						<el-table-column prop="star" label="星级" width="150px">
+							<template slot-scope="scope">
+								<span class='el-icon-star-on' v-if="scope.row.star == 0" style="color: blue;">一般</span>
+								<span class='el-icon-star-on' v-if="scope.row.star == 1" style="color: darkgreen;">较重要</span>
+								<span class='el-icon-star-on' v-if="scope.row.star == 2" style="color: orange;">重要</span>
+								<span class='el-icon-star-on' v-if="scope.row.star == 3" style="color: red;">特别重要</span>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作">
+							<template slot-scope="scope">
+								<span>
+									<i class="el-icon-tickets sideButton" @click="TaskDetail(scope.row)"></i>
+									<i v-if="role!=3" class="el-icon-delete sideButton" @click="deleteTask(scope.row)" style="margin-left:20px"></i>
+								</span>
+							</template>
+						</el-table-column>
+					</el-table>
+				<el-pagination @current-change="getSubTaskList" :current-page.sync="currentPage3" :page-size="10" layout="prev, pager, next, jumper"
 				 :total="page">
 				</el-pagination>
 
 				<span class="notice">
 					当子任务离任务截止日期小于5天且未完成时，“星级”会自动变为重要，当离截止日期小于2天或逾期且未完成时，“星级”会自动变为非常重要。
 				</span>
+				</el-card>
+				
 			</el-main>
-			<el-aside width="250px">
-				<div id="statusChart" style="height:150px"></div>
-				<div id="starChart" style="height:150px"></div>
-				<div id="levelChart" style="height:150px"></div>
-				<div style="margin-top: 20px">
-					<el-radio-group v-model="dayName" @change="getSubTaskEchartsAmount()" size="mini">
-					<el-radio-button label="一周"></el-radio-button>
-					<el-radio-button label="30天"></el-radio-button>
-					<el-radio-button label="半年"></el-radio-button>
-					<el-radio-button label="一年"></el-radio-button>
-					</el-radio-group>
-				</div>
-				<p>
-					<b>拥有者：</b>
-					<p>{{creator}}</p>
-				</p>
-				<p>
-					<b>管理者：</b>
-					<p v-for="manager in managers">{{manager}}</p>
-				</p>
-				<p>
-					<b>参与者：</b>
-					<p v-for="employee in employees">{{employee}}</p>
-				</p>
-				<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
-				v-if="role != 3" icon="el-icon-edit" @click="editParticipator()">任务人员编辑</el-button>
+			<el-aside width="290px" style="padding-right:10px;padding-top:58px">
+				<el-card>
+					<div id="statusChart" style="height:150px"></div>
+					<hr style="border: 1px solid rgb(247, 247, 247);">
+					<div id="starChart" style="height:150px"></div>
+					<hr style="border: 1px solid rgb(247, 247, 247);">
+					<div id="levelChart" style="height:150px"></div>
+					<div style="margin-top: 20px">
+						<el-radio-group v-model="dayName" @change="getSubTaskEchartsAmount()" size="mini">
+						<el-radio-button label="一周"></el-radio-button>
+						<el-radio-button label="30天"></el-radio-button>
+						<el-radio-button label="半年"></el-radio-button>
+						<el-radio-button label="一年"></el-radio-button>
+						</el-radio-group>
+					</div>
+				</el-card>
+				<el-card>
+					<p>
+						<b>拥有者：</b>
+						<p>{{creator}}</p>
+					</p>
+					<p>
+						<b>管理者：</b>
+						<p v-for="manager in managers">{{manager}}</p>
+					</p>
+					<p>
+						<b>参与者：</b>
+						<p v-for="employee in employees">{{employee}}</p>
+					</p>
+					<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+					v-if="role != 3" icon="el-icon-edit" @click="editParticipator()">任务人员编辑</el-button>
+				</el-card>
 			</el-aside>
+			<!-- 子任务详情对话框开始 -->
+			<el-dialog title="子任务详情" :visible.sync="dialogVisible" width="30%">
+				<p>子任务名：{{name}}</p>
+				<p>子任务内容：</p>
+				<el-input class="taskContent"  readonly="true" rows="5" v-model="content" type="textarea"></el-input>
+				<p>开始时间：{{startTime}}</p>
+				<p>截止时间：{{deadline}}</p>
+				<p>等级：{{level}}</p>
+				<p>状态：
+					<span v-if="!stateOperation && value != null">
+						{{statusOptions[value].label}}
+					</span>
+					<el-select v-model="value" placeholder="请选择状态" v-if="stateOperation">
+						<el-option
+							v-for="item in statusOptions"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value">
+						</el-option>
+						</el-select>
+					
+					</p>
+				<p>分配：
+					<span v-if="!assigneeOperation">
+						{{assigneeName}}
+					</span>
+					<el-select v-model="assignee" placeholder="请选择成员" v-if="assigneeOperation">
+						<el-option
+							v-for="user in allUsers"
+							:key="user.userID"
+							:label="user.nickname"
+							:value="user.userID">
+						</el-option>
+					</el-select>
+
+					<el-button  v-if="assigneeOperation" type="primary" style="margin-left: 10px;background: #24375E;border: 0px ;"
+						icon="el-icon-delete" @click="clearAssignee()"></el-button>
+				</p>
+				<p>标签：</p>
+				<el-tag :key="tag" v-for="tag in tag" :disable-transitions="false">
+					{{tag}}
+				</el-tag>
+				<p>星级：<span class='el-icon-star-on' v-if="star == 0" style="color: blue;">一般</span>
+					<span class='el-icon-star-on' v-if="star == 1" style="color: darkgreen;">较重要</span>
+					<span class='el-icon-star-on' v-if="star == 2" style="color: orange;">重要</span>
+					<span class='el-icon-star-on' v-if="star == 3" style="color: red;">特别重要</span></p>
+				<el-button type="primary" style="margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+				v-if="role != 3" @click="editTask()">编辑子任务详情</el-button>
+				<el-button type="primary" style="float: right;margin-top: 15px;margin-right: 10px;background: #24375E;border: 0px ;"
+				v-if="stateOperation || assigneeOperation" icon="el-icon-check" @click="editTaskPublic()">确定修改</el-button>
+			</el-dialog>
+			<!-- 子任务详情对话框结束 -->
 		</el-container>
 	</div>
 </template>
@@ -172,7 +235,7 @@
 				showChart:true,
 				stateOperation: null,
 				assigneeOperation:null,
-				options:[
+				statusOptions:[
 					{
 						value:0,
 						label:'计划中'
@@ -188,6 +251,36 @@
 					{
 						value:3,
 						label:'已取消'
+					},
+				],
+				levelOptions: [{
+						value: 0,
+					},
+					{
+						value: 1,
+					},
+					{
+						value: 2,
+					},
+					{
+						value: 3,
+					},
+				],
+				starOptions: [{
+						value: 0,
+						label: '一般'
+					},
+					{
+						value: 1,
+						label: '较重要'
+					},
+					{
+						value: 2,
+						label: '重要'
+					},
+					{
+						value: 3,
+						label: '特别重要'
 					},
 				],
 				value:null,
@@ -221,7 +314,16 @@
 				},
 				taskCellStyle:{
 					 padding:2+'px',
-				}
+				},
+				// Filters of search
+				useFilter:false,
+				nameFilter:"",
+				assigneeFilter:null,
+				timeStartFilter:"",
+				timeEndFilter:"",
+				levelFilter:null,
+				statusFilter:null,
+				starFilter:null,
 			}
 		},
 		mounted(){
@@ -235,7 +337,7 @@
 						 text: '任务状态统计',
 						 left: 'center',
 						 textStyle: {
-							 fontSize:17
+							 fontSize:20
 						 }
 					},
 					tooltip: {
@@ -244,10 +346,10 @@
 					legend: {
 						top: '17%',
 						left: 'center',
-						itemWidth: 17,   
+						itemWidth: 20,   
             			itemHeight: 8,
 						textStyle: {
-							 fontSize:9.5
+							 fontSize:8
 						}
 					},
 					color:['#3399FF','#FF6600','#009933','#C0C0C0'],
@@ -296,10 +398,10 @@
 					legend: {
 						top: '17%',
 						left: 'center',
-						itemWidth: 17,   
+						itemWidth: 20,   
             			itemHeight: 8,
 						textStyle: {
-							 fontSize:9.5
+							 fontSize:8
 						}
 					},
 					color:['blue','darkgreen','orange','red'],
@@ -348,10 +450,10 @@
 					legend: {
 						top: '17%',
 						left: 'center',
-						itemWidth: 17,   
+						itemWidth: 20,   
             			itemHeight: 8,
 						textStyle: {
-							 fontSize:9.5
+							 fontSize:8
 						}
 					},
 					series: [
@@ -489,65 +591,33 @@
 					return !item.a
 				});
 			},
-			handleCurrentChange() {
-				axios.get('/api/localTask/localSubTaskList', {
-						params: {
-							/* 测试用子任务ID */
-							'taskID': localStorage.getItem('taskID'),
-							'page': this.currentPage3
-						},
-						headers: {
-							"token": localStorage.getItem("token"),
-						}
-					})
-					.then(res => {
-						var response = res.data.data;
-						var a = eval(response);
-						for(var i=0;i<a.length;i++){
-							a[i].deadline = new Date(a[i].deadline).toLocaleDateString().replace(/\//g, '-');
-							a[i].startTime = new Date(a[i].startTime).toLocaleDateString().replace(/\//g, '-');
-						}
-						this.tableData = a;
-					})
-					.catch(function(error) {
-						console.log(error);
-					});
-			},
-			getDefaultSubTask() {
-				var url = window.location.href.split('?')[1].split('&');
-				var taskID = url[0].split('=')[1];
-				this.creatorID = url[1].split('=')[1];
-				localStorage.setItem('taskID',taskID);
-				console.log(url);
-				
-				axios.get('/api/localTask/localSubTaskNumber', {
-						params: {
-							'taskID': localStorage.getItem('taskID'),
-						},
-						headers: {
-							"token": localStorage.getItem("token"),
-						}
-					})
-					.then(res => {				
-						var response = res.data.data;
-						this.page = response * 10;
-					})
-					.catch(function(error) {
-						alert(error);
-					});
+			getSubTaskList() {
+				this.parseFilterParams();
+				var url = '/api/localTask/localSubTaskList';
 
-				axios.get('/api/localTask/localSubTaskList', {
-						params: {
-							/* 测试用子任务ID */
-							'taskID': localStorage.getItem('taskID'),
-							'page': 1
-						},
+				var params = {
+					'taskID': localStorage.getItem('taskID'),
+					'page': this.currentPage3
+				};
+
+				if(this.useFilter){
+					params['name'] = this.nameFilter;
+					params['assignee'] = this.assigneeFilter;
+					params['timeStart'] = this.timeStartFilter;
+					params['timeEnd'] = this.timeEndFilter;
+					params['level'] = this.levelFilter;
+					params['status'] = this.statusFilter;
+					params['star'] = this.starFilter;
+					url = '/api/localTask/localSubTaskListFilter';
+				}
+
+				axios.get(url, {
+						params: params,
 						headers: {
 							"token": localStorage.getItem("token"),
 						}
 					})
 					.then(res => {
-						
 						if(res.data.ret == 2){
 							this.$alert('您不具有访问此任务的权限', '提示', {
 								confirmButtonText: '确定',
@@ -569,7 +639,48 @@
 					.catch(function(error) {
 						console.log(error);
 					});
+			},
+			getDefaultSubTask() {
+				var url = window.location.href.split('?')[1].split('&');
+				var taskID = url[0].split('=')[1];
+				this.creatorID = url[1].split('=')[1];
+				localStorage.setItem('taskID',taskID);
+				console.log(url);
 
+				var params = {
+					'taskID': localStorage.getItem('taskID'),
+				};
+
+				var url = '/api/localTask/localSubTaskNumber';
+
+				this.parseFilterParams();
+				if(this.useFilter){
+					params['name'] = this.nameFilter;
+					params['assignee'] = this.assigneeFilter;
+					params['timeStart'] = this.timeStartFilter;
+					params['timeEnd'] = this.timeEndFilter;
+					params['level'] = this.levelFilter;
+					params['status'] = this.statusFilter;
+					params['star'] = this.starFilter;
+					url = '/api/localTask/localSubTaskNumberFilter';
+				}
+				
+				axios.get(url, {
+						params: params,
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {				
+						var response = res.data.data;
+						// rows pre page
+						this.page = response * 10;
+						this.currentPage3 = 1;
+						this.getSubTaskList();
+					})
+					.catch(function(error) {
+						alert(error);
+					});
 
 				axios.get('/api/localTask/userRole', {
 						params: {
@@ -629,6 +740,10 @@
 							var response = res.data.data;
 							console.log(response);
 							this.allUsers = response;
+							this.urlManagers = [];
+							this.managers = [];
+							this.urlEmployees = [];
+							this.employees = [];
 							for(var i =0;i<response.length;i++){
 								if(response[i].userID == this.creatorID){
 									this.creator = response[i].nickname;
@@ -667,7 +782,7 @@
 							}
 						})
 						.then(function(response) {
-							_this.handleCurrentChange();
+							_this.getSubTaskList();
 						})
 						.catch(function(error) {
 							console.log(error);
@@ -711,7 +826,7 @@
 						.then(function(response) {
 
 							if (response.data.ret == 1) {
-								_this.handleCurrentChange();
+								_this.getSubTaskList();
 							} else {
 								_this.$alert('删除失败', '提示', {
 								         confirmButtonText: '确定',
@@ -832,6 +947,29 @@
 			editParticipator(){
 				this.$router.push({path:'/EditParticipator'});
 			},
+			parseFilterParams(){
+				if(this.assigneeFilter?.toString() == ""){
+					this.assigneeFilter = null;
+				}
+				if(this.levelFilter?.toString() == ""){
+					this.levelFilter = null;
+				}
+				if(this.statusFilter?.toString() == ""){
+					this.statusFilter = null;
+				}
+				if(this.starFilter?.toString() == ""){
+					this.starFilter = null;
+				}
+				if(this.nameFilter == null){
+					this.nameFilter = "";
+				}
+				if(this.timeStartFilter == null){
+					this.timeStartFilter = "";
+				}
+				if(this.timeEndFilter == null){
+					this.timeEndFilter = "";
+				}
+			}
 		},
 		beforeMount: function() {
 			localStorage.removeItem('taskDetail');
@@ -843,6 +981,11 @@
 </script>
 
 <style>
+	.filterLabel{
+		margin-left:20px;
+		margin-right:5px;
+	}
+
 	.icon{
 		height: 17px;
 		width: 17px;

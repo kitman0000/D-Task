@@ -2,6 +2,7 @@ package com.dtask.DTask.localTaskModule.controller;
 
 import com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo;
 import com.dtask.DTask.localTaskModule.entity.LocalSubTaskEntity;
+import com.dtask.DTask.localTaskModule.entity.LocalSubTaskFilterEntity;
 import com.dtask.DTask.localTaskModule.service.ILocalSubTask;
 import com.dtask.common.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,21 @@ public class LocalSubTaskCl{
         return new ResponseData(1,"查询成功",result);
     }
 
+    @RequestMapping(value = "/api/localTask/localSubTaskNumberFilter",method = RequestMethod.GET)
+    public ResponseData getLocalTaskNumberWithFilter(LocalSubTaskEntity localSubTaskEntity, LocalSubTaskFilterEntity filterEntity){
+        int result = localSubTask.getLocalSubTaskNumberWithFilter(localSubTaskEntity,filterEntity);
+        return new ResponseData(1,"查询成功",result);
+    }
+
     @RequestMapping(value = "/api/localTask/localSubTaskList",method = RequestMethod.GET)
     public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity,int page) {
         List<LocalSubTaskBo> result = localSubTask.getLocalSubTaskList(localSubTaskEntity, page);
+        return new ResponseData(1,"查询成功",result);
+    }
+
+    @RequestMapping(value = "/api/localTask/localSubTaskListFilter",method = RequestMethod.GET)
+    public ResponseData getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity,int page,LocalSubTaskFilterEntity filterEntity) {
+        List<LocalSubTaskBo> result = localSubTask.getLocalSubTaskListWithFilter(localSubTaskEntity, page,filterEntity);
         return new ResponseData(1,"查询成功",result);
     }
 

@@ -2,6 +2,7 @@ package com.dtask.DTask.localTaskModule.service;
 
 import com.dtask.DTask.localTaskModule.bo.LocalSubTaskBo;
 import com.dtask.DTask.localTaskModule.entity.LocalSubTaskEntity;
+import com.dtask.DTask.localTaskModule.entity.LocalSubTaskFilterEntity;
 import com.dtask.common.ResponseData;
 
 import java.util.List;
@@ -20,7 +21,11 @@ public interface ILocalSubTask {
 
     int getLocalSubTaskNumber(LocalSubTaskEntity localSubTaskEntity);
 
+    int getLocalSubTaskNumberWithFilter(LocalSubTaskEntity localSubTaskEntity, LocalSubTaskFilterEntity filterEntity);
+
     List<LocalSubTaskBo> getLocalSubTaskList(LocalSubTaskEntity localSubTaskEntity, int page);
+
+    List<LocalSubTaskBo> getLocalSubTaskListWithFilter(LocalSubTaskEntity localSubTaskEntity, int page, LocalSubTaskFilterEntity filterEntity);
 
     boolean editLocalSubTaskStatusByUser(LocalSubTaskEntity localSubTaskEntity);
 
