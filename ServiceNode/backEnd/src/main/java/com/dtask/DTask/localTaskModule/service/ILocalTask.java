@@ -40,4 +40,6 @@ public interface ILocalTask {
     ResponseData getTaskUserRole(int taskID);
 
     PublicEditPermissionBo getPublicEditPermission(int taskID);
+
+    boolean editTaskUserIsAutoAssign(int taskID,int userID,boolean isAutoAssign);
 }

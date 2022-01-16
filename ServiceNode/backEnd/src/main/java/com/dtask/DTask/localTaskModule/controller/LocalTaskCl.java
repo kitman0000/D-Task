@@ -92,5 +92,11 @@ public class LocalTaskCl {
         return new ResponseData(1,"查询成功", localTask.getPublicEditPermission(taskID));
     }
 
+    @RequestMapping(value = "/api/localTask/IsAutoAssign",method = RequestMethod.PUT)
+    public ResponseData editTaskUserIsAutoAssign(int taskID,int userID,boolean isAutoAssign){
+        boolean result = localTask.editTaskUserIsAutoAssign(taskID,userID,isAutoAssign);
+        return result ?  new ResponseData(1,"修改成功",null):new ResponseData(2,"权限错误",null);
+    }
+
 
 }

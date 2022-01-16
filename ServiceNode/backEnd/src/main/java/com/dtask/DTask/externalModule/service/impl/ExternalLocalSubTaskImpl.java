@@ -38,6 +38,8 @@ public class ExternalLocalSubTaskImpl implements IExternalLocalSubTask {
     @Override
     public ExternalSubTaskAddBo autoAssignSubTask(LocalSubTaskBo localSubTaskBo) {
         List<LocalTaskMemberBo> taskUser = localTaskDao.getTaskUser(localSubTaskBo.getTaskID());
+        taskUser.removeIf(user->!user.isAutoAssign());
+
         List<LocalTaskAssigneeCount> taskAssigneeCount = localTaskDao.getTaskAssigneeCount(localSubTaskBo.getTaskID());
 
         // Get the member with the fewest sub tasks
@@ -46,6 +48,11 @@ public class ExternalLocalSubTaskImpl implements IExternalLocalSubTask {
         for (LocalTaskAssigneeCount member : taskAssigneeCount) {
             // Filter the non-assign value
             if (member.getAssigneeID() != null && member.getAssigneeID() != -1) {
+                if (taskUser.stream().noneMatch(user->user.getUserID() == member.getAssigneeID())){
+                    // User is not auto assign enabled
+                    continue;
+                }
+
                 if (assignedTaskCount == -1 || assignedTaskCount > member.getCount()) {
                     fewestSubTaskMemberID = member.getAssigneeID();
                     assignedTaskCount = member.getCount();

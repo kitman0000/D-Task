@@ -14,4 +14,6 @@ public class LocalTaskMemberBo {
     private boolean isAdmin;
 
     private String nickname;
+
+    private boolean isAutoAssign;
 }

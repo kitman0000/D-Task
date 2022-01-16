@@ -55,4 +55,6 @@ public interface LocalTaskDao {
     boolean getAllowUserChangeAssignee(int taskID);
 
     List<LocalTaskAssigneeCount> getTaskAssigneeCount(int taskID);
+
+    void updateUserIsAutoAssign(@Param("taskID") int taskID, @Param("userID") int userID, @Param("isAutoAssign") boolean isAutoAssign);
 }

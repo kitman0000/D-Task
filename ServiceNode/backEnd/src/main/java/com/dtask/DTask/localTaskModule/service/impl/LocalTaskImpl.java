@@ -266,6 +266,21 @@ public class LocalTaskImpl implements ILocalTask {
     }
 
     /**
+     * 修改用户是否接受自动分配
+     */
+    @Override
+    public boolean editTaskUserIsAutoAssign(int taskID,int userID,boolean isAutoAssign) {
+        int opUserID = UserCommon.getUserBo().getUserID();
+
+        if(!checkUserHasPermission(taskID,opUserID)){
+            return false;
+        }
+
+        localTaskDao.updateUserIsAutoAssign(taskID,userID,isAutoAssign);
+        return true;
+    }
+
+    /**
      * 判断用户是否拥有管理权限
      */
     private boolean checkUserHasPermission(int taskID,int userID){

@@ -32,6 +32,19 @@
         </where>
     </update>
 
+    <!-- Update whether the user can be auto assigned -->
+    <update id="updateUserIsAutoAssign">
+        UPDATE tb_local_task_user
+        <set>
+            isAutoAssign = #{isAutoAssign}
+        </set>
+        <where>
+            taskID = #{taskID}
+            AND
+            userID = #{userID}
+        </where>
+    </update>
+
     <delete id="deleteLocalTask">
         DELETE FROM tb_local_task
         <where>
@@ -142,7 +155,7 @@
 
     <!-- 获取用户列表 -->
     <select id="getTaskUser" resultType="com.dtask.DTask.localTaskModule.bo.LocalTaskMemberBo">
-        SELECT userID,isAdmin,nickname FROM tb_local_task_user LEFT JOIN tb_user_info ON tb_local_task_user.userID = tb_user_info.id
+        SELECT userID,isAdmin,nickname,isAutoAssign FROM tb_local_task_user LEFT JOIN tb_user_info ON tb_local_task_user.userID = tb_user_info.id
         <where>
             taskID = #{taskID}
         </where>
