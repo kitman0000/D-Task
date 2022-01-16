@@ -29,7 +29,15 @@
 			<el-table-column label="操作" v-if="role == 1">
 				<template slot-scope="scope">
 					<el-button type="text" size="small" @click="deleteParticipator(scope.row)">移出该任务</el-button>
-					<el-button type="text" size="small" @click="changeRole(scope.row,false)">变更为普通参与人员</el-button>
+					<el-button type="text" size="small" @click="changeRole(scope.row,false)">取消管理员</el-button>
+				</template>
+			</el-table-column>
+			<el-table-column label="自动分配" v-if="role == 1">
+				<template slot-scope="scope">
+				<el-switch
+				v-model="scope.row.autoAssign"
+				@change="switchAutoAssign(scope.row.userID,scope.row.autoAssign)">
+				</el-switch>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -42,7 +50,15 @@
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button type="text" size="small" @click="deleteParticipator(scope.row)">移出该任务</el-button>
-					<el-button type="text" size="small" v-if="role == 1" @click="changeRole(scope.row,true)">变更为管理人员</el-button>
+					<el-button type="text" size="small" v-if="role == 1" @click="changeRole(scope.row,true)">设为管理员</el-button>
+				</template>
+			</el-table-column>
+			<el-table-column label="自动分配" v-if="role == 1">
+				<template slot-scope="scope">
+				<el-switch
+				v-model="scope.row.autoAssign"
+				@change="switchAutoAssign(scope.row.userID,scope.row.autoAssign)">
+				</el-switch>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -86,13 +102,15 @@
 							if (res.data.ret == 1) {
 								this.$alert('移出成功', '提示', {
 									confirmButtonText: '确定',
+									callback: action => {
+										this.getParticipator();
+									}
 								});
 							} else {
-								this.$alert('该人员不在此任务中', '提示', {
-									confirmButtonText: '确定',
+								this.$alert(res.data.message, '提示', {
+									confirmButtonText: '确定'
 								});
 							}
-							window.location.reload();
 						})
 						.catch(function(error) {
 							console.log(error);
@@ -124,13 +142,15 @@
 							if (res.data.ret == 1) {
 								this.$alert('修改成功', '提示', {
 									confirmButtonText: '确定',
+									callback: action => {
+										this.getParticipator();
+									}
 								});
 							} else {
-								this.$alert('修改失败', '提示', {
-									confirmButtonText: '确定',
+								this.$alert(res.data.message, '提示', {
+									confirmButtonText: '确定'
 								});
 							}
-							window.location.reload();
 						});
 				}).catch(() => {
 					this.$message({
@@ -140,6 +160,9 @@
 				});
 			},
 			getParticipator() {
+				this.urlManagers = [];
+				this.urlEmployees = [];
+
 				/* 获得当前角色是不是拥有者 */
 				axios.get('/api/localTask/userRole', {
 						params: {
@@ -262,7 +285,7 @@
 								this.$alert('添加成功', '提示', {
 									confirmButtonText: '确定',
 									callback: action => {
-										window.location.reload();
+										this.getParticipator();
 									}
 								});
 							} else {
@@ -274,6 +297,25 @@
 						});
 				}
 
+			},
+			switchAutoAssign(userID,isAutoAssign){
+				var a = new URLSearchParams();
+				a.append("userID", userID);
+
+				a.append("taskID", localStorage.getItem('taskID'));
+				a.append('isAutoAssign', isAutoAssign);
+				axios.put('/api/localTask/IsAutoAssign', a, {
+						headers: {
+							"token": localStorage.getItem("token"),
+						}
+					})
+					.then(res => {
+						if (res.data.ret != 1) {
+							this.$alert('修改失败', '提示', {
+								confirmButtonText: '确定',
+							});
+						}
+					});
 			}
 		},
 		beforeMount: function() {
